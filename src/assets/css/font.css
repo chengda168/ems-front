@@ -1,0 +1,28 @@
+
+
+
+
+@font-face {
+  font-family: "Arial Black";
+  src: url("../font/arial/Arial-Black.ttf") format("truetype")
+}
+@font-face {
+  font-family: "Arial";
+  src: url("../font/arial/Arial.ttf") format("truetype")
+}
+
+/* 苹方粗体 */
+@font-face {
+  font-family: "PingFang Bold";
+  src: url("../font/pingfang/PingFang-Bold.ttf") format("truetype"),
+}
+/* 苹方细体 */
+@font-face {
+  font-family: "PingFang Light";
+  src: url("../font/pingfang/PingFang-Light.ttf") format("truetype")
+}
+/* 苹方常规 */
+@font-face {
+  font-family: "PingFang Regular";
+  src: url("../font/pingfang/PingFang-Regular.ttf") format("truetype")
+}

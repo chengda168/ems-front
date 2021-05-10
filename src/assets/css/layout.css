@@ -1,0 +1,137 @@
+
+* { margin: 0; padding: 0; outline: 0; box-sizing: border-box; }
+
+body, html { height: 100%; }
+
+
+body{
+    font-size: 100%;
+    font-size: 16px;
+    font-size: 1em;
+    margin: auto;
+    width: 100%;
+    min-width: 1200px;
+    height: 100%;
+	min-height: 100%;
+	font-family: "PingFang Regular";
+    color: #3C464B;
+    /* background-color: #F2F6FA; */
+}
+.iconfont{
+    line-height: 1;
+}
+
+img:not([src*="/"]){
+	display:none;
+}
+
+img {
+	max-width: 100%;
+	width: 100%;
+    vertical-align: middle;
+}
+a{
+	text-decoration: none;
+	cursor: pointer;
+}
+
+a img { 
+	border: 0; 
+}
+
+li,ol{
+	list-style: none;
+}
+
+.flexBox{
+    display: flex;
+}
+
+
+.flexEnd{
+    display: flex;
+    align-items:flex-end;
+}
+.flexCenter{
+    display: flex;
+    align-items:center;
+    justify-content: center;
+}
+.flexBetween{
+    display: flex;
+    align-items:center;
+    justify-content: space-between;
+}
+
+.flexColumnCenter{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.flexStartBetween{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.grayBg{
+    background-color: #BECDD7;
+}
+.redBg{
+    background-color: #D00202;
+}
+.orangeBg{
+    background-color: #FF5100;
+}
+.yellowBg{
+    background-color: #FF9C00;
+}
+.yellowBg1{
+    background-color: #E1BC00;
+}
+.greenBg{
+    background-color: #6AC000;
+}
+.greenBg1{
+    background-color: #00C100;
+}
+.redColor{
+    color: #D00202;
+}
+.yellowColor{
+    color:#FF9C00 ;
+}
+.greenColor{
+    color: #00C100;
+}
+/* 表单 */
+.el-input__inner{
+    color: #3C464B !important;
+}
+.el-form-item__error{
+    left: 10px;
+    color: #ED5565;
+}
+.el-form-item.is-error .el-input__inner, 
+.el-form-item.is-error .el-input__inner:focus, 
+.el-form-item.is-error .el-textarea__inner, 
+.el-form-item.is-error .el-textarea__inner:focus, 
+.el-message-box__input input.invalid, 
+.el-message-box__input input.invalid:focus{
+    border-color: #E2E8EE;
+}
+
+/* 按钮 */
+.el-button--primary,
+.el-button--primary:focus, 
+.el-button--primary:hover{
+    background-color: #009999;
+    border: 0;
+}
+.el-button--primary.is-disabled,
+.el-button--primary.is-disabled:active, 
+.el-button--primary.is-disabled:focus, 
+.el-button--primary.is-disabled:hover{
+    background-color: #879BAA;
+}

@@ -1,0 +1,143 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2499246 */
+  src: url('iconfont.woff2?t=1620439422428') format('woff2'),
+       url('iconfont.woff?t=1620439422428') format('woff'),
+       url('iconfont.ttf?t=1620439422428') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-jiantou-zuo:before {
+  content: "\e65d";
+}
+
+.icon-huo:before {
+  content: "\e66c";
+}
+
+.icon-shenghuomei:before {
+  content: "\e648";
+}
+
+.icon-icontouxiang:before {
+  content: "\e622";
+}
+
+.icon-reshui:before {
+  content: "\e640";
+}
+
+.icon-electricity_icon:before {
+  content: "\e66e";
+}
+
+.icon-re:before {
+  content: "\e603";
+}
+
+.icon-sousuo:before {
+  content: "\e62c";
+}
+
+.icon-dian:before {
+  content: "\e631";
+}
+
+.icon-youjiantou:before {
+  content: "\e623";
+}
+
+.icon-shui:before {
+  content: "\e679";
+}
+
+.icon-yuyan:before {
+  content: "\e611";
+}
+
+.icon-meiqi:before {
+  content: "\e601";
+}
+
+.icon-shui1:before {
+  content: "\e701";
+}
+
+.icon-jiantou1:before {
+  content: "\e7f0";
+}
+
+.icon-jiantou_xia:before {
+  content: "\e636";
+}
+
+.icon-zhankai:before {
+  content: "\e602";
+}
+
+.icon-ziyuan:before {
+  content: "\e64b";
+}
+
+.icon-zhankai-copy:before {
+  content: "\e768";
+}
+
+.icon-iconfontgerenzhongxin:before {
+  content: "\e645";
+}
+
+.icon-laba:before {
+  content: "\e62d";
+}
+
+.icon-shezhi:before {
+  content: "\e654";
+}
+
+.icon--_fangzi:before {
+  content: "\e63b";
+}
+
+.icon-jiantou-copy:before {
+  content: "\e766";
+}
+
+.icon-jiantou-copy-copy:before {
+  content: "\e767";
+}
+
+.icon-jiantou:before {
+  content: "\e612";
+}
+
+.icon-jinggaozhuyi:before {
+  content: "\e764";
+}
+
+.icon-jiantou-copy1:before {
+  content: "\e765";
+}
+
+.icon-yunongtongqingshuruyanzhengma:before {
+  content: "\e63a";
+}
+
+.icon-yanjing:before {
+  content: "\e763";
+}
+
+.icon-wode:before {
+  content: "\e60b";
+}
+
+.icon-ic_keyboard:before {
+  content: "\e615";
+}
+
