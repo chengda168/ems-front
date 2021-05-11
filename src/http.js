@@ -16,12 +16,12 @@ axios.defaults.timeout = 15000 * 60
 // 环境的切换
 if (process.env.NODE_ENV == "development") {
     // axios.defaults.baseURL = "http://103.19.25.33:8081/gleagle";
-    axios.defaults.baseURL = "/api";
+    // axios.defaults.baseURL = "/api";
+    axios.defaults.baseURL = GLOBAL.umsURL
   } else if (process.env.NODE_ENV == "debug") {
     axios.defaults.baseURL = "http://personal2.shenzhuo.vip:21463/gleagle";
   } else if (process.env.NODE_ENV == "production") {
-    // axios.defaults.baseURL = "http://personal2.shenzhuo.vip:21463/gleagle";
-    axios.defaults.baseURL = GLOBAL.umsURL
+    axios.defaults.baseURL = "http://personal2.shenzhuo.vip:21463/gleagle";
   }
 
 axios.defaults.retry = 4
