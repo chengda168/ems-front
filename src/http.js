@@ -1,8 +1,9 @@
 import axios from 'axios'
 
+import GLOBAL from '@/constant/global-variable'
 import { getToken } from '../src/utils/auth'
 import { Message } from 'element-ui'
-console.log("process.env",process.env)
+
 // 请求超时时间
 axios.defaults.timeout = 15000 * 60
 
@@ -19,7 +20,8 @@ if (process.env.NODE_ENV == "development") {
   } else if (process.env.NODE_ENV == "debug") {
     axios.defaults.baseURL = "http://personal2.shenzhuo.vip:21463/gleagle";
   } else if (process.env.NODE_ENV == "production") {
-    axios.defaults.baseURL = "http://personal2.shenzhuo.vip:21463/gleagle";
+    // axios.defaults.baseURL = "http://personal2.shenzhuo.vip:21463/gleagle";
+    axios.defaults.baseURL = GLOBAL.umsURL
   }
 
 axios.defaults.retry = 4

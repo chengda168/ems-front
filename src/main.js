@@ -31,6 +31,9 @@ Vue.prototype.$store = store
 
 Vue.config.productionTip = false
 
+// 配置全局变量
+import globalVariable from '@/constant/global-variable'
+Vue.prototype.GLOBAL = globalVariable;
 
 Vue.use(ElementUI);
 
