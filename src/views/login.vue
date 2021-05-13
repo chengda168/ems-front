@@ -33,7 +33,7 @@
                 <el-input v-model="params.vcode" placeholder="验证码"></el-input>
                 <div class="inputicon iconfont icon-yunongtongqingshuruyanzhengma"></div>
                 <div class="inputCodeimage">
-                  <img src="../assets/images/login/code.png">
+                  <img :src="verifyCodeApi" onclick="this.src=this.src+'?'">
                 </div>
               </el-form-item>
               <div class="LoginConPass">
@@ -61,11 +61,15 @@
   </div>
 </template>
 <script>
+import JsEncrypt from 'jsencrypt'
+import Login from '@/api/ums/login.js'
+
 export default {
   data() {
     return {
       errordis: '2',
       password1: "password",
+      verifyCodeApi: this.GLOBAL.verifyCodeApi,
       params:{
         name:'',
         password:'',
@@ -104,7 +108,17 @@ export default {
       }
     }
   },
+  mounted() {
+    this.getVerifyCode();
+  },
   methods:{
+    // 获取图片验证码
+    getVerifyCode(){
+        Login.verifyCode().then(res => {
+          console.log(res);
+        })
+      
+    },
     showpassword(){
       if(this.password1 == 'password'){
         this.password1 = 'text'
@@ -112,8 +126,18 @@ export default {
         this.password1 = 'password'
       }
     },
-    sumbile(){
+    async sumbile(){
         this.errordis = '1'
+        let res = await Login.getPublicKey(this.params.name)
+        let publicKey = res.data;
+        let jse = new JsEncrypt()
+        jse.setPublicKey(`-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`);
+        let encrypted = jse.encrypt(this.params.password);
+        let loginRes=await Login.doLogin(
+          {"account":this.params.name,
+          "password":encrypted,
+          "code":this.params.vcode});
+   
     }
   }
 }
