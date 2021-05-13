@@ -1,6 +1,8 @@
-import en from './en'
-import cn from './cn'
+import En from './en'
+import Cn from './cn'
+import De from './de'
 export default {
-  en,
-  cn
+  En,
+  Cn,
+  De
 }

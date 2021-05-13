@@ -3,11 +3,8 @@
  */
 const getters = {
   lang: state => state.app.lang,
-  searchObj: state => state.app.searchObj,
-  searchCountry: state => state.app.searchCountry,
-  selectObj: state => state.app.selectObj,
+  collapse: state => state.app.collapse,
   
   token: state => state.user.token,
-  // contactDig: state => state.app.contactDig,
 }
 export default getters

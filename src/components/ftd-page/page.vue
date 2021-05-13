@@ -2,16 +2,7 @@
   <div class="pageBox flexBetween">
     
     <div>
-      <el-pagination v-if="size"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="pageSize"
-        layout="sizes"
-        :total="total">
-      </el-pagination>
-      <el-pagination  v-if="isTotal"
+      <el-pagination  
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
         :page-size="pageSize"
@@ -24,8 +15,7 @@
     <div class="flexBetween">
       <div class="el-pagination">
       <el-button class="firstBtn" :disabled="isFirst" @click="onFirst">
-        <img src="../../assets/images/layout/firstD.png" v-if="isFirst"/>
-        <img src="../../assets/images/layout/last.png" v-else/>
+        <i class="iconfont icon-quanbuxiangshang--copy-copy"></i>
       </el-button>
     </div>
 
@@ -39,8 +29,7 @@
     </el-pagination>
     <div class="el-pagination">
       <el-button class="lastBtn" :disabled="isLast" @click="onLast">
-        <img src="../../assets/images/layout/last.png" v-if="!isLast"/>
-        <img src="../../assets/images/layout/firstD.png" v-else/>
+        <i class="iconfont icon-quanbuxiangshang--copy"></i>
       </el-button>
     </div>
     <el-pagination
@@ -61,17 +50,9 @@ export default {
       type: Number,
       default: 0,
     },
-    size:{
-      type: Boolean,
-      default: false
-    },
-    isTotal:{
-       type: Boolean,
-      default: false
-    },
     pageSize: {
       type: Number,
-      default: 10,
+      default: 15,
     },
     currentPage:{
       type:Number,
@@ -120,44 +101,113 @@ export default {
 </script>
 <style scoped>
 
-  .pageBox {
-    margin-top: 15px;
-  }
   
+  .pageBox  /deep/ .el-pagination{
+    padding: 0;
+    line-height: 1;
+  }
+  .pageBox  /deep/ .el-pagination__total{
+    font-size: 14px;
+    color: #879BAA;
+  }
+  .pageBox  /deep/ .el-pagination .btn-next, 
+  .pageBox  /deep/ .el-pagination .btn-prev,
   .firstBtn,
   .lastBtn {
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
+    width: 20px;
+    min-width: auto;
+    height: 20px;
+    line-height: 20px;
     border: 0;
-    background-color: #F2F6FA;
+    padding: 0;
+    text-align: center;
+    color: #009999;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 4px 0px rgba(52, 88, 157, 0.2);
     border-radius: 50%;
   }
-  .el-pagination .firstBtn,
-  .el-pagination .lastBtn,
+  .firstBtn i,
+  .lastBtn i{
+    margin-right: 0;
+    font-size: 12px;
+  }
+  .pageBox  /deep/ .el-pagination .btn-next:disabled, 
+  .pageBox  /deep/ .el-pagination .btn-prev:disabled,
+  .firstBtn:disabled,
+  .lastBtn:disabled{
+    color: #879BAA;
+  } 
+  .pageBox  /deep/ .el-pagination .btn-prev{
+    margin:0 14px 0 5px;
+  }
+  .pageBox  /deep/ .el-pagination .btn-next{
+    margin:0 5px 0 14px;
+  }
+  
+  
+   .pageBox  /deep/ .el-pager li,
+   .pageBox  /deep/ .el-pager li:hover{
+     min-width: 20px;
+     height: 20px;
+    line-height: 20px;
+    font-weight: normal;
+     font-size: 14px;
+    color: #3C464B;
+  }
+  .pageBox  /deep/ .el-pager li:not(:last-child){
+    margin-right: 4px;
+  }
+  .pageBox  /deep/ .el-pager li.active{
+    min-width: 20px;
+    height: 20px;
+    line-height: 20px;
+    padding: 0;
+    font-size: 14px;
+    color: #FFFFFF;
+    background: #009999;
+    border-radius: 50%;
+  }
+ 
   .lastBtn /deep/ span:not([class*="suffix"]),
   .firstBtn /deep/ span:not([class*="suffix"]) {
     min-width: auto;
+    height: 20px;
+    line-height: 20px;
+  }
+  .pageBox  /deep/ .el-pagination__jump{
     height: 30px;
     line-height: 30px;
+    color: #879BAA;
   }
-  button img {
-    width: 7px;
-    vertical-align: middle;
+  .pageBox  /deep/ .el-pagination__editor{
+    width: auto;
+    height: 30px;
+    margin: 0 5px;
+    padding: 0;
   }
-  .firstBtn:not(:disabled) /deep/ span{
-    line-height: 30px;
+  .pageBox  /deep/ .el-pager .more::before{
+    line-height: 20px;
   }
-  .firstBtn:not(:disabled) img{
-    transform: rotate(-180deg);
-  }
-  .lastBtn:disabled /deep/ span{
-    line-height: 30px;
-  }
-  .lastBtn:disabled img{
-    transform: rotate(-180deg);
-  }
- 
+  
 
-
+/* 1920 */
+@media screen and (min-width: 1665px) {
+  .pageBox {
+    margin-top: 25px;
+  }
+  .pageBox  /deep/ .el-pagination__editor.el-input .el-input__inner{
+    width: 54px;
+    height: 30px;
+  }
+}
+/* 1280*/
+@media screen and (max-width: 1664px) {
+  .pageBox {
+    margin-top: 16px;
+  }
+  .pageBox  /deep/ .el-pagination__editor.el-input .el-input__inner{
+    width: 40px;
+    height: 26px;
+  }
+}
 </style>

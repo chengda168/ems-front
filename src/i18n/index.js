@@ -6,7 +6,7 @@ import { getLanguage, setLanguage } from '../../src/utils/auth'
 Vue.use(VueI18n)
 
 // 默认是中文
-let lang = getLanguage() == 'en' ? 'en' : 'cn';
+let lang = getLanguage() == null ? 'Cn' : getLanguage();
 console.log("lang",lang)
 setLanguage(lang)
 const i18n = new VueI18n({

@@ -18,7 +18,7 @@
               <div class="errorimage iconfont icon-jinggaozhuyi"></div>
               <div class="errorfont">登录账户或密码错误！剩余5次机会，超过6次将冻结24小时。</div>
             </div>
-            <el-form :model="params" :rules="rules" class="registerForm">
+            <el-form :model="params" :rules="rule" ref="params" class="registerForm">
               <el-form-item prop="name">
                 <el-input v-model="params.name" placeholder="邮箱账号/手机号">
                 </el-input>
@@ -38,9 +38,9 @@
               </el-form-item>
               <div class="LoginConPass">
                 <div class="FL"><el-checkbox v-model="checked" class="">记住密码</el-checkbox></div>
-                <div class="FR">忘记密码?</div>
+                <router-link to="/forget" class="FR" style="color: #009999">忘记密码?</router-link>
               </div>
-              <el-button class="loginBtn" @click="sumbile">登 录</el-button>
+              <el-button class="loginBtn" @click="sumbile('params')">登 录</el-button>
             </el-form>
 
           </div>
@@ -91,7 +91,7 @@ export default {
         }
       ],
       checked: false,
-      rules:{
+      rule:{
         name: [
           { required: true, message: '不能为空', trigger: 'blur' }
         ],
@@ -112,8 +112,19 @@ export default {
         this.password1 = 'password'
       }
     },
-    sumbile(){
+    sumbile(params){
+      this.$refs[params].validate((valid) => {
+        if (valid) {
+          this.$router.push("/dashboard");
+        } else {
+          return false;
+        }
+      });
+      if((this.params.name != 'admin')||(this.params.password != '1234')||(this.params.vcode != '1010')){
         this.errordis = '1'
+        }else {
+          this.errordis = '2'
+        }
     }
   }
 }
@@ -280,7 +291,7 @@ export default {
     color: #BECDD7;
     background: #FFFFFF;
     box-shadow: 0px 2px 4px 0px rgba(0, 86, 122, 0.08);
-    border-radius: 30px;
+    border-radius: 4px;
     padding-left: 60px;
     padding-right: 65px;
     border: 0;
@@ -319,9 +330,9 @@ export default {
     margin-left: 10px;
     line-height: 56px;
     background: #009999;        
-    border-radius: 32px;
+    border-radius: 4px;
     text-align: center;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 400;
     color: #FFFFFF;
     padding: 0;
@@ -425,9 +436,10 @@ export default {
     }
 
     /deep/ .el-checkbox__inner::after {
-      height: 5px;
+      width: 3px;
+      height: 6px;
       left: 3px;
-      top: 1px;
+      top: 1px;   
     }
 
     /deep/ .el-carousel__button {
@@ -573,7 +585,7 @@ export default {
       color: #BECDD7;
       background: #FFFFFF;
       box-shadow: 0px 1px 2px 0px rgba(0, 86, 122, 0.08);
-      border-radius: 20px;
+      border-radius: 3px;
       padding-left: 40px;
       padding-right: 43px;
       border: 0;
@@ -582,7 +594,6 @@ export default {
     /deep/ .el-form-item__error {
       padding-top: 3px;
       left: 13px;
-      transform: scale(0.7);    
     }
 
     .inputicon {
@@ -613,9 +624,9 @@ export default {
       margin-left: 7px;
       line-height: 37px;
       background: #009999;        
-      border-radius: 21px;
+      border-radius: 3px;
       text-align: center;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 400;
       color: #FFFFFF;
       padding: 0;
