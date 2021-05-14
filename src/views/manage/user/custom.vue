@@ -625,6 +625,21 @@ import Page from "@/components/ftd-page/page";
                 this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
                }
                this.dialogVisible = false
+                this.ruleForm={
+                    a: '',
+                    b: '',
+                    c: '',
+                    d: '',
+                    e: '',
+                    f:'',
+                    g: '',
+                    h: {
+                        city: '',
+                        area: '',
+                        address: ''
+                    },
+                }
+                this.$refs.ruleForm.resetFields()
             } else {
                 console.log('error submit!!');
                 return false;

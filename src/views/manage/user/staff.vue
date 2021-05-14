@@ -585,7 +585,7 @@ import Page from "@/components/ftd-page/page";
     },
     methods: {
         beforeClose(){
-             this.ruleForm={
+            this.ruleForm={
                 bn: '',
                 name: '',
                 mobile: '',
@@ -630,6 +630,19 @@ import Page from "@/components/ftd-page/page";
                }
                 
                this.dialogVisible = false
+                this.ruleForm={
+                    bn: '',
+                    name: '',
+                    mobile: '',
+                    email: '',
+                    department: '',
+                    role:'',
+                    status: '启用',
+                    watch:false,
+                    edit:false,
+                    power:''
+                }
+                this.$refs.ruleForm.resetFields()
               
             } else {
                 console.log('error submit!!');
