@@ -26,6 +26,7 @@ if (process.env.NODE_ENV == "development") {
 
 axios.defaults.retry = 4
 axios.defaults.retryDelay = 1000
+axios.defaults.withCredentials = true;
 
 // request拦截器
 axios.interceptors.request.use(async config => {
