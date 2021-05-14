@@ -44,7 +44,6 @@ axios.interceptors.request.use(async config => {
   // respone拦截器
 axios.interceptors.response.use(
     response => {
-        console.log("response",response)
       let data = response.data
       if (data.code !== true) {
         // if (data.code === '100019') {

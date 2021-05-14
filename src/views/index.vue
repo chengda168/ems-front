@@ -49,9 +49,10 @@
             <i class="iconfont icon-laba"></i>公告栏
           </div>
           <el-carousel arrow="never" indicator-position="outside" :interval="5000" trigger="click">
-            <el-carousel-item v-for="item in 3" :key="item">
+            <el-carousel-item v-for="item in sNoticeData" :key="item.index">
               <el-scrollbar style="height:100%">
-                打造新能源汽车“世界名片”现代的汽车正朝着电动化、智能化、网联化、个性化持续进化。对消费者而言，汽车早已不只是简单的代步工具。商务人士将其看作品位的代言，新锐青年追求智能化的驾驶体验……如今的消费者更加看重汽车的综合素质与附加价值。虽然不断变化的市场给汽车制造商们带来了一些挑战，但北京新能源汽车股份有限公司（北汽新能源）有着自己的破局之策。
+                {{item.content}}
+                <!-- 打造新能源汽车“世界名片”现代的汽车正朝着电动化、智能化、网联化、个性化持续进化。对消费者而言，汽车早已不只是简单的代步工具。商务人士将其看作品位的代言，新锐青年追求智能化的驾驶体验……如今的消费者更加看重汽车的综合素质与附加价值。虽然不断变化的市场给汽车制造商们带来了一些挑战，但北京新能源汽车股份有限公司（北汽新能源）有着自己的破局之策。 -->
               </el-scrollbar>
             </el-carousel-item>
           </el-carousel>
@@ -66,6 +67,7 @@
 import geoJson from "../assets/js/china.json";
 import { mapGetters } from "vuex";
 import SCustomer from "@/api/ums/sCustomer";
+import SNotice from "@/api/ums/sNotice"
 export default {
   computed: {
     ...mapGetters({
@@ -76,6 +78,7 @@ export default {
     return {
       geoJson: {},
       activeIndex: "Cn",
+      sNoticeData: [],
       icon: "image://" + require("@/assets/images/home/icon1.jpg"),
       isShowHead:false,
        headList:[
@@ -190,7 +193,6 @@ export default {
       //   { name: "金华", value: [119.633, 27.8773] },
       // ];
       var convertData = this.convertData;
-      console.log(this.convertData);
 
       function provinceData() {
         var res = [];
@@ -353,7 +355,6 @@ export default {
       let self = this;
       myChart.on("click", function (params) {
         if (params.seriesIndex == 2) {
-          console.log(params.name);
           self.$router.push("/home");
         }
       });
@@ -403,6 +404,10 @@ export default {
       this.convertData = convertData;
       this.resizeFn();
     },
+    async getSNotice() {
+      let res = await SNotice.loginPage();
+      this.sNoticeData = res.data || [];
+    }
   },
 
   mounted() {
@@ -424,6 +429,7 @@ export default {
     };
 
     this.getAllByLoginUser();
+    this.getSNotice();
   },
 };
 </script>
