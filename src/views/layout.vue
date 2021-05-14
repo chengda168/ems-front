@@ -65,7 +65,8 @@ import { mapGetters } from 'vuex'
         border-radius: 0px 10px 10px 0px;
         transition: all .5s;
     }
-    .closeLayoutLeft{
+    .closeLayoutLeft,
+    .layoutLeft /deep/ .el-menu--collapse{
         width: 60px;
         transition: all .5s;
     }
@@ -111,7 +112,8 @@ import { mapGetters } from 'vuex'
         border-radius: 0px 10px 10px 0px;
         transition: all .5s;
     }
-    .closeLayoutLeft{
+    .closeLayoutLeft,
+    .layoutLeft /deep/ .el-menu--collapse{
         width: 40px;
         transition: all .5s;
     }
