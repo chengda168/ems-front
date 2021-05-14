@@ -42,7 +42,7 @@
                 <el-input v-model="ruleForm.passwordTwo" type="password" placeholder="确认新密码"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" class="fullBtn" @click="nonNext('ruleForm')">确 认</el-button>
+                <el-button type="primary" class="fullBtn" @click="commit('ruleForm')">确 认</el-button>
             </el-form-item>
             </template>
             <template v-else>
@@ -178,9 +178,8 @@ export default {
     }
   },
   methods:{
-    onGetCode(){
-      let res =  Login.sendVerificationCode(this.ruleForm.account);
-      console.log(res)
+   async onGetCode(){
+      let res =await Login.sendVerificationCode(this.ruleForm.account);
       this.isGetCode = true
       let self = this;
       let timer =setInterval(function(){
@@ -191,14 +190,27 @@ export default {
         }
       },1000)
     },
-    nonNext(formName){
+    async nonNext(formName){
+      let res=await Login.verificationCode(this.ruleForm.account,this.ruleForm.code)
+         
+   
       this.$refs[formName].validate((valid) => {
           if (valid) {
+            if(res.code==200){
               this.activeIndex++;
+            }
+            
           } else {
             return false;
           }
         });
+    },
+    async commit(){
+       let pwdRes=await  Login.updateNewPwd(this.ruleForm.account,this.ruleForm.passwordTwo);
+       console.log(this.ruleForm.account,this.ruleForm.passwordTwo);
+       if(pwdRes.code==200){
+          this.activeIndex++;
+       }
     },
     noRouter(){
        this.$router.push("/login");
