@@ -21,7 +21,7 @@
                 <span>查询结果</span>
                 <div class="flexCenter">
                     <el-button type="primary" class="fullBtn" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
-                    <el-button type="primary" class="fullBtn" @click="onDeleted"><i class="iconfont icon-shanchu"></i>删除</el-button>
+                    <el-button type="primary" class="fullBtn" @click="isDialog=true"><i class="iconfont icon-shanchu"></i>删除</el-button>
                     <el-button type="primary" class="fullBtn"><i class="iconfont icon-zanting"></i>暂停</el-button>
                     <el-button type="primary" class="fullBtn"><i class="iconfont icon-runtongyiyaoyihuifu_biyan"></i>恢复</el-button>
                 </div>
@@ -89,7 +89,7 @@
         </div>
         <el-dialog top="0"
             :title="title" :show-close="false"
-            :visible.sync="dialogVisible">
+            :visible.sync="dialogVisible" :before-close="beforeClose">
                 <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
                 <div class="dialogdiv">
                 
@@ -126,13 +126,13 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="状态:" prop="status">
+                        <el-form-item label="状　　态:" prop="status">
                             <el-radio-group v-model="ruleForm.status">
                                 <el-radio label="启用">启 用</el-radio>
                                 <el-radio label="禁用">禁 用</el-radio>
                             </el-radio-group>
                         </el-form-item>
-                        <el-form-item label="系统权限:" prop="power">
+                        <el-form-item label="系统权限:" prop="power" class="requireIcon">
                             <div class="systemPowerBox">
                                 <div class="flexEnd">
                                     <el-checkbox v-model="ruleForm.watch" @change="handleAllWatch">全部</el-checkbox>
@@ -159,12 +159,14 @@
                     <div @click="resetForm('ruleForm')">取 消</div>
                     <div class="dialogbuttomclose"  @click="submitForm('ruleForm')">保 存</div>
                 </div>
-            </el-dialog>
+        </el-dialog>
+        <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
     </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
+import Tips from "@/components/ftd-tips/tips";
   export default {
     computed:{
         ...mapGetters({
@@ -172,10 +174,12 @@ import Page from "@/components/ftd-page/page";
         })
     },
     components:{
-        Page
+        Page,
+        Tips
     },
     data() {
       return {
+          isDialog:false,
         dialogVisible:false,
         title:"新建人员信息",
         index:0,
@@ -241,9 +245,6 @@ import Page from "@/components/ftd-page/page";
           status: [
             { required: true, message: '请选择状态', trigger: 'blur' }
           ],
-        //   power: [
-        //     { required: true, message: '请至少选择一个权限', trigger: 'change' }
-        //   ]
         },
         currentPage: 1,
         width:50,
@@ -584,9 +585,17 @@ import Page from "@/components/ftd-page/page";
         }
     },
     methods: {
-        onSearch() {
+        onConfirm(){
+            this.tableSeelctVal.map((item) => {
+                this.tableData.map((child, index) => {
+                if (item.id == child.id) {
+                    this.tableData.splice(index, 1);
+                }
+                });
+            });
+            this.isDialog = false
         },
-        OnAdd(){
+        beforeClose(){
             this.ruleForm={
                 bn: '',
                 name: '',
@@ -600,6 +609,11 @@ import Page from "@/components/ftd-page/page";
                 power:''
             }
             this.$refs.ruleForm.resetFields()
+            this.dialogVisible = false
+        },
+        onSearch() {
+        },
+        OnAdd(){
             this.isEdit = false;
             this.title = '新建人员信息'
             this.ruleForm.id=this.tableData.length;
@@ -625,8 +639,33 @@ import Page from "@/components/ftd-page/page";
                 // 新建
                 this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
                }
-                
+                this.ruleForm={
+                    bn: '',
+                    name: '',
+                    mobile: '',
+                    email: '',
+                    department: '',
+                    role:'',
+                    status: '启用',
+                    watch:false,
+                    edit:false,
+                    power:''
+                }
+                this.$refs.ruleForm.resetFields()
                this.dialogVisible = false
+                this.ruleForm={
+                    bn: '',
+                    name: '',
+                    mobile: '',
+                    email: '',
+                    department: '',
+                    role:'',
+                    status: '启用',
+                    watch:false,
+                    edit:false,
+                    power:''
+                }
+                this.$refs.ruleForm.resetFields()
               
             } else {
                 console.log('error submit!!');
@@ -638,79 +677,16 @@ import Page from "@/components/ftd-page/page";
             this.$refs[formName].resetFields();
             this.dialogVisible = false
         },
-        setWatch(data,val){
-            console.log(val)
-             data.map(item=>{
-                if(item.children){
-                    this.setWatch(item.children,val)
-                }else{
-                    item.watch = val
-                    console.log(item.label,item.watch)
-                    
-                }
-            })
-            
-        },
         handleAllWatch(val){
-            this.setWatch(this.data,val)
-            // this.data= this.data
-            
-            console.log(this.data)
         },
         handleAllEdit(val){
 
         },
-        getSelectWatch(data){
-        //    this.isSelectWatch = false;
-            data.map(item=>{
-                if(item.children){
-                    this.getSelectWatch(item.children)
-                }else{
-                    if(item.watch || item.edit){
-                        console.log("22")
-                        this.isSelectWatch = true
-                        return false
-                    }else{
-                         console.log("11")
-                    }
-                }
-            })
-            console.log(this.isSelectWatch)
-        },
-        // getSelectEdit(data){
-        //    this.isSelectEdit = false;
-        //     data.map(item=>{
-        //         if(item.children){
-        //             this.getSelectEdit(item.children)
-        //         }else{
-        //             if(item.edit){
-        //                 this.isSelectEdit = true
-        //             }
-        //         }
-        //     })
-        // },
         handleWatchChange(value,data){
             data.watch = value
-            // let arr = this.data.filter((x) =>  x.watch == true);
-            // console.log([].concat(...this.data))
-            //this.getSelectWatch(this.data)
-            // let aa = this.data.some(function (item) {
-            //     return item.watch == true;
-            // });
-            // console.log(arr)
         },
         handleEditChange(value,data){
             data.edit = value
-            this.getSelectWatch(this.data)
-        },
-        onDeleted(){
-            this.tableSeelctVal.map((item) => {
-                this.tableData.map((child, index) => {
-                if (item.id == child.id) {
-                    this.tableData.splice(index, 1);
-                }
-                });
-            });
         },
         handleSelectionChange(val){
             this.tableSeelctVal = val;
@@ -801,6 +777,11 @@ import Page from "@/components/ftd-page/page";
     .systemPowerBox /deep/ .el-tree .el-tree-node__children .el-tree-node__children .el-tree-node__expand-icon.is-leaf{
         color: transparent;
     }
+    .requireIcon /deep/ .el-form-item__label::before{
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
 }
 /* 1280*/
 @media screen and (max-width: 1664px) {
@@ -852,6 +833,11 @@ import Page from "@/components/ftd-page/page";
     }
     .systemPowerBox /deep/ .el-tree .el-tree-node__children .el-tree-node__children .el-tree-node__expand-icon.is-leaf{
         color: transparent;
+    }
+    .requireIcon /deep/ .el-form-item__label::before{
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
     }
 }
 </style>

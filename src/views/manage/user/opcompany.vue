@@ -17,12 +17,12 @@
             <div class="siemensLayoutResultTitle flexBetween">
                 <span>查询结果</span>
                 <div class="flexCenter">
-                    <el-button type="primary" class="fullBtn"><i class="iconfont icon-xinjian"></i>新建</el-button>
-                    <el-button type="primary" class="fullBtn" @click="onDeleted"><i class="iconfont icon-shanchu"></i>删除</el-button>
+                    <el-button type="primary" class="fullBtn" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
+                    <el-button type="primary" class="fullBtn" @click="isDialog = true"><i class="iconfont icon-shanchu"></i>删除</el-button>
                 </div>
             </div>
             <div class="siemensLayoutResultCon">
-                 <el-table border stripe
+                 <el-table border stripe :key="index"
                     :data="tableData" height="100%"
                     style="width: 100%" @selection-change="handleSelectionChange">
                     <el-table-column align="center"
@@ -55,22 +55,65 @@
                     </el-table-column>
                     <el-table-column align="center"
                         label="操 作">
-                        <div class="tableOper">
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                                <i class="iconfont icon-bianji"></i>
-                            </el-tooltip>
-                            
-                        </div>
+                        <template slot-scope="scope">
+                            <div class="tableOper">
+                                <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                                    <i class="iconfont icon-bianji" @click="onEdit(scope.row,scope.$index)"></i>
+                                </el-tooltip>
+                                
+                            </div>
+                        </template>
                     </el-table-column>
                 </el-table>
             </div>
             <Page :total="400" :pageSize="15"></Page>
         </div>
+        <el-dialog top="0"
+            :title="title" :show-close="false"
+            :visible.sync="dialogVisible" :before-close="beforeClose">
+                <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
+                <div class="dialogdiv">
+                
+                    <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
+                        <el-form-item label="运维单位名称:" prop="bn">
+                            <el-input type="text" v-model="ruleForm.bn"></el-input>
+                        </el-form-item>
+                        <el-form-item label="运维单位编号:" prop="name">
+                            <el-input type="text" v-model="ruleForm.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="联系　人:" prop="mobile">
+                            <el-input v-model="ruleForm.mobile"></el-input>
+                        </el-form-item>
+                        <el-form-item label="手机号码:"  prop="email">
+                            <el-input v-model="ruleForm.email"></el-input>
+                        </el-form-item>
+                        <el-form-item label="电子邮箱:"  prop="account">
+                            <el-input v-model="ruleForm.account"></el-input>
+                        </el-form-item>
+                        <el-form-item label="所属角色:" prop="department">
+                            <el-select v-model="ruleForm.department" placeholder="" popper-class="dialogSelect">
+                                <el-option
+                                v-for="item in departmentList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <div class="dialogbuttom">
+                    <div @click="resetForm('ruleForm')">取 消</div>
+                    <div class="dialogbuttomclose"  @click="submitForm('ruleForm')">保 存</div>
+                </div>
+            </el-dialog>
+        <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
     </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
+import Tips from "@/components/ftd-tips/tips";
   export default {
     computed:{
         ...mapGetters({
@@ -78,13 +121,59 @@ import Page from "@/components/ftd-page/page";
         })
     },
     components:{
-        Page
+        Page,
+        Tips
     },
     data() {
       return {
+          isDialog:false,
+        labelWidth:'112px',
+        dialogVisible:false,
+        title:"新建运维单位信息",
+        index:0,
         params: {
           name: '',
           mobile: '',
+        },
+        departmentList:[
+            {
+                value: '电力公司搭建部门',
+                label: '电力公司搭建部门'
+            }, 
+            {
+                value: '电力公司搭建部门1',
+                label: '电力公司搭建部门1'
+            },
+        ],
+        isEdit:false,
+        editIndex:null,
+        ruleForm: {
+            bn: '',
+            name: '',
+            mobile: '',
+            email: '',
+            account:'',
+            department: ''
+        },
+        rules: {
+          bn: [
+            { required: true, message: '请输入运维单位名称', trigger: 'blur' },
+          ],
+          name: [
+            { required: true, message: '请输入运维单位编号', trigger: 'blur' },
+          ],
+          mobile: [
+            { required: true, message: '请输入联系人', trigger: 'blur' },
+          ],
+          email: [
+            { required: true, message: '请输入手机号码', trigger: 'blur' },
+          ],
+          account: [
+           { required: true, message: '请输入电子邮箱', trigger: 'blur' },
+          ],
+          department: [
+            { required: true, message: '请选择所属角色', trigger: 'change' }
+          ],
         },
         currentPage: 1,
         width:50,
@@ -228,12 +317,77 @@ import Page from "@/components/ftd-page/page";
                     this.width = 40;
                 }
             }
+            if (document.body.clientWidth > 1664) {
+                this.labelWidth = '112px';
+            } else {
+                this.labelWidth = '75px';
+            }
         }
     },
     methods: {
+        beforeClose(){
+            this.ruleForm={
+                bn: '',
+                name: '',
+                mobile: '',
+                email: '',
+                department:'',
+                account: ''
+            }
+            this.$refs.ruleForm.resetFields()
+            this.dialogVisible = false
+        },
         onSearch() {
         },
-        onDeleted(){
+        OnAdd(){
+            this.isEdit = false;
+            this.title = '新建运维单位信息'
+            this.ruleForm.id=this.tableData.length;
+            this.dialogVisible = true;
+        },
+        onEdit(row,index){
+            this.isEdit = true;
+            this.title = '编辑运维单位信息'
+            this.ruleForm =JSON.parse(JSON.stringify(row)) ;
+            this.editIndex = index;
+            this.dialogVisible = true
+        },
+        submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+            if (valid) {
+               if(this.isEdit){
+                // 编辑
+                console.log(this.ruleForm)
+                this.tableData[this.editIndex]=JSON.parse(JSON.stringify(this.ruleForm));
+                this.index++;
+                console.log(this.tableData)
+               }else{
+                // 新建
+                this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
+               }
+                
+               this.dialogVisible = false
+                this.ruleForm={
+                    bn: '',
+                    name: '',
+                    mobile: '',
+                    email: '',
+                    department:'',
+                    account: ''
+                }
+                this.$refs.ruleForm.resetFields()
+              
+            } else {
+                console.log('error submit!!');
+                return false;
+            }
+            });
+        },
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+            this.dialogVisible = false
+        },
+        onConfirm(){
             this.tableSeelctVal.map((item) => {
                 this.tableData.map((child, index) => {
                 if (item.id == child.id) {
@@ -241,6 +395,7 @@ import Page from "@/components/ftd-page/page";
                 }
                 });
             });
+            this.isDialog =false
         },
         handleSelectionChange(val){
             this.tableSeelctVal = val;

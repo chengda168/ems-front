@@ -74,7 +74,7 @@ export default {
     return {
       geoJson: {},
       activeIndex: "Cn",
-      icon: "image://" + require("@/assets/images/home/icon1.png"),
+      icon: "image://" + require("@/assets/images/home/icon1.jpg"),
       isShowHead:false,
        headList:[
                 {
@@ -326,6 +326,9 @@ export default {
               normal: {
                 show: false,
               },
+            },
+            itemStyle:{
+              opacity:1
             },
            
             data: convertData,
