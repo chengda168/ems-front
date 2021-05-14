@@ -18,7 +18,7 @@
                 <span>查询结果</span>
                 <div class="flexCenter">
                     <el-button type="primary" class="fullBtn" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
-                    <el-button type="primary" class="fullBtn" @click="onDeleted"><i class="iconfont icon-shanchu"></i>删除</el-button>
+                    <el-button type="primary" class="fullBtn" @click="isDialog = true"><i class="iconfont icon-shanchu"></i>删除</el-button>
                 </div>
             </div>
             <div class="siemensLayoutResultCon">
@@ -154,43 +154,15 @@
                     <div class="dialogbuttomclose"  @click="submitForm('ruleForm')">保 存</div>
                 </div>
         </el-dialog>
+        <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
     </div>
 
-
-
-
-
-        <!-- <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button> -->
-
-        <!-- <el-dialog
-        title="新建运维团队信息"
-        :visible.sync="dialogVisible"
-        :show-close="false"
-        width="32%">
-            <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
-            <div class="dialogdiv">
-                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="registerForm" label-width="100px" hide-required-asterisk=false>
-                    <el-form-item label="密码" prop="pass">
-                        <el-input type="password" v-model="ruleForm.pass"></el-input>
-                    </el-form-item>
-                    <el-form-item label="确认密码" prop="checkPass">
-                        <el-input type="password" v-model="ruleForm.checkPass"></el-input>
-                    </el-form-item>
-                    <el-form-item label="年龄" prop="age">
-                        <el-input v-model="ruleForm.age"></el-input>
-                    </el-form-item>
-                </el-form>
-            </div>
-            <div class="dialogbuttom">
-                <div @click="resetForm('ruleForm')">重置</div>
-                <div class="dialogbuttomclose"  @click="submitForm('ruleForm')">提交</div>
-            </div>
-        </el-dialog> -->
-
+        
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
+import Tips from "@/components/ftd-tips/tips";
   export default {
     computed:{
         ...mapGetters({
@@ -198,10 +170,12 @@ import Page from "@/components/ftd-page/page";
         })
     },
     components:{
-        Page
+        Page,
+        Tips
     },
     data() {
       return {
+          isDialog:false,
         index: 0,
         title: "新建客户信息",
         dialogVisible: false,
@@ -625,6 +599,21 @@ import Page from "@/components/ftd-page/page";
                 this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
                }
                this.dialogVisible = false
+                this.ruleForm={
+                    a: '',
+                    b: '',
+                    c: '',
+                    d: '',
+                    e: '',
+                    f:'',
+                    g: '',
+                    h: {
+                        city: '',
+                        area: '',
+                        address: ''
+                    },
+                }
+                this.$refs.ruleForm.resetFields()
             } else {
                 console.log('error submit!!');
                 return false;
@@ -638,7 +627,7 @@ import Page from "@/components/ftd-page/page";
         
         onSearch() {
         },
-        onDeleted(){
+        onConfirm(){
             this.tableSeelctVal.map((item) => {
                 this.tableData.map((child, index) => {
                 if (item.id == child.id) {
@@ -646,6 +635,7 @@ import Page from "@/components/ftd-page/page";
                 }
                 });
             });
+            this.isDialog = false;
         },
         handleSelectionChange(val){
             this.tableSeelctVal = val;

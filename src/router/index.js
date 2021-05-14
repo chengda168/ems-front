@@ -11,13 +11,23 @@ import Layout from '@/views/layout'
 import Home from '@/views/home'
 import ManageStaff from '@/views/manage/user/staff'
 import ManageCustom from '@/views/manage/user/custom'
-
-import Aa from '@/views/aa'
 import ManageOpcompany from '@/views/manage/user/opcompany'
 import ManageOpteam from '@/views/manage/user/opteam'
+
+import ArchivesBuild from '@/views/manage/archives/build'
+import ArchivesDevice from '@/views/manage/archives/device'
+import ArchivesEnergy from '@/views/manage/archives/energy'
+import ArchivesMeter from '@/views/manage/archives/meter'
+import ArchivesPrice from '@/views/manage/archives/price'
+import ArchivesRule from '@/views/manage/archives/rule'
+
 import ManageAdvertise from '@/views/manage/advertisement/advertise'
+import ManageData from '@/views/manage/advertisement/data'
+import ManageLog from '@/views/manage/advertisement/log'
 
+import ManageInfo from '@/views/manage/info'
 
+import Aa from '@/views/aa'
 
 
 
@@ -106,10 +116,83 @@ export default new Router({
             path:'/custom'
           }
         },
+        
+        {
+          path: 'build',
+          name: 'ArchivesBuild',
+          component: ArchivesBuild,
+          meta:{
+            path:'/custom'
+          }
+        },
+        {
+          path: 'device',
+          name: 'ArchivesDevice',
+          component: ArchivesDevice,
+          meta:{
+            path:'/custom'
+          }
+        },
+        {
+          path: 'meter',
+          name: 'ArchivesMeter',
+          component: ArchivesMeter,
+          meta:{
+            path:'/custom'
+          }
+        },
+        {
+          path: 'rule',
+          name: 'ArchivesRule',
+          component: ArchivesRule,
+          meta:{
+            path:'/custom'
+          }
+        },
+        {
+          path: 'energy',
+          name: 'ArchivesEnergy',
+          component: ArchivesEnergy,
+          meta:{
+            path:'/custom'
+          }
+        },
+        {
+          path: 'price',
+          name: 'ArchivesPrice',
+          component: ArchivesPrice,
+          meta:{
+            path:'/custom'
+          }
+        },
         {
           path: 'advertise',
           name: 'ManageAdvertise',
           component: ManageAdvertise,
+          meta:{
+            path:'/custom'
+          }
+        },
+        {
+          path: 'data',
+          name: 'ManageData',
+          component: ManageData,
+          meta:{
+            path:'/custom'
+          }
+        },
+        {
+          path: 'log',
+          name: 'ManageLog',
+          component: ManageLog,
+          meta:{
+            path:'/custom'
+          }
+        },
+        {
+          path: 'info',
+          name: 'ManageInfo',
+          component: ManageInfo,
           meta:{
             path:'/custom'
           }

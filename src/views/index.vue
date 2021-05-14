@@ -76,18 +76,18 @@ export default {
     return {
       geoJson: {},
       activeIndex: "Cn",
-      icon: "image://" + require("@/assets/images/home/icon1.png"),
-      isShowHead: false,
-      headList: [
-        {
-          name: "修改密码",
-          icon: "iconfont icon-ic_keyboard",
-        },
-        {
-          name: "登出",
-          icon: "iconfont icon-dengchu",
-        },
-      ],
+      icon: "image://" + require("@/assets/images/home/icon1.jpg"),
+      isShowHead:false,
+       headList:[
+                {
+                    name:'修改密码',
+                    icon:'iconfont icon-ic_keyboard'
+                },
+                {
+                    name:'登出',
+                    icon:'iconfont icon-dengchu'
+                }
+            ],
       options: [
         {
           value: "0",
@@ -332,7 +332,10 @@ export default {
                 show: false,
               },
             },
-
+            itemStyle:{
+              opacity:1
+            },
+           
             data: convertData,
             showEffectOn: "render",
             rippleEffect: {
