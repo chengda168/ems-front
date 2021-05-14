@@ -547,6 +547,7 @@ import Tips from "@/components/ftd-tips/tips";
         float: left;
         height: 15px;
         margin-top: 12px;
+        margin-left: 10px;
     }
 
     .dataCon {
@@ -659,6 +660,7 @@ import Tips from "@/components/ftd-tips/tips";
         float: left;
         height: 10px;
         margin-top: 5px;
+        margin-left: 7px;
     }
 
     .dataCon {

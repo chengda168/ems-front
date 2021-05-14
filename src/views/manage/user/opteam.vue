@@ -493,11 +493,11 @@ import Tips from "@/components/ftd-tips/tips";
         submitForm1(formName) {
             this.$refs[formName].validate((valid) => {
             if (valid) {
+                this.dialogPassword = false;
               
             } else {
                 console.log('error submit!!');
                 return false;
-                this.dialogPassword = false;
             }
             });
         },
