@@ -537,6 +537,7 @@ el-input__inner::placeholder{
         color: #FFFFFF;
         line-height: 40px;
         text-align: center;
+        cursor: pointer;
     }
 
     .dialogbuttom .dialogbuttomclose{
@@ -913,6 +914,7 @@ el-input__inner::placeholder{
         color: #FFFFFF;
         line-height: 27px;
         text-align: center;
+        cursor: pointer;
     }
 
     .dialogbuttom .dialogbuttomclose{
