@@ -65,18 +65,33 @@
             :visible.sync="dialogVisible" :before-close="beforeClose">
                 <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
                 <div class="dialogdiv">
-                
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
                         <el-form-item label="广告图片:" prop="bn">
                             <!-- <img class="davertiseimg" :src="scope.row.bn"> -->
-                            <button class=""></button>
+                            <el-upload
+                                class="upload-demo"
+                                action="https://jsonplaceholder.typicode.com/posts/"
+                                :limit='1'
+                                :file-list="ruleForm.bn"
+                                list-type="picture"
+                                :on-remove="onRemove"
+                                :on-success="onSuccess">
+                                <div>
+                                    <el-button class="updataImg">点击上传</el-button>
+                                    <div slot="tip" class="el-upload__tip updataImgTip">图片尺寸789dpi*348dpi</div>
+                                </div>
+                                </el-upload>
+                            <!-- <el-input type="text" v-model="ruleForm.bn"></el-input> -->
                         </el-form-item>
                         <el-form-item label="广告位置:" prop="name">
                             <el-input type="text" v-model="ruleForm.name"></el-input>
                         </el-form-item>
                         <el-form-item label="广告展示时间:" prop="mobile">
-                            <!-- <el-date-picker v-model="value1" type="date" placeholder="选择日期"></el-date-picker> -->
-                            <el-input v-model="ruleForm.mobile"></el-input>
+                            <div class="flex">
+                                <el-date-picker v-model="ruleForm.mobile.a" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" class="dataCon"></el-date-picker>
+                                至
+                                <el-date-picker v-model="ruleForm.mobile.b" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" class="dataCon"></el-date-picker>
+                            </div>
                         </el-form-item>
                         <el-form-item label="广告描述:"  prop="email">
                             <el-input v-model="ruleForm.email" type="textarea" :autosize="{ minRows: 4, maxRows: 6}"></el-input>
@@ -113,12 +128,15 @@ import Page from "@/components/ftd-page/page";
         ruleForm: {
             bn: '',
             name: '',
-            mobile: '',
+            mobile: {
+                a: '',
+                b: ''
+            },
             email: '',
         },
         rules: {
-          bn: [
-            { required: true, message: '请输入用户编码', trigger: 'blur' },
+           bn: [
+            { type: 'array', required: true, message: '请上传图片', trigger: 'change' }
           ],
           name: [
             { required: true, message: '请输入用户姓名', trigger: 'blur' },
@@ -252,6 +270,41 @@ import Page from "@/components/ftd-page/page";
                 mobile: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
+            {
+                bn: require("@/assets/images/backups.png"),
+                id:16,
+                name: '第二张',
+                mobile: '10天',
+                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
+            }, 
+            {
+                bn: require("@/assets/images/backups.png"),
+                id:17,
+                name: '第二张',
+                mobile: '10天',
+                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
+            }, 
+            {
+                bn: require("@/assets/images/backups.png"),
+                id:18,
+                name: '第二张',
+                mobile: '10天',
+                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
+            }, 
+            {
+                bn: require("@/assets/images/backups.png"),
+                id:19,
+                name: '第二张',
+                mobile: '10天',
+                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
+            }, 
+            {
+                bn: require("@/assets/images/backups.png"),
+                id:20,
+                name: '第二张',
+                mobile: '10天',
+                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
+            }, 
         ],
         tableSeelctVal:[]
       }
@@ -274,11 +327,22 @@ import Page from "@/components/ftd-page/page";
         }
     },
     methods: {
+        onSuccess(response, file, fileList){
+            console.log(fileList)
+            this.ruleForm.bn = fileList
+        },
+        onRemove(file, fileList){
+            console.log(fileList)
+            this.ruleForm.bn = fileList
+        },
         beforeClose(){
             this.ruleForm={
                 bn: '',
                 name: '',
-                mobile: '',
+                mobile: {
+                    a: '',
+                    b: ''
+                },
                 email: '',
             }
             this.$refs.ruleForm.resetFields()
@@ -310,6 +374,7 @@ import Page from "@/components/ftd-page/page";
                 console.log(this.tableData)
                }else{
                 // 新建
+                this.ruleForm.mobile = '10天'
                 this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
                }
                 
@@ -317,7 +382,10 @@ import Page from "@/components/ftd-page/page";
                 this.ruleForm={
                     bn: '',
                     name: '',
-                    mobile: '',
+                    mobile: {
+                        a: '',
+                        b: ''
+                    },
                     email: '',
                 }
                 this.$refs.ruleForm.resetFields()
@@ -372,7 +440,7 @@ import Page from "@/components/ftd-page/page";
             if (document.body.clientWidth > 1664) {
                 this.labelWidth = '120px';
             } else {
-                this.labelWidth = '80px';
+                this.labelWidth = '95px';
             }
             
         },
@@ -387,8 +455,97 @@ import Page from "@/components/ftd-page/page";
   }
 </script>
 <style scoped>
+    .flex {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .upload-demo /deep/ .el-upload-list__item-name {
+        display: none;
+    }
+
+    .upload-demo /deep/ .el-icon-close-tip {
+        display: none;
+    }
+
+    .upload-demo /deep/ .el-icon-upload-success {
+        display: none;
+    }
+
+    .upload-demo /deep/ .el-upload-list__item-status-label {
+        display: none;
+    }
+
     
 @media screen and (min-width: 1665px) {
+
+    .upload-demo /deep/ .el-upload-list__item {
+        width: 100px;
+        height: 100px;
+        overflow: inherit;
+        padding: 16px 5px;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        background: #FFFFFF;
+        border-radius: 4px;
+        border: 1px solid #BECDD7;
+    }
+
+    .upload-demo /deep/ .el-upload-list--picture .el-upload-list__item-thumbnail{
+        width: 90px;
+        height: auto;
+        margin-left: 0;
+
+    }
+
+    .upload-demo /deep/ .el-icon-close {
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        line-height: 19px;
+        color: #FFFFFF;
+        text-align: center;
+        background-color: #ED5565;
+        border-radius: 50%;
+        top: -12px;
+        right: -12px;
+        opacity: 1;
+    }
+    .upload-demo /deep/ .el-icon-close::before{
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 12px;
+        height: 2px;
+        background-color: #FFFFFF;
+    }
+
+    .updataImg {
+        float: left; 
+        width: 140px;
+        height: 40px;
+        background: #009999;
+        border-radius: 4px;
+    }
+
+    .updataImg /deep/ span {
+        font-size: 16px;
+        font-weight: 400;
+        color: #FFFFFF;
+    }
+
+    .updataImgTip {
+        float: left;
+        height: 15px;
+        margin-top: 12px;
+    }
+
+    .dataCon {
+        width: 185px;
+    }
     .adverDiv {
         width: 600px;
     }
@@ -426,6 +583,81 @@ import Page from "@/components/ftd-page/page";
 
 
 @media screen and (max-width: 1664px) {
+    .upload-demo /deep/ .el-button {
+        padding: 0;
+    }
+
+    .flex /deep/ .el-input__icon {
+        line-height: 28px;
+    }
+
+    .upload-demo /deep/ .el-upload-list__item {
+        width: 67px;
+        height: 67px;
+        overflow: inherit;
+        padding: 10px 3px;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        background: #FFFFFF;
+        border-radius: 3px;
+        border: 1px solid #BECDD7;
+    }
+
+    .upload-demo /deep/ .el-upload-list--picture .el-upload-list__item-thumbnail{
+        width: 60px;
+        height: auto;
+        margin-left: 0;
+
+    }
+
+    .upload-demo /deep/ .el-icon-close {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        line-height: 13px;
+        color: #FFFFFF;
+        text-align: center;
+        background-color: #ED5565;
+        border-radius: 50%;
+        top: -8px;
+        right: -8px;
+        opacity: 1;
+    }
+    .upload-demo /deep/ .el-icon-close::before{
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 8px;
+        height: 2px;
+        background-color: #FFFFFF;
+    }
+
+    .updataImg {
+        float: left; 
+        width: 94px;
+        height: 27px;
+        background: #009999;
+        border-radius: 3px;
+    }
+
+    .updataImg /deep/ span {
+        font-size: 12px;
+        font-weight: 400;
+        color: #FFFFFF;
+    }
+
+    .updataImgTip {
+        float: left;
+        height: 10px;
+        margin-top: 5px;
+    }
+
+    .dataCon {
+        width: 123px;
+    }
     .adverDiv {
         width: 400px;
     }
