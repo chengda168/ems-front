@@ -89,7 +89,7 @@
   </div>
 </template>
 <script>
-import JsEncrypt from "jsencrypt";
+// import JsEncrypt from "jsencrypt";
 import Login from "@/api/ums/login.js";
 
 export default {

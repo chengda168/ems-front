@@ -65,7 +65,7 @@
 <script>
 import geoJson from "../assets/js/china.json";
 import { mapGetters } from "vuex";
-import SCustomer from "@/api/ums/sCustomer";
+// import SCustomer from "@/api/ums/sCustomer";
 export default {
   computed: {
     ...mapGetters({

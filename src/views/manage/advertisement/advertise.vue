@@ -10,7 +10,7 @@
                         <div class="adver">轮播时间</div>
                     </div>
                     <el-button type="primary" class="fullBtn" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
-                    <el-button type="primary" class="fullBtn" @click="onDeleted"><i class="iconfont icon-shanchu"></i>删除</el-button>
+                    <el-button type="primary" class="fullBtn" @click="isDialog=true"><i class="iconfont icon-shanchu"></i>删除</el-button>
                 </div>
             </div>
             <div class="siemensLayoutResultCon">
@@ -103,11 +103,13 @@
                     <div class="dialogbuttomclose"  @click="submitForm('ruleForm')">保 存</div>
                 </div>
         </el-dialog>
+        <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
     </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
+import Tips from "@/components/ftd-tips/tips";
   export default {
     computed:{
         ...mapGetters({
@@ -115,10 +117,12 @@ import Page from "@/components/ftd-page/page";
         })
     },
     components:{
-        Page
+        Page,
+        Tips
     },
     data() {
       return {
+        isDialog:false,
         dialogVisible:false,
         title:"新建首页广告",
         index:0,
@@ -400,7 +404,8 @@ import Page from "@/components/ftd-page/page";
             this.$refs[formName].resetFields();
             this.dialogVisible = false
         },
-        onDeleted(){
+        
+        onConfirm(){
             this.tableSeelctVal.map((item) => {
                 this.tableData.map((child, index) => {
                 if (item.id == child.id) {
@@ -408,6 +413,7 @@ import Page from "@/components/ftd-page/page";
                 }
                 });
             });
+            this.isDialog = false
         },
         handleSelectionChange(val){
             this.tableSeelctVal = val;

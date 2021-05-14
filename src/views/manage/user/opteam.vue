@@ -81,7 +81,7 @@
                                 </el-tooltip>
                                 
                                 <el-tooltip class="item" effect="dark" content="重置密码" placement="top">
-                                    <i class="iconfont icon-ic_keyboard"></i>
+                                    <i class="iconfont icon-ic_keyboard" @click="onPassword(scope.row,scope.$index)"></i>
                                 </el-tooltip>
                                 
                             </div>
@@ -137,6 +137,26 @@
                     <div class="dialogbuttomclose"  @click="submitForm('ruleForm')">保 存</div>
                 </div>
             </el-dialog>
+        <el-dialog top="0"
+            title="重置密码" :show-close="false"
+            :visible.sync="dialogPassword">
+                <div class="close iconfont icon-guanbi" @click="dialogPassword = false"></div>
+                <div class="dialogdiv">
+                    <el-form :model="ruleForm1" label-position="left" :rules="rules1" ref="ruleForm1" class="registerForm" :label-width="labelWidth1" >
+                        
+                        <el-form-item label="新密码:" prop="password">
+                            <el-input type="text" v-model="ruleForm1.password"></el-input>
+                        </el-form-item>
+                        <el-form-item label="确认新密码:" prop="password1">
+                            <el-input v-model="ruleForm1.password1"></el-input>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <div class="dialogbuttom">
+                    <div @click="resetForm1()">取 消</div>
+                    <div class="dialogbuttomclose"  @click="submitForm1('ruleForm1')">保 存</div>
+                </div>
+            </el-dialog>
         <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
     </div>
 </template>
@@ -156,11 +176,13 @@ import Tips from "@/components/ftd-tips/tips";
     },
     data() {
       return {
-          isDialog:false,
+        dialogPassword: false,
+        isDialog:false,
         dialogVisible:false,
         title:"新建运维团队信息",
         index:0,
         labelWidth:'88px',
+        labelWidth1:'96px',
         isEdit:false,
         editIndex:null,
         roleList:[
@@ -181,6 +203,18 @@ import Tips from "@/components/ftd-tips/tips";
             department: '',
             role:'',
             status: '启用',
+        },
+        ruleForm1: {
+            password: '',
+            password1: '',
+        },
+        rules1: {
+          password: [
+            { required: true, message: '请输入新密码', trigger: 'blur' },
+          ],
+          password1: [
+            { required: true, message: '请输入新密码', trigger: 'blur' },
+          ],
         },
         rules: {
           name: [
@@ -387,6 +421,9 @@ import Tips from "@/components/ftd-tips/tips";
         }
     },
     methods: {
+        resetForm1(){
+            this.dialogPassword = false;
+        },
         beforeClose(){
              this.ruleForm={
                 name: '',
@@ -414,6 +451,9 @@ import Tips from "@/components/ftd-tips/tips";
             this.ruleForm =JSON.parse(JSON.stringify(row)) ;
             this.editIndex = index;
             this.dialogVisible = true
+        },
+        onPassword(row,index){
+            this.dialogPassword = true;
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
@@ -447,6 +487,17 @@ import Tips from "@/components/ftd-tips/tips";
             } else {
                 console.log('error submit!!');
                 return false;
+            }
+            });
+        },
+        submitForm1(formName) {
+            this.$refs[formName].validate((valid) => {
+            if (valid) {
+              
+            } else {
+                console.log('error submit!!');
+                return false;
+                this.dialogPassword = false;
             }
             });
         },
@@ -492,6 +543,12 @@ import Tips from "@/components/ftd-tips/tips";
             } else {
                 this.labelWidth = '68px';
             }
+            if (document.body.clientWidth > 1664) {
+                this.labelWidth = '96px';
+            } else {
+                this.labelWidth = '68px';
+            }
+            
             
         },
     },
