@@ -52,7 +52,7 @@
                   class="inputicon iconfont icon-yunongtongqingshuruyanzhengma"
                 ></div>
                 <div class="inputCodeimage">
-                  <img :src="verifyCodeApi" onclick="this.src=this.src+'?'" />
+                  <img :src="verifyCodeApi" @click="getVerifyCode" />
                 </div>
               </el-form-item>
               <div class="LoginConPass">
@@ -94,13 +94,24 @@ import Login from "@/api/ums/login.js";
 
 export default {
   data() {
+    const validateVcode = (rule, value, callback) => {
+      console.log(this.code, value);
+      if (this.code.toLowerCase() != value.toLowerCase()) {
+        callback(new Error("验证码错误，请重新输入"));
+      } else {
+        callback();
+      }
+    };
+
     return {
       errordis: "2",
       password1: "password",
       verifyCodeApi: this.GLOBAL.verifyCodeApi,
+
       params: {
         name: "",
         password: "",
+        uuid: "",
         vcode: "",
       },
       cn: [
@@ -129,11 +140,12 @@ export default {
         vcode: [
           {
             required: true,
-            message: "验证码错误，请重新输入",
+            validator: validateVcode,
             trigger: "blur",
           },
         ],
       },
+      code: "",
     };
   },
   mounted() {
@@ -141,10 +153,11 @@ export default {
   },
   methods: {
     // 获取图片验证码
-    getVerifyCode() {
-      Login.verifyCode().then((res) => {
-        console.log(res);
-      });
+    async getVerifyCode() {
+      //获取uuid
+      let res = await Login.verifyCode();
+      this.verifyCodeApi = "data:image/gif;base64," + res.data.img;
+      this.code = res.data.code;
     },
     showpassword() {
       if (this.password1 == "password") {
@@ -154,31 +167,26 @@ export default {
       }
     },
     async sumbile(params) {
-      this.$refs[params].validate((valid) => {
-        if (valid) {
-          // this.errordis = '1'
-          //   let res = await Login.getPublicKey(this.params.name)
-          //   let publicKey = res.data;
-          //   let jse = new JsEncrypt()
-          //   jse.setPublicKey(`-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`);
-          //   let encrypted = jse.encrypt(this.params.password);
-          //   let loginRes=await Login.doLogin(
-          //     {"account":this.params.name,
-          //     "password":encrypted,
-          //     "code":this.params.vcode});
+      //let code=await Login.verifyCode();
+      let valid = this.$refs[params].validate();
+      // this.$refs[params].validate((valid) => {
+      if (valid) {
+        let res = await Login.getPublicKey(this.params.name);
+        let publicKey = res.data;
+        let jse = new JsEncrypt();
+        jse.setPublicKey(
+          `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
+        );
+        let encrypted = jse.encrypt(this.params.password);
+        let loginRes = await Login.doLogin({
+          account: this.params.name,
+          password: encrypted,
+        });
+        if (loginRes.code == 200) {
           this.$router.push("/dashboard");
         } else {
-          return false;
+          this.errordis = "1";
         }
-      });
-      if (
-        this.params.name != "admin" ||
-        this.params.password != "1234" ||
-        this.params.vcode != "1010"
-      ) {
-        this.errordis = "1";
-      } else {
-        this.errordis = "2";
       }
     },
   },

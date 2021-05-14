@@ -38,9 +38,24 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async verifyCode(){
-        const url = `/ums/verifyCode/getVerify`;
+        // console.log(uuid)
+        const url = `/ums/verifyCode/generate`;
+        // let param = {
+        //     "uuid" : uuid
+        // }
         const data = await this.$get(url);
         return data;
+    }
+
+
+    static async sendVerificationCode(number){
+        const url = `/ums/users/sendVerificationCode`;
+        let param = {
+            "number" : number
+        }
+        const data = await this.$get(url,param);
+        return data;
+
     }
 
 
