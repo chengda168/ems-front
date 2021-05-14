@@ -133,7 +133,10 @@ li,ol{
 ::-webkit-scrollbar-corner {
     background-color: #E9ECF0;
 }
-
+/* element滚动条 */
+.el-scrollbar__thumb{
+    background-color:#BECDD7 ;
+}
 
 /* 表单 */
 .el-input__inner{
@@ -160,6 +163,7 @@ el-input__inner::placeholder{
 .el-message-box__input input.invalid:focus{
     border-color: #BECDD7;
 }
+
 
 
 /* 按钮 */
