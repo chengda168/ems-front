@@ -17,7 +17,7 @@
             <div class="error" v-if="errordis == '1'">
               <div class="errorimage iconfont icon-jinggaozhuyi"></div>
               <div class="errorfont">
-                登录账户或密码错误！剩余5次机会，超过6次将冻结24小时。
+                登录账户或密码错误！剩余{{loginFailedNum}}次机会，超过6次将冻结24小时。
               </div>
             </div>
             <el-form
@@ -107,7 +107,7 @@ export default {
       errordis: "2",
       password1: "password",
       verifyCodeApi: this.GLOBAL.verifyCodeApi,
-
+      loginFailedNum:"",
       params: {
         name: "",
         password: "",
@@ -182,6 +182,7 @@ export default {
           account: this.params.name,
           password: encrypted,
         });
+        this.loginFailedNum=6-loginRes.data.loginFailedNum;
         if (loginRes.code == 200) {
           this.$router.push("/dashboard");
         } else {
