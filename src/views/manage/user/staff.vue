@@ -126,13 +126,13 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="状态:" prop="status">
+                        <el-form-item label="状　　态:" prop="status">
                             <el-radio-group v-model="ruleForm.status">
                                 <el-radio label="启用">启 用</el-radio>
                                 <el-radio label="禁用">禁 用</el-radio>
                             </el-radio-group>
                         </el-form-item>
-                        <el-form-item label="系统权限:" prop="power">
+                        <el-form-item label="系统权限:" prop="power" class="requireIcon">
                             <div class="systemPowerBox">
                                 <div class="flexEnd">
                                     <el-checkbox v-model="ruleForm.watch" @change="handleAllWatch">全部</el-checkbox>
@@ -159,7 +159,8 @@
                     <div @click="resetForm('ruleForm')">取 消</div>
                     <div class="dialogbuttomclose"  @click="submitForm('ruleForm')">保 存</div>
                 </div>
-            </el-dialog>
+        </el-dialog>
+        
     </div>
 </template>
 <script>
@@ -241,9 +242,6 @@ import Page from "@/components/ftd-page/page";
           status: [
             { required: true, message: '请选择状态', trigger: 'blur' }
           ],
-        //   power: [
-        //     { required: true, message: '请至少选择一个权限', trigger: 'change' }
-        //   ]
         },
         currentPage: 1,
         width:50,
@@ -628,7 +626,19 @@ import Page from "@/components/ftd-page/page";
                 // 新建
                 this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
                }
-                
+                this.ruleForm={
+                    bn: '',
+                    name: '',
+                    mobile: '',
+                    email: '',
+                    department: '',
+                    role:'',
+                    status: '启用',
+                    watch:false,
+                    edit:false,
+                    power:''
+                }
+                this.$refs.ruleForm.resetFields()
                this.dialogVisible = false
               
             } else {
@@ -641,70 +651,16 @@ import Page from "@/components/ftd-page/page";
             this.$refs[formName].resetFields();
             this.dialogVisible = false
         },
-        setWatch(data,val){
-            console.log(val)
-             data.map(item=>{
-                if(item.children){
-                    this.setWatch(item.children,val)
-                }else{
-                    item.watch = val
-                    console.log(item.label,item.watch)
-                    
-                }
-            })
-            
-        },
         handleAllWatch(val){
-            this.setWatch(this.data,val)
-            // this.data= this.data
-            
-            console.log(this.data)
         },
         handleAllEdit(val){
 
         },
-        getSelectWatch(data){
-        //    this.isSelectWatch = false;
-            data.map(item=>{
-                if(item.children){
-                    this.getSelectWatch(item.children)
-                }else{
-                    if(item.watch || item.edit){
-                        console.log("22")
-                        this.isSelectWatch = true
-                        return false
-                    }else{
-                         console.log("11")
-                    }
-                }
-            })
-            console.log(this.isSelectWatch)
-        },
-        // getSelectEdit(data){
-        //    this.isSelectEdit = false;
-        //     data.map(item=>{
-        //         if(item.children){
-        //             this.getSelectEdit(item.children)
-        //         }else{
-        //             if(item.edit){
-        //                 this.isSelectEdit = true
-        //             }
-        //         }
-        //     })
-        // },
         handleWatchChange(value,data){
             data.watch = value
-            // let arr = this.data.filter((x) =>  x.watch == true);
-            // console.log([].concat(...this.data))
-            //this.getSelectWatch(this.data)
-            // let aa = this.data.some(function (item) {
-            //     return item.watch == true;
-            // });
-            // console.log(arr)
         },
         handleEditChange(value,data){
             data.edit = value
-            this.getSelectWatch(this.data)
         },
         onDeleted(){
             this.tableSeelctVal.map((item) => {
@@ -804,6 +760,11 @@ import Page from "@/components/ftd-page/page";
     .systemPowerBox /deep/ .el-tree .el-tree-node__children .el-tree-node__children .el-tree-node__expand-icon.is-leaf{
         color: transparent;
     }
+    .requireIcon /deep/ .el-form-item__label::before{
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
 }
 /* 1280*/
 @media screen and (max-width: 1664px) {
@@ -855,6 +816,11 @@ import Page from "@/components/ftd-page/page";
     }
     .systemPowerBox /deep/ .el-tree .el-tree-node__children .el-tree-node__children .el-tree-node__expand-icon.is-leaf{
         color: transparent;
+    }
+    .requireIcon /deep/ .el-form-item__label::before{
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
     }
 }
 </style>

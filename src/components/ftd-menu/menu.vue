@@ -2,19 +2,26 @@
     <div>
         <el-menu class="menuBox" unique-opened :collapse="collapse" :class="{'closeMenu':collapse}"
             :default-active="activeRourter" router :default-openeds="openedsIndex"
-            @open="handleOpen"
-            @close="handleClose"
            >
-            <el-submenu :index="item.id" v-for="(item,index) in menuList" :key="index">
-                <template slot="title" >
-                    <i :class="item.iconfont" @click="handleselect(item.id)"></i>
-                    <span>{{item.title}}</span>
-                </template>
-                <template v-if="item.children">
+           <template v-for="(item,index) in menuList" >
+               <el-submenu :index="item.id" :key="index" v-if="item.children">
+                    <template slot="title" >
+                        <div class="menuTitle"  @click="handleselect(item.id)">
+                            <i :class="item.iconfont"></i>
+                            <span>{{item.title}}</span>
+                        </div>
+                    </template>
                     <el-menu-item  v-for="(items,index) in item.children" :index="items.path"  :key="index">{{items.name}}</el-menu-item>
-                </template>
-                
-            </el-submenu>
+                    
+                </el-submenu>
+                <el-menu-item  v-else :index="item.path"  :key="index" class="oneMenu">
+                    <div class="menuTitle"  @click="handleselect(item.id)">
+                        <i :class="item.iconfont"></i>
+                        <span>{{item.title}}</span>
+                    </div>
+                </el-menu-item>
+           </template>
+            
         </el-menu>
     </div>
 </template>
@@ -69,32 +76,32 @@ import { mapGetters } from 'vuex'
                 {
                     title:'档案管理',
                     iconfont:'iconfont icon-dangan',
-                    path:'/aa',
+                    // path:'/aa',
                     id:'1',
                     children:[
                         {
                             name:'建筑信息管理',
-                            path:'/aa'
+                            path:'/build'
                         },
                         {
                             name:'设备信息管理',
-                            path:'/'
+                            path:'/device'
                         },
                         {
                             name:'表计、传感器信息管理',
-                            path:'/'
+                            path:'/meter'
                         },
                         {
                             name:'规则定义',
-                            path:'/'
+                            path:'/rule'
                         },
                         {
                             name:'能耗指标设定',
-                            path:'/'
+                            path:'/energy'
                         },
                         {
                             name:'价格录入',
-                            path:'/'
+                            path:'/price'
                         }
                     ]
                 },
@@ -105,15 +112,15 @@ import { mapGetters } from 'vuex'
                      children:[
                         {
                             name:'数据字典管理',
-                            path:'/'
+                            path:'/data'
                         },
                         {
                             name:'系统日志管理',
-                            path:'/'
+                            path:'/log'
                         },
                         {
                             name:'首页广告位管理',
-                            path:'/'
+                            path:'/advertise'
                         }
                     ]
                 },
@@ -121,21 +128,7 @@ import { mapGetters } from 'vuex'
                     title:'信息发布',
                     iconfont:'iconfont icon-xinxifabu',
                     id:'3',
-                    path:'/'
-                    //  children:[
-                    //     {
-                    //         name:'档案管理',
-                    //         path:'/'
-                    //     },
-                    //     {
-                    //         name:'档案管理',
-                    //         path:'/'
-                    //     },
-                    //     {
-                    //         name:'档案管理',
-                    //         path:'/'
-                    //     },
-                    // ]
+                    path:'/info'
                 }
             ]
         }
@@ -148,12 +141,13 @@ import { mapGetters } from 'vuex'
         console.log(key, keyPath);
       },
       handleselect(id){
+          
           if(this.collapse == true){
-              let arr=[]
-              arr.push(id)
-              this.openedsIndex = arr;
-              this.$store.dispatch('setCollapse',false);
-          }
+                let arr=[]
+                arr.push(id)
+                this.openedsIndex = arr;
+            }
+           this.$store.dispatch('setCollapse',false);
           
       }
     },
@@ -178,15 +172,21 @@ import { mapGetters } from 'vuex'
         position: relative;
         height: 40px;
         line-height: 40px;
-        padding: 0 30px !important;
+        padding: 0 !important;
         margin-bottom: 5px;
         font-size: 16px;
         color: #fff;
+    }
+    .menuTitle{
+        padding: 0 30px !important;
     }
     .closeMenu{
         margin-top: 68px;
     }
     .closeMenu /deep/ .el-submenu__title{
+        padding: 0 !important;
+    }
+    .closeMenu /deep/ .menuTitle{
         padding: 0 22px !important;
     }
    .closeMenu /deep/ .el-submenu__title span,
@@ -194,7 +194,8 @@ import { mapGetters } from 'vuex'
         display: none;
     }
   
-    /deep/ .el-submenu.is-active .el-submenu__title::after{
+    /deep/ .el-submenu.is-active .el-submenu__title::after,
+    .oneMenu.is-active::after{
         content: "";
         position: absolute;
         top: 0;
@@ -204,7 +205,8 @@ import { mapGetters } from 'vuex'
         background-color: #FFB900;
         border-radius: 2px;
     }
-     /deep/ .el-submenu__title .iconfont{
+     /deep/ .el-submenu__title .iconfont,
+     .oneMenu .iconfont{
          display: inline-block;
          width: 16px;
          height: 16px;
@@ -222,7 +224,7 @@ import { mapGetters } from 'vuex'
     /deep/ .el-submenu__title .icon-dangan{
         font-size: 17px;
      }
-     /deep/ .el-submenu__title .icon-xinxifabu{
+     /deep/ .oneMenu .icon-xinxifabu{
           font-size: 20px;
      }
     /deep/ .el-submenu__title .el-submenu__icon-arrow{
@@ -245,6 +247,9 @@ import { mapGetters } from 'vuex'
         color: #fff;
         padding: 0 0 0 70px !important;
     }
+    .oneMenu{
+        padding-left: 0 !important;
+    }
 }
 /* 1280*/
 @media screen and (max-width: 1664px) {
@@ -259,15 +264,21 @@ import { mapGetters } from 'vuex'
         position: relative;
         height: 26px;
         line-height: 26px;
-        padding: 0 20px !important;
+        padding: 0 !important;
         margin-bottom: 3px;
         font-size: 12px;
         color: #fff;
+    }
+    .menuTitle{
+        padding: 0 20px !important;
     }
     .closeMenu{
         margin-top: 45px;
     }
     .closeMenu /deep/ .el-submenu__title{
+        padding: 0 !important;
+    }
+    .closeMenu /deep/ .menuTitle{
         padding: 0 14px !important;
     }
    .closeMenu /deep/ .el-submenu__title span,
@@ -275,7 +286,8 @@ import { mapGetters } from 'vuex'
         display: none;
     }
   
-    /deep/ .el-submenu.is-active .el-submenu__title::after{
+    /deep/ .el-submenu.is-active .el-submenu__title::after,
+    .oneMenu.is-active::after{
         content: "";
         position: absolute;
         top: 0;
@@ -285,7 +297,8 @@ import { mapGetters } from 'vuex'
         background-color: #FFB900;
         border-radius: 1px;
     }
-     /deep/ .el-submenu__title .iconfont{
+     /deep/ .el-submenu__title .iconfont,
+     .oneMenu .iconfont{
          display: inline-block;
          width: 11px;
          height: 11px;
@@ -303,7 +316,7 @@ import { mapGetters } from 'vuex'
     /deep/ .el-submenu__title .icon-dangan{
         font-size: 12px;
      }
-     /deep/ .el-submenu__title .icon-xinxifabu{
+     /deep/ .oneMenu .icon-xinxifabu{
           font-size: 13px;
      }
     /deep/ .el-submenu__title .el-submenu__icon-arrow{
@@ -325,6 +338,9 @@ import { mapGetters } from 'vuex'
         font-size: 12px;
         color: #fff;
         padding: 0 0 0 46px !important;
+    }
+    .oneMenu{
+        padding-left: 0 !important;
     }
 }
 </style>

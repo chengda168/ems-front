@@ -240,7 +240,9 @@ el-input__inner::placeholder{
         height: 40px;
         line-height: 40px;
         padding: 0 10px;
+        text-align: left;
     }
+    
     /* 检索条件 */
     .siemensLayoutCon{
         display: flex;
@@ -609,6 +611,8 @@ el-input__inner::placeholder{
         height: 26px;
         line-height: 26px;
         padding: 0 6px;
+        font-size: 12px;
+        text-align: left;
     }
     .el-form-item__content,
     .el-form-item__label{
