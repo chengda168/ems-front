@@ -89,7 +89,7 @@
         </div>
         <el-dialog top="0"
             :title="title" :show-close="false"
-            :visible.sync="dialogVisible">
+            :visible.sync="dialogVisible" :before-close="beforeClose">
                 <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
                 <div class="dialogdiv">
                 
@@ -584,10 +584,8 @@ import Page from "@/components/ftd-page/page";
         }
     },
     methods: {
-        onSearch() {
-        },
-        OnAdd(){
-            this.ruleForm={
+        beforeClose(){
+             this.ruleForm={
                 bn: '',
                 name: '',
                 mobile: '',
@@ -600,6 +598,11 @@ import Page from "@/components/ftd-page/page";
                 power:''
             }
             this.$refs.ruleForm.resetFields()
+            this.dialogVisible = false
+        },
+        onSearch() {
+        },
+        OnAdd(){
             this.isEdit = false;
             this.title = '新建人员信息'
             this.ruleForm.id=this.tableData.length;

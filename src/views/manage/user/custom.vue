@@ -85,7 +85,7 @@
         </div>
         <el-dialog
             :title="title" :show-close="false" top="0"
-            :visible.sync="dialogVisible">
+            :visible.sync="dialogVisible" :before-close="beforeClose">
                 <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
                 <div class="dialogdiv">
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
@@ -579,8 +579,8 @@ import Page from "@/components/ftd-page/page";
             }
             console.log(this.roleList1)
         },
-        OnAdd(ruleForm){
-            this.ruleForm={
+        beforeClose(){
+             this.ruleForm={
                 a: '',
                 b: '',
                 c: '',
@@ -595,6 +595,10 @@ import Page from "@/components/ftd-page/page";
                 },
             }
             this.$refs.ruleForm.resetFields()
+            this.dialogVisible = false
+        },
+        OnAdd(ruleForm){
+           
             this.isEdit = false;
             this.title = '新建客户信息'
             this.ruleForm.id=this.tableData.length;
