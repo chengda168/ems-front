@@ -762,7 +762,8 @@ import Tips from "@/components/ftd-tips/tips";
         align-items: baseline;
         justify-content: space-between;
     }
-    .systemPowerBox /deep/ .el-tree-node__content:hover{
+    .systemPowerBox /deep/ .el-tree-node__content:hover,
+    .systemPowerBox /deep/ .el-tree-node:focus>.el-tree-node__content{
         background-color: transparent;
     }
     .systemPowerBox /deep/ .el-checkbox{
@@ -819,7 +820,8 @@ import Tips from "@/components/ftd-tips/tips";
         align-items: baseline;
         justify-content: space-between;
     }
-    .systemPowerBox /deep/ .el-tree-node__content:hover{
+    .systemPowerBox /deep/ .el-tree-node__content:hover,
+    .systemPowerBox /deep/ .el-tree-node:focus>.el-tree-node__content{
         background-color: transparent;
     }
     .systemPowerBox /deep/ .el-checkbox{
