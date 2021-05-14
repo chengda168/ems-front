@@ -514,6 +514,7 @@ el-input__inner::placeholder{
         max-height: 556px;
         padding-right: 30px;
         overflow: auto;
+        padding-bottom: 20px;
     }
 
     .el-dialog__body {
@@ -885,6 +886,7 @@ el-input__inner::placeholder{
         max-height: 371px;
         padding-right: 20px;
         overflow: auto;
+        padding-bottom: 14px;
     }
 
     .el-dialog__body {

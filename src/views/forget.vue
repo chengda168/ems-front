@@ -61,6 +61,8 @@
   </div>
 </template>
 <script>
+import Login from "@/api/ums/login.js";
+
 export default {
   computed: {
     classTextObj: function () {
@@ -177,6 +179,8 @@ export default {
   },
   methods:{
     onGetCode(){
+      let res =  Login.sendVerificationCode(this.ruleForm.account);
+      console.log(res)
       this.isGetCode = true
       let self = this;
       let timer =setInterval(function(){

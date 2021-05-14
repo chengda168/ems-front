@@ -65,7 +65,7 @@
                         prop="h"
                         label="所属地址">
                         <template slot-scope="scope">
-                            {{scope.row.h.city}}{{scope.row.h.area}}{{scope.row.h.address}}
+                            {{scope.row.h.city}}{{scope.row.h.area}}{{scope.row.h.area1}}{{scope.row.h.address}}
                         </template>
                     </el-table-column>
                     <el-table-column align="center"
@@ -135,9 +135,17 @@
                                     >
                                     </el-option>
                                 </el-select>
-                                <el-select v-model="ruleForm.h.area" placeholder="" popper-class="dialogSelect " class="SelectYihang">
+                                <el-select v-model="ruleForm.h.area" placeholder="" popper-class="dialogSelect " class="SelectYihang" @change="selectCityArea1()">
                                     <el-option
                                     v-for="item in roleList1"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                    </el-option>
+                                </el-select>
+                                <el-select v-model="ruleForm.h.area1" placeholder="" popper-class="dialogSelect " class="SelectYihang">
+                                    <el-option
+                                    v-for="item in roleList10"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">
@@ -190,33 +198,34 @@ import Tips from "@/components/ftd-tips/tips";
           h: {
             city: '',
             area: '',
+            area1: '',
             address: ''
           },
         },
         rules: {
           a: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' }
+            { required: true, message: '请输入上级单位', trigger: 'blur' }
           ],
           b: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' }
+            { required: true, message: '请输入园区名称', trigger: 'blur' }
           ],
           c: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' }
+            { required: true, message: '请输入园区编号', trigger: 'blur' }
           ],
           d: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' }
+            { required: true, message: '请输入联系人', trigger: 'blur' }
           ],
           e: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' }
+            { required: true, message: '请输入手机号码', trigger: 'blur' }
           ],
           f: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' }
+            { required: true, message: '请输入电子邮箱', trigger: 'blur' }
           ],
           g: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' }
+            { required: true, message: '请输入运维单位', trigger: 'blur' }
           ],
           h: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' }
+            { required: true, message: '请输入园区地址', trigger: 'blur' }
           ],
         },
         params: {
@@ -238,7 +247,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -253,7 +263,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -268,7 +279,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -283,7 +295,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -298,7 +311,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -313,7 +327,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -328,7 +343,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -343,7 +359,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -358,7 +375,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -373,7 +391,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -388,7 +407,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -403,7 +423,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -418,7 +439,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -433,7 +455,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -448,7 +471,8 @@ import Tips from "@/components/ftd-tips/tips";
                 g:'电力公司',
                 h: {
                     city: '上海市',
-                    area: '浦东区',
+                    area: '',
+                    area1: '浦东区',
                     address: '陆家嘴'
                 },
             }, 
@@ -478,23 +502,19 @@ import Tips from "@/components/ftd-tips/tips";
         ],
         roleList:[
             {
-                value: '上海',
-                label: '上海'
+                value: '上海市',
+                label: '上海市'
             }, 
             {
-                value: '江苏',
-                label: '江苏'
+                value: '江苏市',
+                label: '江苏市'
             },
         ],
         roleList1:[
             {
-                value: '静安区',
-                label: '静安区'
+                value: '上海市',
+                label: '上海市'
             }, 
-            {
-                value: '嘉定区',
-                label: '嘉定区'
-            },
         ],
         roleList2:[
             {
@@ -505,12 +525,44 @@ import Tips from "@/components/ftd-tips/tips";
                 value: '南通市',
                 label: '南通市'
             },
-            {
-                value: '无锡市',
-                label: '无锡市'
-            },
         ],
         roleList3:[
+            {
+                value: '上海市',
+                label: '上海市'
+            }, 
+        ],
+        roleList4:[
+            {
+                value: '静安区',
+                label: '静安区'
+            }, 
+            {
+                value: '嘉定区',
+                label: '嘉定区'
+            },
+        ],
+        roleList5:[
+            {
+                value: '常熟市',
+                label: '常熟市'
+            }, 
+            {
+                value: '吴中区',
+                label: '吴中区'
+            },
+        ],
+        roleList6:[
+            {
+                value: '海门市',
+                label: '海门市'
+            }, 
+            {
+                value: '如皋市',
+                label: '如皋市'
+            },
+        ],
+        roleList10:[
             {
                 value: '静安区',
                 label: '静安区'
@@ -542,16 +594,33 @@ import Tips from "@/components/ftd-tips/tips";
     methods: {
         selectCityArea(){
             console.log(this.ruleForm)
-            if(this.ruleForm.h.city == "上海"){
+            if(this.ruleForm.h.city == "上海市"){
                 this.roleList1 = this.roleList3
                 this.ruleForm.h.area = ''
+                this.ruleForm.h.area1 = ''
                 this.ruleForm.h.address = ''
             }else {
                 this.roleList1 = this.roleList2
                 this.ruleForm.h.area = ''
+                this.ruleForm.h.area1 = ''
                 this.ruleForm.h.address = ''
             }
-            console.log(this.roleList1)
+        },
+        selectCityArea1(){
+            console.log(this.ruleForm)
+            if(this.ruleForm.h.area == "上海市"){
+                this.roleList10 = this.roleList4
+                this.ruleForm.h.area1 = ''
+                this.ruleForm.h.address = ''
+            }else if(this.ruleForm.h.area == "苏州市"){
+                this.roleList10 = this.roleList5
+                this.ruleForm.h.area1 = ''
+                this.ruleForm.h.address = ''
+            }else if(this.ruleForm.h.area == "南通市"){
+                this.roleList10 = this.roleList6
+                this.ruleForm.h.area1 = ''
+                this.ruleForm.h.address = ''
+            }
         },
         beforeClose(){
              this.ruleForm={
@@ -690,7 +759,7 @@ import Tips from "@/components/ftd-tips/tips";
     }
 
     .SelectYihang {
-        width: 210px;
+        width: 132px;
     }
 
     .SelectYihang1 {
@@ -709,7 +778,7 @@ import Tips from "@/components/ftd-tips/tips";
     }
 
     .SelectYihang {
-        width: 140px;
+        width: 88px;
     }
 
     .SelectYihang1 {
