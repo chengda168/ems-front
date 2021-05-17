@@ -26,22 +26,22 @@
                         :width="width">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="bn" 
+                        prop="pictureUrl" 
                         label="广告图片">
                         <template slot-scope="scope">
-                            <img class="davertiseimg" :src="scope.row.bn">
+                            <img class="davertiseimg" :src="scope.row.pictureUrl">
                         </template>
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="name"
+                        prop="position"
                         label="广告轮转位置">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="mobile"
+                        prop="showTime"
                         label="广告展示时限">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="email"
+                        prop="description"
                         label="广告描述"
                         :width="width1">
                     </el-table-column>
@@ -58,7 +58,7 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <Page :total="400" :pageSize="15"></Page>
+            <Page :total="totalElements" :pageSize="15" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
         </div>
         <el-dialog top="0"
             :title="title" :show-close="false"
@@ -66,13 +66,13 @@
                 <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
                 <div class="dialogdiv">
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
-                        <el-form-item label="广告图片:" prop="bn">
-                            <!-- <img class="davertiseimg" :src="scope.row.bn"> -->
+                        <el-form-item label="广告图片:" prop="pictureUrl">
+                            <!-- <img class="davertiseimg" :src="scope.row.pictureUrl"> -->
                             <el-upload
                                 class="upload-demo"
                                 action="https://jsonplaceholder.typicode.com/posts/"
                                 :limit='1'
-                                :file-list="ruleForm.bn"
+                                :file-list="ruleForm.pictureUrl"
                                 list-type="picture"
                                 :on-remove="onRemove"
                                 :on-success="onSuccess">
@@ -81,20 +81,20 @@
                                     <div slot="tip" class="el-upload__tip updataImgTip">图片尺寸789dpi*348dpi</div>
                                 </div>
                                 </el-upload>
-                            <!-- <el-input type="text" v-model="ruleForm.bn"></el-input> -->
+                            <!-- <el-input type="text" v-model="ruleForm.pictureUrl"></el-input> -->
                         </el-form-item>
-                        <el-form-item label="广告位置:" prop="name">
-                            <el-input type="text" v-model="ruleForm.name"></el-input>
+                        <el-form-item label="广告位置:" prop="position">
+                            <el-input type="text" v-model="ruleForm.position"></el-input>
                         </el-form-item>
-                        <el-form-item label="广告展示时间:" prop="mobile">
+                        <el-form-item label="广告展示时间:" prop="showTime">
                             <div class="flex">
-                                <el-date-picker v-model="ruleForm.mobile.a" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" class="dataCon"></el-date-picker>
+                                <el-date-picker v-model="ruleForm.showTime.a" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" class="dataCon"></el-date-picker>
                                 至
-                                <el-date-picker v-model="ruleForm.mobile.b" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" class="dataCon"></el-date-picker>
+                                <el-date-picker v-model="ruleForm.showTime.b" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" class="dataCon"></el-date-picker>
                             </div>
                         </el-form-item>
-                        <el-form-item label="广告描述:"  prop="email">
-                            <el-input v-model="ruleForm.email" type="textarea" :autosize="{ minRows: 4, maxRows: 6}"></el-input>
+                        <el-form-item label="广告描述:"  prop="description">
+                            <el-input v-model="ruleForm.description" type="textarea" :autosize="{ minRows: 4, maxRows: 6}"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -107,9 +107,12 @@
     </div>
 </template>
 <script>
+
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
+import SAdvertising from "@/api/ums/sAdvertising";
+
   export default {
     computed:{
         ...mapGetters({
@@ -130,186 +133,39 @@ import Tips from "@/components/ftd-tips/tips";
         isEdit:false,
         editIndex:null,
         ruleForm: {
-            bn: '',
-            name: '',
-            mobile: {
+            pictureUrl: '',
+            position: '',
+            showTime: {
                 a: '',
                 b: ''
             },
-            email: '',
+            description: '',
         },
         rules: {
-           bn: [
+           pictureUrl: [
             { type: 'array', required: true, message: '请上传图片', trigger: 'change' }
           ],
-          name: [
+          position: [
             { required: true, message: '请输入用户姓名', trigger: 'blur' },
           ],
-          mobile: [
+          showTime: [
             { required: true, message: '请输入手机号码', trigger: 'blur' },
           ],
-          email: [
+          description: [
             { required: true, message: '请输入电子邮箱', trigger: 'blur' },
           ],
         },
         input: '',
         params: {
-          name: '',
-          mobile: '',
+          position: '',
+          showTime: '',
           emial:''
         },
         currentPage: 1,
+        totalElements: 0,
         width:50,
         width1:540,
-        tableData: [
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:0,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:1,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:2,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:3,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:4,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:5,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:6,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:7,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:8,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:9,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:10,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:11,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:12,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:13,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:14,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:15,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:16,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:17,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:18,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:19,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-            {
-                bn: require("@/assets/images/backups.png"),
-                id:20,
-                name: '第二张',
-                mobile: '10天',
-                email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
-            }, 
-        ],
+        tableData: [],
         tableSeelctVal:[]
       }
     },
@@ -331,23 +187,27 @@ import Tips from "@/components/ftd-tips/tips";
         }
     },
     methods: {
+        onPageChange(val){
+            console.log(val)
+            this.currentPage = val
+        },
         onSuccess(response, file, fileList){
             console.log(fileList)
-            this.ruleForm.bn = fileList
+            this.ruleForm.pictureUrl = fileList
         },
         onRemove(file, fileList){
             console.log(fileList)
-            this.ruleForm.bn = fileList
+            this.ruleForm.pictureUrl = fileList
         },
         beforeClose(){
             this.ruleForm={
-                bn: '',
-                name: '',
-                mobile: {
+                pictureUrl: '',
+                position: '',
+                showTime: {
                     a: '',
                     b: ''
                 },
-                email: '',
+                description: '',
             }
             this.$refs.ruleForm.resetFields()
             this.dialogVisible = false
@@ -368,6 +228,7 @@ import Tips from "@/components/ftd-tips/tips";
             this.dialogVisible = true
         },
         submitForm(formName) {
+            console.log(this.ruleForm)
             this.$refs[formName].validate((valid) => {
             if (valid) {
                if(this.isEdit){
@@ -378,19 +239,19 @@ import Tips from "@/components/ftd-tips/tips";
                 console.log(this.tableData)
                }else{
                 // 新建
-                this.ruleForm.mobile = '10天'
+                this.ruleForm.showTime = '10天'
                 this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
                }
                 
                this.dialogVisible = false
                 this.ruleForm={
-                    bn: '',
-                    name: '',
-                    mobile: {
+                    pictureUrl: '',
+                    position: '',
+                    showTime: {
                         a: '',
                         b: ''
                     },
-                    email: '',
+                    description: '',
                 }
                 this.$refs.ruleForm.resetFields()
               
@@ -450,6 +311,15 @@ import Tips from "@/components/ftd-tips/tips";
             }
             
         },
+        async getTableData() {
+            console.log("getData")
+            this.params.pageIndex = this.currentPage
+            this.params.length = 15
+            let res = await SAdvertising.list(this.params)
+            this.totalElements = res.data.totalElements
+            console.log(res.data)
+            this.tableData = res.data.content
+        }
     },
     mounted(){
         let self = this;
@@ -457,6 +327,7 @@ import Tips from "@/components/ftd-tips/tips";
         window.addEventListener("resize", function () {
             self.resizeFn();
         });
+        this.getTableData();
     }
   }
 </script>
