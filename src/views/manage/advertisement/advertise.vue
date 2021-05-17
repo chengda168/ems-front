@@ -157,9 +157,16 @@ import Tips from "@/components/ftd-tips/tips";
     },
     data() {
         var validatePass = (rule, value, callback) => {
-            console.log(value.length)
             if (value.length != 2) {
                 callback(new Error('请输入广告展示时间'));
+            } else {
+            callback();
+            }
+        };
+        var validatePass1 = (rule, value, callback) => {
+            console.log(value.length)
+            if (value.length != 1) {
+                callback(new Error('请上传图片'));
             } else {
             callback();
             }
@@ -174,16 +181,14 @@ import Tips from "@/components/ftd-tips/tips";
         editIndex:null,
         data:[],
         ruleForm: {
-            bn: '',
+            bn: [],
             name: '',
             data:[],
-            start: '',
-            end: '',
             email: '',
         },
         rules: {
            bn: [
-            { type: 'array', required: true, message: '请上传图片', trigger: 'change' }
+            { validator: validatePass1,  required: true, trigger: 'change' }
           ],
           name: [
             { required: true, message: '请输入广告位置', trigger: 'blur' },
@@ -377,6 +382,7 @@ import Tips from "@/components/ftd-tips/tips";
         },
         onSuccess(response, file, fileList){
             console.log(fileList)
+            
             this.ruleForm.bn = fileList
         },
         onRemove(file, fileList){
