@@ -37,7 +37,7 @@
                         label="广告轮转位置">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="mobile"
+                        prop="data"
                         label="广告展示时限">
                     </el-table-column>
                      <el-table-column align="center"
@@ -69,6 +69,7 @@
                         <el-form-item label="广告图片:" prop="bn">
                             <!-- <img class="davertiseimg" :src="scope.row.bn"> -->
                             <el-upload
+                                ref="ruleForm.bn"
                                 class="upload-demo"
                                 action="https://jsonplaceholder.typicode.com/posts/"
                                 :limit='1'
@@ -80,20 +81,25 @@
                                     <el-button class="updataImg">点击上传</el-button>
                                     <div slot="tip" class="el-upload__tip updataImgTip">图片尺寸789dpi*348dpi</div>
                                 </div>
-                                </el-upload>
-                            <!-- <el-input type="text" v-model="ruleForm.bn"></el-input> -->
+                            </el-upload>
                         </el-form-item>
                         <el-form-item label="广告位置:" prop="name">
                             <el-input type="text" v-model="ruleForm.name"></el-input>
                         </el-form-item>
-                        <el-form-item label="广告展示时间:" prop="mobile">
-                            <div class="flex">
-                                <el-date-picker v-model="ruleForm.mobile.a" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" class="dataCon"></el-date-picker>
-                                至
-                                <el-date-picker v-model="ruleForm.mobile.b" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" class="dataCon"></el-date-picker>
-                            </div>
+                        <el-form-item label="广告展示时间:" prop="data">
+                            <el-date-picker :clearable="false"
+                            v-model="ruleForm.data[0]" :prefix-icon="'iconfont icon-rili'"
+                            type="date" class="dateBox dataCon" :picker-options="pickerOptionsStart"
+                            placeholder="开始日期">
+                            </el-date-picker>
+                            <span class="separatorText">至</span>
+                            <el-date-picker :clearable="false" 
+                            v-model="ruleForm.data[1]" :prefix-icon="'iconfont icon-rili'"
+                            type="date" class="dateBox dataCon" :picker-options="pickerOptionsEnd"
+                            placeholder="结束日期">
+                            </el-date-picker>
                         </el-form-item>
-                        <el-form-item label="广告描述:"  prop="email">
+                        <el-form-item label="　广告描述:"  prop="email">
                             <el-input v-model="ruleForm.email" type="textarea" :autosize="{ minRows: 4, maxRows: 6}"></el-input>
                         </el-form-item>
                     </el-form>
@@ -114,13 +120,50 @@ import Tips from "@/components/ftd-tips/tips";
     computed:{
         ...mapGetters({
             collapse: 'collapse'
-        })
+        }),
+        
+        pickerOptionsStart(){
+            var _this=this;
+            return {
+                disabledDate(time) {
+                    let endTime=_this.ruleForm.data[1];
+                    if(endTime !=''){
+                        return time.getTime() > endTime;
+                    }else{
+                        return false
+                    }
+                    
+                }
+            }
+        },
+        pickerOptionsEnd() {
+            var _this=this;
+            return {
+                disabledDate(time) {
+                    let startTime=_this.ruleForm.data[0];
+                    if(startTime !=''){
+                        return time.getTime() < startTime;
+                    }else{
+                        return false
+                    }
+                    
+                }
+            }
+        }
     },
     components:{
         Page,
         Tips
     },
     data() {
+        var validatePass = (rule, value, callback) => {
+            console.log(value.length)
+            if (value.length != 2) {
+                callback(new Error('请输入广告展示时间'));
+            } else {
+            callback();
+            }
+        };
       return {
         isDialog:false,
         dialogVisible:false,
@@ -129,13 +172,13 @@ import Tips from "@/components/ftd-tips/tips";
         labelWidth:'120px',
         isEdit:false,
         editIndex:null,
+        data:[],
         ruleForm: {
             bn: '',
             name: '',
-            mobile: {
-                a: '',
-                b: ''
-            },
+            data:[],
+            start: '',
+            end: '',
             email: '',
         },
         rules: {
@@ -143,13 +186,10 @@ import Tips from "@/components/ftd-tips/tips";
             { type: 'array', required: true, message: '请上传图片', trigger: 'change' }
           ],
           name: [
-            { required: true, message: '请输入用户姓名', trigger: 'blur' },
+            { required: true, message: '请输入广告位置', trigger: 'blur' },
           ],
-          mobile: [
-            { required: true, message: '请输入手机号码', trigger: 'blur' },
-          ],
-          email: [
-            { required: true, message: '请输入电子邮箱', trigger: 'blur' },
+          data: [
+            { validator: validatePass, message: '请输入广告展示时间', trigger: 'blur' },
           ],
         },
         input: '',
@@ -166,147 +206,147 @@ import Tips from "@/components/ftd-tips/tips";
                 bn: require("@/assets/images/backups.png"),
                 id:0,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:1,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:2,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:3,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:4,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:5,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:6,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:7,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:8,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:9,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:10,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:11,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:12,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:13,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:14,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:15,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:16,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:17,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:18,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:19,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
             {
                 bn: require("@/assets/images/backups.png"),
                 id:20,
                 name: '第二张',
-                mobile: '10天',
+                data: '10天',
                 email: '广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述广告描述',
             }, 
         ],
@@ -345,12 +385,9 @@ import Tips from "@/components/ftd-tips/tips";
         },
         beforeClose(){
             this.ruleForm={
-                bn: '',
+                bn: [],
                 name: '',
-                mobile: {
-                    a: '',
-                    b: ''
-                },
+                data: [],
                 email: '',
             }
             this.$refs.ruleForm.resetFields()
@@ -382,22 +419,18 @@ import Tips from "@/components/ftd-tips/tips";
                 console.log(this.tableData)
                }else{
                 // 新建
-                this.ruleForm.mobile = '10天'
+                this.ruleForm.data = '10天'
                 this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
                }
                 
                this.dialogVisible = false
                 this.ruleForm={
-                    bn: '',
+                    bn: [],
                     name: '',
-                    mobile: {
-                        a: '',
-                        b: ''
-                    },
+                    data: [],
                     email: '',
                 }
                 this.$refs.ruleForm.resetFields()
-              
             } else {
                 console.log('error submit!!');
                 return false;
@@ -484,6 +517,11 @@ import Tips from "@/components/ftd-tips/tips";
 
     .upload-demo /deep/ .el-upload-list__item-status-label {
         display: none;
+    }
+
+    
+    .dateBox{
+        width: auto;
     }
 
     
@@ -668,7 +706,7 @@ import Tips from "@/components/ftd-tips/tips";
     }
 
     .dataCon {
-        width: 123px;
+        width: 114px;
     }
     .adverDiv {
         width: 400px;
