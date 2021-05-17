@@ -69,7 +69,6 @@
                         <el-form-item label="广告图片:" prop="bn">
                             <!-- <img class="davertiseimg" :src="scope.row.bn"> -->
                             <el-upload
-                                ref="ruleForm.bn"
                                 class="upload-demo"
                                 action="https://jsonplaceholder.typicode.com/posts/"
                                 :limit='1'
@@ -188,7 +187,7 @@ import Tips from "@/components/ftd-tips/tips";
         },
         rules: {
            bn: [
-            { validator: validatePass1,  required: true, trigger: 'change' }
+            { validator: validatePass1,  required: true, trigger: 'blur' }
           ],
           name: [
             { required: true, message: '请输入广告位置', trigger: 'blur' },
@@ -384,10 +383,12 @@ import Tips from "@/components/ftd-tips/tips";
             console.log(fileList)
             
             this.ruleForm.bn = fileList
+            this.$refs.ruleForm.validateField('bn');
         },
         onRemove(file, fileList){
             console.log(fileList)
             this.ruleForm.bn = fileList
+            this.$refs.ruleForm.validateField('bn');
         },
         beforeClose(){
             this.ruleForm={
