@@ -91,20 +91,21 @@ export default {
                     icon:'iconfont icon-dengchu'
                 }
             ],
-      options: [
-        {
-          value: "0",
-          label: "工业园区01",
-        },
-        {
-          value: "1",
-          label: "工业园区02",
-        },
-        {
-          value: "2",
-          label: "工业园区03",
-        },
-      ],
+      options: [],
+      // options: [
+      //   {
+      //     value: "0",
+      //     label: "工业园区01",
+      //   },
+      //   {
+      //     value: "1",
+      //     label: "工业园区02",
+      //   },
+      //   {
+      //     value: "2",
+      //     label: "工业园区03",
+      //   },
+      // ],
       convertData: [],
       langText: "Cn",
       isShowLang: false,
@@ -397,8 +398,8 @@ export default {
       let options = [];
       var convertData = [];
       for (let i = 0; i < datas.length; i++) {
-        options.push({ value: datas[i].id, label: datas[i].clientName });
-        convertData.push({name: datas[i].cityCode , value: [datas[i].longitude,datas[i].latitude]});
+        options.push({ value: datas[i].id, label: datas[i].customerName });
+        convertData.push({name: datas[i].customerName , value: [datas[i].longitude,datas[i].latitude]});
       }
       this.options = options;
       this.convertData = convertData;

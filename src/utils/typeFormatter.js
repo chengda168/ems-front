@@ -1,5 +1,5 @@
 const type = {
-    'enabled' : {
+    'status' : {
         0 : '停 用',
         1 : '启 用'
     },

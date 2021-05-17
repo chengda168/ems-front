@@ -3,22 +3,22 @@
         <div class="siemensLayoutSearchBox" :class="{'collspaseForm' : collapse}">
             <el-form :inline="true" :model="params" class="siemensLayoutSearchBoxForm flexBetween">
                 <el-form-item label="姓名：" class="treeFormItem">
-                    <el-input v-model="params.name" placeholder="请输入运维单位名称"></el-input>
+                    <el-input v-model="params.userName" placeholder="请输入运维单位名称"></el-input>
                 </el-form-item>
                 <el-form-item label="单位：" class="treeFormItem">
-                    <el-input v-model="params.company" placeholder="请输入联系人"></el-input>
+                    <el-input v-model="params.unitName" placeholder="请输入联系人"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号码：" class="treeFormItem">
                     <el-input v-model="params.mobile" placeholder="请输入手机号码"></el-input>
                 </el-form-item>
                 <el-form-item label="电子邮箱：" class="treeFormItem">
-                    <el-input v-model="params.emial" placeholder="请输入电子邮箱"></el-input>
+                    <el-input v-model="params.email" placeholder="请输入电子邮箱"></el-input>
                 </el-form-item>
                 <el-form-item label="运维客户：" class="treeFormItem">
-                    <el-input v-model="params.customer" placeholder="请输入联系人"></el-input>
+                    <el-input v-model="params.customerName" placeholder="请输入联系人"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" class="fullBtn" @click="onSearch"><i class="iconfont icon-sousuo"></i>查询</el-button>
+                    <el-button type="primary" class="fullBtn" @click="getTableData"><i class="iconfont icon-sousuo"></i>查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -61,15 +61,15 @@
                         label="电子邮箱">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="unit"
+                        prop="unitName"
                         label="单 位">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="clientId"
+                        prop="customerName"
                         label="运维客户">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="enabled"
+                        prop="status"
                         :formatter="$typeFormatter"
                         
                         label="状 态"
@@ -97,30 +97,30 @@
         <el-dialog top="0"
             :title="title" :show-close="false"
             :visible.sync="dialogVisible" :before-close="beforeClose">
-                <div class="close iconfont icon-guanbi" @click="beforeClose()"></div>
+                <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
                 <div class="dialogdiv">
                 
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
                         
-                        <el-form-item label="姓　　名:" prop="name">
-                            <el-input type="text" v-model="ruleForm.name"></el-input>
+                        <el-form-item label="姓　　名:" prop="userName">
+                            <el-input type="text" v-model="ruleForm.userName"></el-input>
                         </el-form-item>
                         <el-form-item label="手机号码:" prop="mobile">
                             <el-input v-model="ruleForm.mobile"></el-input>
                         </el-form-item>
-                        <el-form-item label="职务/角色:"  prop="email">
-                            <el-input v-model="ruleForm.email"></el-input>
+                        <el-form-item label="职务/角色:"  prop="job">
+                            <el-input v-model="ruleForm.job"></el-input>
                         </el-form-item>
-                        <el-form-item label="电子邮箱:" prop="account">
-                            <el-input type="text" v-model="ruleForm.account"></el-input>
+                        <el-form-item label="电子邮箱:" prop="email">
+                            <el-input type="text" v-model="ruleForm.email"></el-input>
                         </el-form-item>
                         <el-form-item label="运维单位:" prop="department">
                             <el-input v-model="ruleForm.department"></el-input>
                         </el-form-item>
-                        <el-form-item label="园区名称:" prop="role">
-                            <el-select v-model="ruleForm.role" placeholder="" popper-class="dialogSelect">
+                        <el-form-item label="园区名称:" prop="customerId">
+                            <el-select v-model="ruleForm.customerId" placeholder="" popper-class="dialogSelect">
                                 <el-option
-                                v-for="item in roleList"
+                                v-for="item in customerList"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value">
@@ -167,7 +167,7 @@
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
-import SOperateionTeam from "@/api/ums/sOperationTeam"
+import SOperationTeam from "@/api/ums/sOperationTeam"
   export default {
     computed:{
         ...mapGetters({
@@ -208,7 +208,7 @@ import SOperateionTeam from "@/api/ums/sOperationTeam"
         labelWidth1:'96px',
         isEdit:false,
         editIndex:null,
-        roleList:[
+        customerList:[
             {
                 value: '园区1',
                 label: '园区1'
@@ -219,7 +219,7 @@ import SOperateionTeam from "@/api/ums/sOperationTeam"
             },
         ],
         ruleForm: {
-            name: '',
+            userName: '',
             mobile: '',
             email: '',
             account: '',
@@ -255,19 +255,19 @@ import SOperateionTeam from "@/api/ums/sOperationTeam"
           department: [
            { required: true, message: '请输入运维单位', trigger: 'change' },
           ],
-          role: [
+          customerId: [
             { required: true, message: '请选择园区名称', trigger: 'change' }
           ],
-          status: [
+          enabled: [
             { required: true, message: '请选择状态', trigger: 'blur' }
           ],
         },
         params: {
-          name: '',
-          company: '',
+          userName: '',
+          unitName: '',
           mobile: '',
-          emial:'',
-          customer: ''
+          email:'',
+          customerName: ''
         },
         currentPage: 1,
         totalElements : 0,
@@ -314,8 +314,6 @@ import SOperateionTeam from "@/api/ums/sOperationTeam"
             }
             this.$refs.ruleForm.resetFields()
             this.dialogVisible = false
-        },
-        onSearch() {
         },
         OnAdd(){
             this.isEdit = false;
@@ -428,27 +426,28 @@ import SOperateionTeam from "@/api/ums/sOperationTeam"
             
         },
         async getTableData() {
-            let params = {
-                "pageIndex": this.currentPage,
-                "length": this.pageSize,
-            }
-            let res = await SOperateionTeam.list(params);
+            let params = this.$deepCopy(this.params);
+            params['pageIndex'] = this.currentPage;
+            params['length'] = this.pageSize;
+            console.log(params);
+            let res = await SOperationTeam.page(params);
             console.log(res);
             this.tableData = res.data.content || [];
             this.totalElements = res.data.totalElements;
         },
         async suspendBatch() {
-
-            console.log(this.tableSeelctVal);
             let ids = this.tableSeelctVal.map(item => item.id);
-            console.log(ids);
             if(ids.length > 0) {
-                let res = await SOperateionTeam.suspendBatch(ids);
-                console.log(res);
+                let res = await SOperationTeam.suspendBatch(ids);
+                _self.getTableData();
             }
         },
-        recoverBatch() {
-            
+        async recoverBatch() {
+            let ids = this.tableSeelctVal.map(item => item.id);
+            if(ids.length > 0) {
+                let res = await SOperationTeam.recoverBatch(ids);
+                _self.getTableData();
+            }
         }
     },
     mounted(){
