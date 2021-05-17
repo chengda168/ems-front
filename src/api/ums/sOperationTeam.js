@@ -12,7 +12,7 @@ export default class sOperationTeam extends BaseApi {
      */
     static async list(param){
         const url = `/ums/sOperationTeam/list`;
-        const data = await this.$get(url,param);
+        const data = await this.$post(url,param);
         return data;
     }
 
