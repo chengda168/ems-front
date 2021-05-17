@@ -63,12 +63,13 @@
         <el-dialog top="0"
             :title="title" :show-close="false"
             :visible.sync="dialogVisible" :before-close="beforeClose">
-                <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
+                <div class="close iconfont icon-guanbi" @click="beforeClose()"></div>
                 <div class="dialogdiv">
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
                         <el-form-item label="广告图片:" prop="pictureUrl">
                             <!-- <img class="davertiseimg" :src="scope.row.pictureUrl"> -->
                             <el-upload
+                                ref="ruleForm.bn"
                                 class="upload-demo"
                                 action="https://jsonplaceholder.typicode.com/posts/"
                                 :limit='1'
@@ -80,21 +81,26 @@
                                     <el-button class="updataImg">点击上传</el-button>
                                     <div slot="tip" class="el-upload__tip updataImgTip">图片尺寸789dpi*348dpi</div>
                                 </div>
-                                </el-upload>
-                            <!-- <el-input type="text" v-model="ruleForm.pictureUrl"></el-input> -->
+                            </el-upload>
                         </el-form-item>
                         <el-form-item label="广告位置:" prop="position">
                             <el-input type="text" v-model="ruleForm.position"></el-input>
                         </el-form-item>
                         <el-form-item label="广告展示时间:" prop="showTime">
-                            <div class="flex">
-                                <el-date-picker v-model="ruleForm.showTime.a" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" class="dataCon"></el-date-picker>
-                                至
-                                <el-date-picker v-model="ruleForm.showTime.b" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" class="dataCon"></el-date-picker>
-                            </div>
+                            <el-date-picker :clearable="false"
+                            v-model="ruleForm.showTime[0]" :prefix-icon="'iconfont icon-rili'"
+                            type="date" class="dateBox dataCon" :picker-options="pickerOptionsStart"
+                            placeholder="开始日期">
+                            </el-date-picker>
+                            <span class="separatorText">至</span>
+                            <el-date-picker :clearable="false" 
+                            v-model="ruleForm.showTime[1]" :prefix-icon="'iconfont icon-rili'"
+                            type="date" class="dateBox dataCon" :picker-options="pickerOptionsEnd"
+                            placeholder="结束日期">
+                            </el-date-picker>
                         </el-form-item>
-                        <el-form-item label="广告描述:"  prop="description">
-                            <el-input v-model="ruleForm.description" type="textarea" :autosize="{ minRows: 4, maxRows: 6}"></el-input>
+                        <el-form-item label="　广告描述:"  prop="email">
+                            <el-input v-model="ruleForm.email" type="textarea" :autosize="{ minRows: 4, maxRows: 6}"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -117,13 +123,50 @@ import SAdvertising from "@/api/ums/sAdvertising";
     computed:{
         ...mapGetters({
             collapse: 'collapse'
-        })
+        }),
+        
+        pickerOptionsStart(){
+            var _this=this;
+            return {
+                disabledDate(time) {
+                    let endTime=_this.ruleForm.showTime[1];
+                    if(endTime !=''){
+                        return time.getTime() > endTime;
+                    }else{
+                        return false
+                    }
+                    
+                }
+            }
+        },
+        pickerOptionsEnd() {
+            var _this=this;
+            return {
+                disabledDate(time) {
+                    let startTime=_this.ruleForm.showTime[0];
+                    if(startTime !=''){
+                        return time.getTime() < startTime;
+                    }else{
+                        return false
+                    }
+                    
+                }
+            }
+        }
     },
     components:{
         Page,
         Tips
     },
     data() {
+        var validatePass = (rule, value, callback) => {
+            console.log(value.length)
+            if (value.length != 2) {
+                callback(new Error('请输入广告展示时间'));
+            } else {
+            callback();
+            }
+        };
       return {
         isDialog:false,
         dialogVisible:false,
@@ -132,13 +175,11 @@ import SAdvertising from "@/api/ums/sAdvertising";
         labelWidth:'120px',
         isEdit:false,
         editIndex:null,
+        data:[],
         ruleForm: {
             pictureUrl: '',
             position: '',
-            showTime: {
-                a: '',
-                b: ''
-            },
+            showTime: [],
             description: '',
         },
         rules: {
@@ -146,19 +187,16 @@ import SAdvertising from "@/api/ums/sAdvertising";
             { type: 'array', required: true, message: '请上传图片', trigger: 'change' }
           ],
           position: [
-            { required: true, message: '请输入用户姓名', trigger: 'blur' },
+            { required: true, message: '请输入广告位置', trigger: 'blur' },
           ],
           showTime: [
-            { required: true, message: '请输入手机号码', trigger: 'blur' },
-          ],
-          description: [
-            { required: true, message: '请输入电子邮箱', trigger: 'blur' },
+            { validator: validatePass,required: true, message: '请输入广告展示时间', trigger: 'blur' },
           ],
         },
         input: '',
         params: {
           position: '',
-          showTime: '',
+          showTime: [],
           emial:''
         },
         currentPage: 1,
@@ -189,7 +227,7 @@ import SAdvertising from "@/api/ums/sAdvertising";
     methods: {
         onPageChange(val){
             console.log(val)
-            this.currentPage = val
+            this.currentPage = val;
         },
         onSuccess(response, file, fileList){
             console.log(fileList)
@@ -203,10 +241,7 @@ import SAdvertising from "@/api/ums/sAdvertising";
             this.ruleForm={
                 pictureUrl: '',
                 position: '',
-                showTime: {
-                    a: '',
-                    b: ''
-                },
+                showTime: [],
                 description: '',
             }
             this.$refs.ruleForm.resetFields()
@@ -247,14 +282,10 @@ import SAdvertising from "@/api/ums/sAdvertising";
                 this.ruleForm={
                     pictureUrl: '',
                     position: '',
-                    showTime: {
-                        a: '',
-                        b: ''
-                    },
+                    showTime: [],
                     description: '',
                 }
                 this.$refs.ruleForm.resetFields()
-              
             } else {
                 console.log('error submit!!');
                 return false;
@@ -351,6 +382,11 @@ import SAdvertising from "@/api/ums/sAdvertising";
 
     .upload-demo /deep/ .el-upload-list__item-status-label {
         display: none;
+    }
+
+    
+    .dateBox{
+        width: auto;
     }
 
     
@@ -535,7 +571,7 @@ import SAdvertising from "@/api/ums/sAdvertising";
     }
 
     .dataCon {
-        width: 123px;
+        width: 114px;
     }
     .adverDiv {
         width: 400px;

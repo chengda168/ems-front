@@ -81,12 +81,12 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <Page :total="400" :pageSize="15"></Page>
+            <Page :total="400" :pageSize="15" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
         </div>
         <el-dialog
             :title="title" :show-close="false" top="0"
             :visible.sync="dialogVisible" :before-close="beforeClose">
-                <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
+                <div class="close iconfont icon-guanbi" @click="beforeClose()"></div>
                 <div class="dialogdiv">
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
                         <el-form-item label="上级单位:" prop="a">
@@ -158,7 +158,7 @@
                     </el-form>
                 </div>
                 <div class="dialogbuttom">
-                    <div @click="resetForm('ruleForm')">取 消</div>
+                    <div @click="resetForm()">取 消</div>
                     <div class="dialogbuttomclose"  @click="submitForm('ruleForm')">保 存</div>
                 </div>
         </el-dialog>
@@ -182,6 +182,7 @@ import Tips from "@/components/ftd-tips/tips";
         Tips
     },
     data() {
+        
       return {
           isDialog:false,
         index: 0,
@@ -592,6 +593,10 @@ import Tips from "@/components/ftd-tips/tips";
         }
     },
     methods: {
+         onPageChange(val){
+            console.log(val)
+            this.currentPage = val;
+        },
         selectCityArea(){
             console.log(this.ruleForm)
             if(this.ruleForm.h.city == "上海市"){
@@ -689,9 +694,8 @@ import Tips from "@/components/ftd-tips/tips";
             }
             });
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-            this.dialogVisible = false
+        resetForm() {
+            this.beforeClose()
         },
         
         onSearch() {
@@ -754,9 +758,7 @@ import Tips from "@/components/ftd-tips/tips";
     
 @media screen and (min-width: 1665px) {
 
-    .treeFormItem /deep/ .el-form-item__content {
-        width: 548px;
-    }
+
 
     .SelectYihang {
         width: 132px;
@@ -772,10 +774,6 @@ import Tips from "@/components/ftd-tips/tips";
 
 
 @media screen and (max-width: 1664px) {
-
-    .treeFormItem /deep/ .el-form-item__content {
-        width: 365px;
-    }
 
     .SelectYihang {
         width: 88px;

@@ -16,10 +16,20 @@ import axios from './http'
 import './permission' // 权限
 
 import i18n from './i18n'
+
+//swiper
+import VueAwesomeSwiper from 'vue-awesome-swiper'   
+import 'swiper/dist/css/swiper.css'
+
+
+
 // 引入字体图标css (字体图标的使用：iconfont）
 import '@/assets/font/iconfont/iconfont.css'
 import "@/assets/css/font.css";
 import "@/assets/css/layout.css";
+
+
+
 
 import App from './App'
 import router from './router'
@@ -35,7 +45,12 @@ Vue.config.productionTip = false
 import globalVariable from '@/constant/global-variable'
 Vue.prototype.GLOBAL = globalVariable;
 
+// 全局引入自定义typeFormatter
+import TypeFormatter from "./utils/TypeFormatter";
+Vue.prototype.$typeFormatter = TypeFormatter.typeFormatter;
+
 Vue.use(ElementUI);
+Vue.use(VueAwesomeSwiper);
 
 /* eslint-disable no-new */
 new Vue({

@@ -28,8 +28,8 @@
                 <div class="flexCenter">
                     <el-button type="primary" class="fullBtn" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
                     <el-button type="primary" class="fullBtn" @click="isDialog = true"><i class="iconfont icon-shanchu"></i>删除</el-button>
-                    <el-button type="primary" class="fullBtn"><i class="iconfont icon-zanting"></i>暂停</el-button>
-                    <el-button type="primary" class="fullBtn"><i class="iconfont icon-runtongyiyaoyihuifu_biyan"></i>恢复</el-button>
+                    <el-button type="primary" class="fullBtn" @click="suspendBatch"><i class="iconfont icon-zanting"></i>暂停</el-button>
+                    <el-button type="primary" class="fullBtn" @click="recoverBatch"><i class="iconfont icon-runtongyiyaoyihuifu_biyan"></i>恢复</el-button>
                 </div>
             </div>
             <div class="siemensLayoutResultCon">
@@ -45,7 +45,7 @@
                         :width="width">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="name"
+                        prop="userName"
                         label="姓名">
                     </el-table-column>
                     <el-table-column align="center"
@@ -53,24 +53,27 @@
                         label="手机号码">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="email"
+                        prop="job"
                         label="职务/角色">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="account"
+                        prop="email"
                         label="电子邮箱">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="department"
+                        prop="unit"
                         label="单 位">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="role"
+                        prop="clientId"
                         label="运维客户">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="status"
-                        label="状 态">
+                        prop="enabled"
+                        :formatter="$typeFormatter"
+                        
+                        label="状 态"
+                        >
                     </el-table-column>
                     <el-table-column align="center"
                         label="操 作">
@@ -89,12 +92,12 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <Page :total="400" :pageSize="15"></Page>
+            <Page :total="totalElements" :pageSize="pageSize" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
         </div>
         <el-dialog top="0"
             :title="title" :show-close="false"
             :visible.sync="dialogVisible" :before-close="beforeClose">
-                <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
+                <div class="close iconfont icon-guanbi" @click="beforeClose()"></div>
                 <div class="dialogdiv">
                 
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
@@ -164,6 +167,7 @@
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
+import SOperateionTeam from "@/api/ums/sOperationTeam"
   export default {
     computed:{
         ...mapGetters({
@@ -266,159 +270,10 @@ import Tips from "@/components/ftd-tips/tips";
           customer: ''
         },
         currentPage: 1,
+        totalElements : 0,
+        pageSize : 15,
         width:50,
-        tableData: [
-            {
-                id:0,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:1,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:2,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:3,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:4,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:5,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:6,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:7,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:8,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:9,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:10,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:11,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:12,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:13,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:14,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-        ],
+        tableData: [],
         tableSeelctVal:[]
       }
     },
@@ -440,6 +295,10 @@ import Tips from "@/components/ftd-tips/tips";
         }
     },
     methods: {
+        onPageChange(val){
+            this.currentPage = val;
+            this.getTableData();
+        },
         resetForm1(){
             this.dialogPassword = false;
         },
@@ -521,27 +380,25 @@ import Tips from "@/components/ftd-tips/tips";
             });
         },
         resetForm(formName) {
-            this.$refs[formName].resetFields();
-            this.dialogVisible = false
+            this.beforeClose()
+            // this.$refs[formName].resetFields();
+            // this.dialogVisible = false
         },
         onConfirm(){
-            this.tableSeelctVal.map((item) => {
-                this.tableData.map((child, index) => {
-                if (item.id == child.id) {
-                    this.tableData.splice(index, 1);
-                }
-                });
-            });
+            let ids = this.tableSeelctVal.map(item => item.id);
+            console.log(ids);
+            // this.tableSeelctVal.map((item) => {
+            //     console.log(item);
+            //     this.tableData.map((child, index) => {
+            //     if (item.id == child.id) {
+            //         this.tableData.splice(index, 1);
+            //     }
+            //     });
+            // });
             this.isDialog =false
         },
         handleSelectionChange(val){
             this.tableSeelctVal = val;
-        },
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
         },
         resizeFn() {
             if(!this.collapse){
@@ -570,6 +427,29 @@ import Tips from "@/components/ftd-tips/tips";
             
             
         },
+        async getTableData() {
+            let params = {
+                "pageIndex": this.currentPage,
+                "length": this.pageSize,
+            }
+            let res = await SOperateionTeam.list(params);
+            console.log(res);
+            this.tableData = res.data.content || [];
+            this.totalElements = res.data.totalElements;
+        },
+        async suspendBatch() {
+
+            console.log(this.tableSeelctVal);
+            let ids = this.tableSeelctVal.map(item => item.id);
+            console.log(ids);
+            if(ids.length > 0) {
+                let res = await SOperateionTeam.suspendBatch(ids);
+                console.log(res);
+            }
+        },
+        recoverBatch() {
+            
+        }
     },
     mounted(){
         let self = this;
@@ -577,16 +457,13 @@ import Tips from "@/components/ftd-tips/tips";
         window.addEventListener("resize", function () {
             self.resizeFn();
         });
+        this.getTableData();
     }
   }
 </script>
 <style scoped>
     
 @media screen and (min-width: 1665px) {
-
-    .treeFormItem /deep/ .el-form-item__content {
-        width: 160px;
-    }
 
     .siemensLayoutSearchBoxForm /deep/ .el-form-item {
         margin-right: 30px;
@@ -596,10 +473,6 @@ import Tips from "@/components/ftd-tips/tips";
 
 
 @media screen and (max-width: 1664px) {
-
-    .treeFormItem /deep/ .el-form-item__content {
-        width: 106px;
-    }
 
     .siemensLayoutSearchBoxForm /deep/ .el-form-item {
         margin-right: 20px;
