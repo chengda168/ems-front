@@ -87,15 +87,15 @@
                         </el-form-item>
                         <el-form-item label="广告展示时间:" prop="data">
                             <el-date-picker :clearable="false"
-                            v-model="ruleForm.data[0]" :prefix-icon="'iconfont icon-rili'"
+                            v-model="ruleForm.start" :prefix-icon="'iconfont icon-rili'"
                             type="date" class="dateBox dataCon" :picker-options="pickerOptionsStart"
-                            placeholder="开始日期">
+                            placeholder="开始日期" @change="startTime()">
                             </el-date-picker>
                             <span class="separatorText">至</span>
                             <el-date-picker :clearable="false" 
-                            v-model="ruleForm.data[1]" :prefix-icon="'iconfont icon-rili'"
+                            v-model="ruleForm.end" :prefix-icon="'iconfont icon-rili'"
                             type="date" class="dateBox dataCon" :picker-options="pickerOptionsEnd"
-                            placeholder="结束日期">
+                            placeholder="结束日期" @change="endTime()">
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item label="　广告描述:"  prop="email">
@@ -163,7 +163,6 @@ import Tips from "@/components/ftd-tips/tips";
             }
         };
         var validatePass1 = (rule, value, callback) => {
-            console.log(value.length)
             if (value.length != 1) {
                 callback(new Error('请上传图片'));
             } else {
@@ -183,6 +182,8 @@ import Tips from "@/components/ftd-tips/tips";
             bn: [],
             name: '',
             data:[],
+            start:'',
+            end:'',
             email: '',
         },
         rules: {
@@ -375,6 +376,12 @@ import Tips from "@/components/ftd-tips/tips";
         }
     },
     methods: {
+        startTime() {
+            this.ruleForm.data[0] = this.ruleForm.start
+        },
+        endTime() {
+            this.ruleForm.data[1] = this.ruleForm.end
+        },
         onPageChange(val){
             console.log(val)
             this.currentPage = val;
@@ -395,6 +402,8 @@ import Tips from "@/components/ftd-tips/tips";
                 bn: [],
                 name: '',
                 data: [],
+                start:'',
+                end:'',
                 email: '',
             }
             this.$refs.ruleForm.resetFields()
@@ -427,14 +436,18 @@ import Tips from "@/components/ftd-tips/tips";
                }else{
                 // 新建
                 this.ruleForm.data = '10天'
+               console.log(this.ruleForm)
                 this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
                }
+               console.log(this.ruleForm)
                 
                this.dialogVisible = false
                 this.ruleForm={
                     bn: [],
                     name: '',
                     data: [],
+                    start:'',
+                    end:'',
                     email: '',
                 }
                 this.$refs.ruleForm.resetFields()
