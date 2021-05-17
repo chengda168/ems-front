@@ -185,10 +185,7 @@ el-input__inner::placeholder{
 .el-button--primary.is-disabled:hover{
     background-color: #879BAA;
 }
-/* 100%按钮 */
-.fullBtn{
-    width: 100%;
-}
+
 
 .el-menu--vertical{
     display: none;
@@ -208,6 +205,10 @@ el-input__inner::placeholder{
     .el-input__inner,
     .el-button{
         border-radius: 4px;
+    }
+    .el-button{
+        width: 140px;
+        height: 40px;
     }
 
     /* 首页园区下拉框 */
@@ -311,6 +312,9 @@ el-input__inner::placeholder{
         height: 80px;
         font-size: 18px;
     }
+    .siemensLayoutResultTitleNoBtn {
+        height: 64px;
+    }
     .siemensLayoutResultTitle .el-button{
         
         width: 140px;
@@ -318,7 +322,7 @@ el-input__inner::placeholder{
         padding: 0;
         font-size: 16px;
     }
-    .siemensLayoutResultTitle .el-button:not(:first-child){
+    .siemensLayoutCon .el-button:not(:first-child){
         margin-left: 30px;
     }
     /* 复选框 */
@@ -387,7 +391,8 @@ el-input__inner::placeholder{
         background-color: #fff;
     }
     .el-table td .cell{
-        line-height: 40px;
+        line-height: 20px;
+        padding: 10px;
     }
     .el-table--enable-row-hover .el-table__body tr:hover>td{
         background-color: #fff;
@@ -528,7 +533,7 @@ el-input__inner::placeholder{
         display: flex;
         justify-content: space-between;
         margin-top: 40px;
-        padding: 0 60px;
+        padding: 0 90px 0 60px;
     }
 
     .dialogbuttom div {
@@ -558,7 +563,32 @@ el-input__inner::placeholder{
     .dialogSelect .el-select-dropdown__item.selected{
         color: #009999;
     }
-    
+
+    /* 时间选择器 */
+    .dateBox /deep/ .el-input__inner{
+        padding: 0 30px 0 10px;
+        font-size: 14px;
+    }
+    .dateBox /deep/ .el-input__inner::placeholder{
+        font-size: 14px;
+    }
+    .dateBox /deep/ .el-input__prefix{
+        left: auto;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: auto;
+        line-height: 1;
+        color: #879BAA;
+    }
+   .dateBox /deep/ .el-input__icon{
+       width: auto;
+       font-size: 20px;
+    }
+    .separatorText{
+        font-size: 14px;
+        padding: 0 12px;
+    }
     
 }
 
@@ -577,6 +607,12 @@ el-input__inner::placeholder{
     .el-input__inner,
     .el-button{
         border-radius: 3px;
+    }
+    .el-button{
+        width: 94px;
+        height: 26px;
+        /* line-height: 26px; */
+        padding: 0;
     }
      /* 首页园区下拉框 */
     .homeDropdownBox{
@@ -692,13 +728,16 @@ el-input__inner::placeholder{
         height: 54px;
         font-size: 12px;
     }
+    .siemensLayoutResultTitleNoBtn {
+        height: 42px;
+    }
     .siemensLayoutResultTitle .el-button{
         width: 94px;
         height: 26px;
         padding: 0;
         font-size: 12px;
     }
-    .siemensLayoutResultTitle .el-button:not(:first-child){
+    .siemensLayoutCon  .el-button:not(:first-child){
         margin-left: 20px;
     }
     /* 复选框 */
@@ -762,7 +801,8 @@ el-input__inner::placeholder{
         background-color: #fff;
     }
     .el-table td .cell{
-        line-height: 30px;
+        line-height: 18px;
+        padding: 6px;
     }
     .el-table--enable-row-hover .el-table__body tr:hover>td{
         background-color: #fff;
@@ -906,7 +946,7 @@ el-input__inner::placeholder{
         display: flex;
         justify-content: space-between;
         margin-top: 27px;
-        padding: 0 40px;
+        padding: 0 60px 0 40px;
     }
 
     .dialogbuttom div {
@@ -946,6 +986,36 @@ el-input__inner::placeholder{
         font-size: 12px;
     }
 
+    /* 时间选择器 */
+    .dateBox /deep/ .el-input__inner{
+        padding: 0 20px 0 6px;
+        font-size: 12px;
+    }
+    .dateBox /deep/ .el-input__inner::placeholder{
+        font-size: 12px;
+    }
+    .dateBox /deep/ .el-input__prefix{
+        left: auto;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: auto;
+        line-height: 1;
+        color: #879BAA;
+    }
+   .dateBox /deep/ .el-input__icon{
+       width: auto;
+       font-size: 14px;
+    }
+    .separatorText{
+        font-size: 12px;
+        padding: 0 8px;
+    }
+
 }
 
 
+/* 100%按钮 */
+.fullBtn{
+    width: 100%;
+}

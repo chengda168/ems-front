@@ -45,7 +45,7 @@
                         :width="width">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="name"
+                        prop="userName"
                         label="姓名">
                     </el-table-column>
                     <el-table-column align="center"
@@ -53,24 +53,27 @@
                         label="手机号码">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="email"
+                        prop="job"
                         label="职务/角色">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="account"
+                        prop="email"
                         label="电子邮箱">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="department"
+                        prop="unit"
                         label="单 位">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="role"
+                        prop="clientId"
                         label="运维客户">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="status"
-                        label="状 态">
+                        prop="enabled"
+                        :formatter="$typeFormatter"
+                        
+                        label="状 态"
+                        >
                     </el-table-column>
                     <el-table-column align="center"
                         label="操 作">
@@ -89,12 +92,12 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <Page :total="400" :pageSize="15"></Page>
+            <Page :total="400" :pageSize="15" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
         </div>
         <el-dialog top="0"
             :title="title" :show-close="false"
             :visible.sync="dialogVisible" :before-close="beforeClose">
-                <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
+                <div class="close iconfont icon-guanbi" @click="beforeClose()"></div>
                 <div class="dialogdiv">
                 
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
@@ -145,10 +148,10 @@
                     <el-form :model="ruleForm1" label-position="left" :rules="rules1" ref="ruleForm1" class="registerForm" :label-width="labelWidth1" >
                         
                         <el-form-item label="新密码:" prop="password">
-                            <el-input type="text" v-model="ruleForm1.password"></el-input>
+                            <el-input type="password" v-model="ruleForm1.password"></el-input>
                         </el-form-item>
                         <el-form-item label="确认新密码:" prop="password1">
-                            <el-input v-model="ruleForm1.password1"></el-input>
+                            <el-input type="password" v-model="ruleForm1.password1"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -164,6 +167,7 @@
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
+import SOperateionTeam from "@/api/ums/sOperationTeam"
   export default {
     computed:{
         ...mapGetters({
@@ -175,6 +179,25 @@ import Tips from "@/components/ftd-tips/tips";
         Tips
     },
     data() {
+         var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (this.ruleForm1.password1 !== '') {
+            this.$refs.ruleForm1.validateField('password1');
+          }
+          callback();
+        }
+      };
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.ruleForm1.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
       return {
         dialogPassword: false,
         isDialog:false,
@@ -210,10 +233,10 @@ import Tips from "@/components/ftd-tips/tips";
         },
         rules1: {
           password: [
-            { required: true, message: '请输入新密码', trigger: 'blur' },
+            { validator: validatePass, trigger: 'blur' }
           ],
           password1: [
-            { required: true, message: '请输入新密码', trigger: 'blur' },
+            { validator: validatePass2, trigger: 'blur' }
           ],
         },
         rules: {
@@ -249,156 +272,156 @@ import Tips from "@/components/ftd-tips/tips";
         currentPage: 1,
         width:50,
         tableData: [
-            {
-                id:0,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:1,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:2,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:3,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:4,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:5,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:6,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:7,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:8,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:9,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:10,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:11,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:12,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:13,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:14,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
+            // {
+            //     id:0,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:1,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:2,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:3,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:4,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:5,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:6,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:7,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:8,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:9,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:10,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:11,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:12,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:13,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:14,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
         ],
         tableSeelctVal:[]
       }
@@ -421,6 +444,10 @@ import Tips from "@/components/ftd-tips/tips";
         }
     },
     methods: {
+        onPageChange(val){
+            console.log(val)
+            this.currentPage = val;
+        },
         resetForm1(){
             this.dialogPassword = false;
         },
@@ -502,8 +529,9 @@ import Tips from "@/components/ftd-tips/tips";
             });
         },
         resetForm(formName) {
-            this.$refs[formName].resetFields();
-            this.dialogVisible = false
+            this.beforeClose()
+            // this.$refs[formName].resetFields();
+            // this.dialogVisible = false
         },
         onConfirm(){
             this.tableSeelctVal.map((item) => {
@@ -551,6 +579,16 @@ import Tips from "@/components/ftd-tips/tips";
             
             
         },
+        async getTableData() {
+            let params = {
+                "pageIndex": 1,
+                "length": 15,
+            }
+            let res = await SOperateionTeam.list(params);
+            this.tableData = res.data.content;
+            let totalElements = res.data.totalElements;
+            console.log(res);
+        }
     },
     mounted(){
         let self = this;
@@ -558,16 +596,13 @@ import Tips from "@/components/ftd-tips/tips";
         window.addEventListener("resize", function () {
             self.resizeFn();
         });
+        this.getTableData();
     }
   }
 </script>
 <style scoped>
     
 @media screen and (min-width: 1665px) {
-
-    .treeFormItem /deep/ .el-form-item__content {
-        width: 160px;
-    }
 
     .siemensLayoutSearchBoxForm /deep/ .el-form-item {
         margin-right: 30px;
@@ -577,10 +612,6 @@ import Tips from "@/components/ftd-tips/tips";
 
 
 @media screen and (max-width: 1664px) {
-
-    .treeFormItem /deep/ .el-form-item__content {
-        width: 106px;
-    }
 
     .siemensLayoutSearchBoxForm /deep/ .el-form-item {
         margin-right: 20px;

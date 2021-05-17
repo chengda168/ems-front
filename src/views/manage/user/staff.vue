@@ -20,10 +20,10 @@
             <div class="siemensLayoutResultTitle flexBetween">
                 <span>查询结果</span>
                 <div class="flexCenter">
-                    <el-button type="primary" class="fullBtn" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
-                    <el-button type="primary" class="fullBtn" @click="isDialog=true"><i class="iconfont icon-shanchu"></i>删除</el-button>
-                    <el-button type="primary" class="fullBtn"><i class="iconfont icon-zanting"></i>暂停</el-button>
-                    <el-button type="primary" class="fullBtn"><i class="iconfont icon-runtongyiyaoyihuifu_biyan"></i>恢复</el-button>
+                    <el-button type="primary" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
+                    <el-button type="primary" @click="isDialog=true"><i class="iconfont icon-shanchu"></i>删除</el-button>
+                    <el-button type="primary"><i class="iconfont icon-zanting"></i>暂停</el-button>
+                    <el-button type="primary"><i class="iconfont icon-runtongyiyaoyihuifu_biyan"></i>恢复</el-button>
                 </div>
             </div>
             <div class="siemensLayoutResultCon">
@@ -85,12 +85,12 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <Page :total="400" :pageSize="15"></Page>
+            <Page :total="400" :pageSize="15" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
         </div>
         <el-dialog top="0"
             :title="title" :show-close="false"
             :visible.sync="dialogVisible" :before-close="beforeClose">
-                <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
+                <div class="close iconfont icon-guanbi" @click="beforeClose()"></div>
                 <div class="dialogdiv">
                 
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
@@ -156,7 +156,7 @@
                     </el-form>
                 </div>
                 <div class="dialogbuttom">
-                    <div @click="resetForm('ruleForm')">取 消</div>
+                    <div @click="resetForm()">取 消</div>
                     <div class="dialogbuttomclose"  @click="submitForm('ruleForm')">保 存</div>
                 </div>
         </el-dialog>
@@ -168,10 +168,10 @@
                     <el-form :model="ruleForm1" label-position="left" :rules="rules1" ref="ruleForm1" class="registerForm" :label-width="labelWidth1" >
                         
                         <el-form-item label="新密码:" prop="password">
-                            <el-input type="text" v-model="ruleForm1.password"></el-input>
+                            <el-input type="password" v-model="ruleForm1.password"></el-input>
                         </el-form-item>
                         <el-form-item label="确认新密码:" prop="password1">
-                            <el-input v-model="ruleForm1.password1"></el-input>
+                            <el-input type="password" v-model="ruleForm1.password1"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -197,7 +197,27 @@ import Tips from "@/components/ftd-tips/tips";
         Page,
         Tips
     },
+    
     data() {
+         var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (this.ruleForm1.password1 !== '') {
+            this.$refs.ruleForm1.validateField('password1');
+          }
+          callback();
+        }
+      };
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.ruleForm1.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
       return {
         dialogPassword: false,
           isDialog:false,
@@ -212,10 +232,10 @@ import Tips from "@/components/ftd-tips/tips";
         },
         rules1: {
           password: [
-            { required: true, message: '请输入新密码', trigger: 'blur' },
+              { validator: validatePass, trigger: 'blur' }
           ],
           password1: [
-            { required: true, message: '请输入新密码', trigger: 'blur' },
+              { validator: validatePass2, trigger: 'blur' }
           ],
         },
         roleList:[
@@ -619,6 +639,10 @@ import Tips from "@/components/ftd-tips/tips";
         }
     },
     methods: {
+         onPageChange(val){
+            console.log(val)
+            this.currentPage = val;
+        },
         resetForm1(){
             this.dialogPassword = false;
         },
@@ -704,19 +728,6 @@ import Tips from "@/components/ftd-tips/tips";
                 }
                 this.$refs.ruleForm.resetFields()
                this.dialogVisible = false
-                this.ruleForm={
-                    bn: '',
-                    name: '',
-                    mobile: '',
-                    email: '',
-                    department: '',
-                    role:'',
-                    status: '启用',
-                    watch:false,
-                    edit:false,
-                    power:''
-                }
-                this.$refs.ruleForm.resetFields()
               
             } else {
                 console.log('error submit!!');
@@ -724,9 +735,8 @@ import Tips from "@/components/ftd-tips/tips";
             }
             });
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-            this.dialogVisible = false
+        resetForm() {
+            this.beforeClose()
         },
         handleAllWatch(val){
         },
@@ -741,12 +751,6 @@ import Tips from "@/components/ftd-tips/tips";
         },
         handleSelectionChange(val){
             this.tableSeelctVal = val;
-        },
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
         },
         resizeFn() {
             if(!this.collapse){
@@ -813,7 +817,8 @@ import Tips from "@/components/ftd-tips/tips";
         align-items: baseline;
         justify-content: space-between;
     }
-    .systemPowerBox /deep/ .el-tree-node__content:hover{
+    .systemPowerBox /deep/ .el-tree-node__content:hover,
+    .systemPowerBox /deep/ .el-tree-node:focus>.el-tree-node__content{
         background-color: transparent;
     }
     .systemPowerBox /deep/ .el-checkbox{
@@ -870,7 +875,8 @@ import Tips from "@/components/ftd-tips/tips";
         align-items: baseline;
         justify-content: space-between;
     }
-    .systemPowerBox /deep/ .el-tree-node__content:hover{
+    .systemPowerBox /deep/ .el-tree-node__content:hover,
+    .systemPowerBox /deep/ .el-tree-node:focus>.el-tree-node__content{
         background-color: transparent;
     }
     .systemPowerBox /deep/ .el-checkbox{

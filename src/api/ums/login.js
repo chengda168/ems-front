@@ -48,6 +48,11 @@ export default class login extends BaseApi {
     }
 
 
+    /**
+     * 获取验证码（短信、邮箱）
+     * @param {*} number 
+     * @returns 
+     */
     static async sendVerificationCode(number){
         const url = `/ums/users/sendVerificationCode`;
         let param = {
@@ -58,6 +63,38 @@ export default class login extends BaseApi {
 
     }
 
+    /**
+     * 验证
+     * @param {*账号} number 
+     * @param {*验证码} vcode 
+     * @returns 
+     */
+    static async verificationCode(account,code){
+        const url = `/ums/users/verificationCode`;
+        let param = {
+            "number" : account,
+            "vCode":code
+        }
+        const data = await this.$get(url,param);
+        return data;
+    }
+
+    /**
+     * 修改密码
+     * @param {*} account 
+     * @param {*} passwordTwo 
+     * @returns 
+     */
+    static async updateNewPwd(account,passwordTwo){
+        const url = `/ums/users/updateNewPwd`;
+        let param = {
+            "number" : account,
+            "newPwd":passwordTwo
+        }
+        const data = await this.$post(url,param);
+        console.log(param)
+        return data;
+    }
 
  
 }

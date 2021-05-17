@@ -7,7 +7,7 @@
             <div class="logoBox" v-if="!isCollapse">
                 <img src="../assets/images/layout/logo.png">
             </div>
-            <!-- <Tree></Tree> -->
+            <!-- <Tree v-if="$route.path == '/home'"></Tree> -->
             <Menu v-if="$route.meta.path == '/custom'"></Menu>
         </div>
         <div class="layoutRight">
@@ -59,6 +59,8 @@ import { mapGetters } from 'vuex'
         height: 100vh;
     }
     .layoutLeft{
+        display: flex;
+        flex-direction: column;
         width: 280px;
         height: 100%;
         background: linear-gradient(180deg, #50BEBE 0%, #009999 45%, #0099B0 75%, #0099CB 100%);
@@ -106,6 +108,8 @@ import { mapGetters } from 'vuex'
         height: 100vh;
     }
     .layoutLeft{
+        display: flex;
+        flex-direction: column;
         width: 186px;
         height: 100%;
         background: linear-gradient(180deg, #50BEBE 0%, #009999 45%, #0099B0 75%, #0099CB 100%);

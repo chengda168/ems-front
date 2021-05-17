@@ -66,12 +66,12 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <Page :total="400" :pageSize="15"></Page>
+            <Page :total="400" :pageSize="15" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
         </div>
         <el-dialog top="0"
             :title="title" :show-close="false"
             :visible.sync="dialogVisible" :before-close="beforeClose">
-                <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
+                <div class="close iconfont icon-guanbi" @click="beforeClose()"></div>
                 <div class="dialogdiv">
                 
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
@@ -325,6 +325,10 @@ import Tips from "@/components/ftd-tips/tips";
         }
     },
     methods: {
+         onPageChange(val){
+            console.log(val)
+            this.currentPage = val;
+        },
         beforeClose(){
             this.ruleForm={
                 bn: '',
@@ -384,8 +388,9 @@ import Tips from "@/components/ftd-tips/tips";
             });
         },
         resetForm(formName) {
-            this.$refs[formName].resetFields();
-            this.dialogVisible = false
+            this.beforeClose()
+            // this.$refs[formName].resetFields();
+            // this.dialogVisible = false
         },
         onConfirm(){
             this.tableSeelctVal.map((item) => {
@@ -434,7 +439,7 @@ import Tips from "@/components/ftd-tips/tips";
 </script>
 <style scoped>
     
-@media screen and (min-width: 1665px) {
+/* @media screen and (min-width: 1665px) {
 
     .treeFormItem /deep/ .el-form-item__content {
         width: 548px;
@@ -449,7 +454,7 @@ import Tips from "@/components/ftd-tips/tips";
         width: 365px;
     }
 
-}
+} */
 
     
 </style>
