@@ -22,8 +22,8 @@
                 <div class="flexCenter">
                     <el-button type="primary" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
                     <el-button type="primary" @click="isDialog=true"><i class="iconfont icon-shanchu"></i>删除</el-button>
-                    <el-button type="primary"><i class="iconfont icon-zanting"></i>暂停</el-button>
-                    <el-button type="primary"><i class="iconfont icon-runtongyiyaoyihuifu_biyan"></i>恢复</el-button>
+                    <el-button type="primary" @click="onSuspend"><i class="iconfont icon-zanting"></i>暂停</el-button>
+                    <el-button type="primary" @click="onRecover"><i class="iconfont icon-runtongyiyaoyihuifu_biyan"></i>恢复</el-button>
                 </div>
             </div>
             <div class="siemensLayoutResultCon">
@@ -639,6 +639,12 @@ import Tips from "@/components/ftd-tips/tips";
         }
     },
     methods: {
+        onSuspend(){
+            console.log("点击暂停按钮")
+        },
+        onRecover(){
+            console.log("点击恢复按钮")
+        },
          onPageChange(val){
             console.log(val)
             this.currentPage = val;
