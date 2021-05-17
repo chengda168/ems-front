@@ -86,7 +86,7 @@
         <el-dialog
             :title="title" :show-close="false" top="0"
             :visible.sync="dialogVisible" :before-close="beforeClose">
-                <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
+                <div class="close iconfont icon-guanbi" @click="beforeClose()"></div>
                 <div class="dialogdiv">
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
                         <el-form-item label="上级单位:" prop="a">

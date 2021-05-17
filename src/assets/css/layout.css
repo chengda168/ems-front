@@ -312,6 +312,9 @@ el-input__inner::placeholder{
         height: 80px;
         font-size: 18px;
     }
+    .siemensLayoutResultTitleNoBtn {
+        height: 64px;
+    }
     .siemensLayoutResultTitle .el-button{
         
         width: 140px;
@@ -388,8 +391,8 @@ el-input__inner::placeholder{
         background-color: #fff;
     }
     .el-table td .cell{
-        line-height: 40px;
-        padding: 0 10px;
+        line-height: 20px;
+        padding: 10px;
     }
     .el-table--enable-row-hover .el-table__body tr:hover>td{
         background-color: #fff;
@@ -560,7 +563,32 @@ el-input__inner::placeholder{
     .dialogSelect .el-select-dropdown__item.selected{
         color: #009999;
     }
-    
+
+    /* 时间选择器 */
+    .dateBox /deep/ .el-input__inner{
+        padding: 0 30px 0 10px;
+        font-size: 14px;
+    }
+    .dateBox /deep/ .el-input__inner::placeholder{
+        font-size: 14px;
+    }
+    .dateBox /deep/ .el-input__prefix{
+        left: auto;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: auto;
+        line-height: 1;
+        color: #879BAA;
+    }
+   .dateBox /deep/ .el-input__icon{
+       width: auto;
+       font-size: 20px;
+    }
+    .separatorText{
+        font-size: 14px;
+        padding: 0 12px;
+    }
     
 }
 
@@ -700,6 +728,9 @@ el-input__inner::placeholder{
         height: 54px;
         font-size: 12px;
     }
+    .siemensLayoutResultTitleNoBtn {
+        height: 42px;
+    }
     .siemensLayoutResultTitle .el-button{
         width: 94px;
         height: 26px;
@@ -770,8 +801,8 @@ el-input__inner::placeholder{
         background-color: #fff;
     }
     .el-table td .cell{
-        line-height: 30px;
-        padding: 0 6px;
+        line-height: 18px;
+        padding: 6px;
     }
     .el-table--enable-row-hover .el-table__body tr:hover>td{
         background-color: #fff;
@@ -953,6 +984,32 @@ el-input__inner::placeholder{
     }
     .dialogSelect .el-select-dropdown__item{
         font-size: 12px;
+    }
+
+    /* 时间选择器 */
+    .dateBox /deep/ .el-input__inner{
+        padding: 0 20px 0 6px;
+        font-size: 12px;
+    }
+    .dateBox /deep/ .el-input__inner::placeholder{
+        font-size: 12px;
+    }
+    .dateBox /deep/ .el-input__prefix{
+        left: auto;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: auto;
+        line-height: 1;
+        color: #879BAA;
+    }
+   .dateBox /deep/ .el-input__icon{
+       width: auto;
+       font-size: 14px;
+    }
+    .separatorText{
+        font-size: 12px;
+        padding: 0 8px;
     }
 
 }
