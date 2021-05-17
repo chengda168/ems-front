@@ -185,10 +185,7 @@ el-input__inner::placeholder{
 .el-button--primary.is-disabled:hover{
     background-color: #879BAA;
 }
-/* 100%按钮 */
-.fullBtn{
-    width: 100%;
-}
+
 
 .el-menu--vertical{
     display: none;
@@ -208,6 +205,10 @@ el-input__inner::placeholder{
     .el-input__inner,
     .el-button{
         border-radius: 4px;
+    }
+    .el-button{
+        width: 140px;
+        height: 40px;
     }
 
     /* 首页园区下拉框 */
@@ -318,7 +319,7 @@ el-input__inner::placeholder{
         padding: 0;
         font-size: 16px;
     }
-    .siemensLayoutResultTitle .el-button:not(:first-child){
+    .siemensLayoutCon .el-button:not(:first-child){
         margin-left: 30px;
     }
     /* 复选框 */
@@ -578,6 +579,12 @@ el-input__inner::placeholder{
     .el-button{
         border-radius: 3px;
     }
+    .el-button{
+        width: 94px;
+        height: 26px;
+        /* line-height: 26px; */
+        padding: 0;
+    }
      /* 首页园区下拉框 */
     .homeDropdownBox{
         background-color: #025F7A;
@@ -698,7 +705,7 @@ el-input__inner::placeholder{
         padding: 0;
         font-size: 12px;
     }
-    .siemensLayoutResultTitle .el-button:not(:first-child){
+    .siemensLayoutCon  .el-button:not(:first-child){
         margin-left: 20px;
     }
     /* 复选框 */
@@ -949,3 +956,7 @@ el-input__inner::placeholder{
 }
 
 
+/* 100%按钮 */
+.fullBtn{
+    width: 100%;
+}
