@@ -189,7 +189,7 @@ import Tips from "@/components/ftd-tips/tips";
             { required: true, message: '请输入广告位置', trigger: 'blur' },
           ],
           data: [
-            { validator: validatePass, message: '请输入广告展示时间', trigger: 'blur' },
+            { validator: validatePass,required: true, message: '请输入广告展示时间', trigger: 'blur' },
           ],
         },
         input: '',
