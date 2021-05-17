@@ -4,14 +4,13 @@
     <div>
       <el-pagination  
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
+        :current-page="currentPage"
         :page-size="pageSize"
         layout="total"
         :total="total"
       >
       </el-pagination>
     </div>
-    
     <div class="flexBetween">
       <div class="el-pagination">
       <el-button class="firstBtn" :disabled="isFirst" @click="onFirst">
@@ -21,7 +20,7 @@
 
     <el-pagination
       @current-change="handleCurrentChange"
-      :current-page.sync="currentPage"
+      :current-page="currentPage"
       :page-size="pageSize"
       layout="prev,pager,next"
       :total="total"
@@ -34,7 +33,7 @@
     </div>
     <el-pagination
       @current-change="handleCurrentChange"
-      :current-page.sync="currentPage"
+      :current-page="currentPage"
       :page-size="pageSize"
       layout="jumper"
       :total="total"
@@ -61,18 +60,16 @@ export default {
   },
   data() {
     return {
-      // currentPage: 1,
       isFirst: true,
       isLast: false,
     };
   },
   methods: {
     handleSizeChange(val){
-      // this.pageSize = val
       this.$emit('pageSize',val)
     },
     handleCurrentChange(val) {
-      let pages = Math.ceil(this.total/10);
+      let pages = Math.ceil(this.total/this.pageSize);
       if (val == 1) {
         this.isFirst = true;
       } else {
@@ -86,15 +83,13 @@ export default {
       this.$emit('onPageChange',val)
     },
     onFirst(){
-      this.currentPage= 1;
       this.$emit('onPageChange',1)
       this.handleCurrentChange(1);
     },
     onLast(){
-      // this.currentPage= Math.ceil(this.total/10);
-      let page = Math.ceil(this.total/10);
+      let page = Math.ceil(this.total/this.pageSize);
       this.$emit('onPageChange',page)
-      this.handleCurrentChange(Math.ceil(this.total/10))
+      this.handleCurrentChange(Math.ceil(this.total/this.pageSize))
     }
   },
 };

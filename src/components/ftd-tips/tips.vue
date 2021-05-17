@@ -2,7 +2,7 @@
     <el-dialog top="0" :show-close="false" class="deletedDailog"
             :visible.sync="isDialog">
             <div class="close iconfont icon-guanbi" @click="resetForm()"></div>
-            {{title}}
+            <p class="tipsText"> {{title}}</p>
             <div class="dialogbuttom">
                 <div @click="resetForm()">取 消</div>
                 <div class="dialogbuttomclose"  @click="submitForm()">确 定</div>
@@ -50,6 +50,10 @@ export default {
     }
     .dialogbuttom{
         margin-top: 74px;
+        padding-right: 60px;
+    }
+    .tipsText{
+        line-height: 36px;
     }
 }
 
@@ -67,6 +71,10 @@ export default {
     }
     .dialogbuttom{
         margin-top: 50px;
+         padding-right:40px;
+    }
+    .tipsText{
+        line-height: 24px;
     }
 }
 </style>

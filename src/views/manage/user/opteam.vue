@@ -89,7 +89,7 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <Page :total="400" :pageSize="15"></Page>
+            <Page :total="400" :pageSize="15" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
         </div>
         <el-dialog top="0"
             :title="title" :show-close="false"
@@ -440,6 +440,10 @@ import Tips from "@/components/ftd-tips/tips";
         }
     },
     methods: {
+        onPageChange(val){
+            console.log(val)
+            this.currentPage = val;
+        },
         resetForm1(){
             this.dialogPassword = false;
         },
@@ -521,8 +525,9 @@ import Tips from "@/components/ftd-tips/tips";
             });
         },
         resetForm(formName) {
-            this.$refs[formName].resetFields();
-            this.dialogVisible = false
+            this.beforeClose()
+            // this.$refs[formName].resetFields();
+            // this.dialogVisible = false
         },
         onConfirm(){
             this.tableSeelctVal.map((item) => {
@@ -584,10 +589,6 @@ import Tips from "@/components/ftd-tips/tips";
     
 @media screen and (min-width: 1665px) {
 
-    .treeFormItem /deep/ .el-form-item__content {
-        width: 160px;
-    }
-
     .siemensLayoutSearchBoxForm /deep/ .el-form-item {
         margin-right: 30px;
     }
@@ -596,10 +597,6 @@ import Tips from "@/components/ftd-tips/tips";
 
 
 @media screen and (max-width: 1664px) {
-
-    .treeFormItem /deep/ .el-form-item__content {
-        width: 106px;
-    }
 
     .siemensLayoutSearchBoxForm /deep/ .el-form-item {
         margin-right: 20px;

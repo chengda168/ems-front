@@ -389,6 +389,7 @@ el-input__inner::placeholder{
     }
     .el-table td .cell{
         line-height: 40px;
+        padding: 0 10px;
     }
     .el-table--enable-row-hover .el-table__body tr:hover>td{
         background-color: #fff;
@@ -529,7 +530,7 @@ el-input__inner::placeholder{
         display: flex;
         justify-content: space-between;
         margin-top: 40px;
-        padding: 0 60px;
+        padding: 0 90px 0 60px;
     }
 
     .dialogbuttom div {
@@ -770,6 +771,7 @@ el-input__inner::placeholder{
     }
     .el-table td .cell{
         line-height: 30px;
+        padding: 0 6px;
     }
     .el-table--enable-row-hover .el-table__body tr:hover>td{
         background-color: #fff;
@@ -913,7 +915,7 @@ el-input__inner::placeholder{
         display: flex;
         justify-content: space-between;
         margin-top: 27px;
-        padding: 0 40px;
+        padding: 0 60px 0 40px;
     }
 
     .dialogbuttom div {

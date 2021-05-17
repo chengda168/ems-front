@@ -85,7 +85,7 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <Page :total="400" :pageSize="15"></Page>
+            <Page :total="400" :pageSize="15" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
         </div>
         <el-dialog top="0"
             :title="title" :show-close="false"
@@ -156,7 +156,7 @@
                     </el-form>
                 </div>
                 <div class="dialogbuttom">
-                    <div @click="resetForm('ruleForm')">取 消</div>
+                    <div @click="resetForm()">取 消</div>
                     <div class="dialogbuttomclose"  @click="submitForm('ruleForm')">保 存</div>
                 </div>
         </el-dialog>
@@ -639,6 +639,10 @@ import Tips from "@/components/ftd-tips/tips";
         }
     },
     methods: {
+         onPageChange(val){
+            console.log(val)
+            this.currentPage = val;
+        },
         resetForm1(){
             this.dialogPassword = false;
         },
@@ -724,19 +728,6 @@ import Tips from "@/components/ftd-tips/tips";
                 }
                 this.$refs.ruleForm.resetFields()
                this.dialogVisible = false
-                this.ruleForm={
-                    bn: '',
-                    name: '',
-                    mobile: '',
-                    email: '',
-                    department: '',
-                    role:'',
-                    status: '启用',
-                    watch:false,
-                    edit:false,
-                    power:''
-                }
-                this.$refs.ruleForm.resetFields()
               
             } else {
                 console.log('error submit!!');
@@ -744,9 +735,8 @@ import Tips from "@/components/ftd-tips/tips";
             }
             });
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-            this.dialogVisible = false
+        resetForm() {
+            this.beforeClose()
         },
         handleAllWatch(val){
         },
@@ -761,12 +751,6 @@ import Tips from "@/components/ftd-tips/tips";
         },
         handleSelectionChange(val){
             this.tableSeelctVal = val;
-        },
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
         },
         resizeFn() {
             if(!this.collapse){
