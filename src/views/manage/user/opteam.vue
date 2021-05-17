@@ -45,7 +45,7 @@
                         :width="width">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="name"
+                        prop="userName"
                         label="姓名">
                     </el-table-column>
                     <el-table-column align="center"
@@ -53,24 +53,27 @@
                         label="手机号码">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="email"
+                        prop="job"
                         label="职务/角色">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="account"
+                        prop="email"
                         label="电子邮箱">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="department"
+                        prop="unit"
                         label="单 位">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="role"
+                        prop="clientId"
                         label="运维客户">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="status"
-                        label="状 态">
+                        prop="enabled"
+                        :formatter="$typeFormatter"
+                        
+                        label="状 态"
+                        >
                     </el-table-column>
                     <el-table-column align="center"
                         label="操 作">
@@ -164,6 +167,7 @@
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
+import SOperateionTeam from "@/api/ums/sOperationTeam"
   export default {
     computed:{
         ...mapGetters({
@@ -268,156 +272,156 @@ import Tips from "@/components/ftd-tips/tips";
         currentPage: 1,
         width:50,
         tableData: [
-            {
-                id:0,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:1,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:2,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:3,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:4,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:5,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:6,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:7,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:8,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:9,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:10,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:11,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:12,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:13,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
-            {
-                id:14,
-                name: '赵丽颖',
-                mobile: '12345678909',
-                email: '部 长',
-                account: '123456@163.com',
-                department: '电力信息有限公司',
-                role:'电力信息有限公司',
-                status: '启 用',
-            }, 
+            // {
+            //     id:0,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:1,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:2,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:3,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:4,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:5,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:6,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:7,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:8,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:9,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:10,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:11,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:12,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:13,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
+            // {
+            //     id:14,
+            //     name: '赵丽颖',
+            //     mobile: '12345678909',
+            //     email: '部 长',
+            //     account: '123456@163.com',
+            //     department: '电力信息有限公司',
+            //     role:'电力信息有限公司',
+            //     status: '启 用',
+            // }, 
         ],
         tableSeelctVal:[]
       }
@@ -575,6 +579,16 @@ import Tips from "@/components/ftd-tips/tips";
             
             
         },
+        async getTableData() {
+            let params = {
+                "pageIndex": 1,
+                "length": 15,
+            }
+            let res = await SOperateionTeam.list(params);
+            this.tableData = res.data.content;
+            let totalElements = res.data.totalElements;
+            console.log(res);
+        }
     },
     mounted(){
         let self = this;
@@ -582,6 +596,7 @@ import Tips from "@/components/ftd-tips/tips";
         window.addEventListener("resize", function () {
             self.resizeFn();
         });
+        this.getTableData();
     }
   }
 </script>

@@ -35,6 +35,10 @@ Vue.config.productionTip = false
 import globalVariable from '@/constant/global-variable'
 Vue.prototype.GLOBAL = globalVariable;
 
+// 全局引入自定义typeFormatter
+import TypeFormatter from "./utils/TypeFormatter";
+Vue.prototype.$typeFormatter = TypeFormatter.typeFormatter;
+
 Vue.use(ElementUI);
 
 /* eslint-disable no-new */
