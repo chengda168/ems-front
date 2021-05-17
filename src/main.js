@@ -16,18 +16,18 @@ import axios from './http'
 import './permission' // 权限
 
 import i18n from './i18n'
+
+//swiper
+import VueAwesomeSwiper from 'vue-awesome-swiper'   
+import 'swiper/dist/css/swiper.css'
+
+
+
 // 引入字体图标css (字体图标的使用：iconfont）
 import '@/assets/font/iconfont/iconfont.css'
 import "@/assets/css/font.css";
 import "@/assets/css/layout.css";
 
-//swiper
-// import Vue from 'vue'
-// import VueAwesomeSwiper from 'vue-awesome-swiper'
-// require styles
-// import 'swiper/dist/css/swiper.css'
-
-// Vue.use(VueAwesomeSwiper)
 
 
 
@@ -50,6 +50,7 @@ import TypeFormatter from "./utils/TypeFormatter";
 Vue.prototype.$typeFormatter = TypeFormatter.typeFormatter;
 
 Vue.use(ElementUI);
+Vue.use(VueAwesomeSwiper);
 
 /* eslint-disable no-new */
 new Vue({
