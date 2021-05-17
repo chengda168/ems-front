@@ -21,6 +21,16 @@ import '@/assets/font/iconfont/iconfont.css'
 import "@/assets/css/font.css";
 import "@/assets/css/layout.css";
 
+//swiper
+// import Vue from 'vue'
+// import VueAwesomeSwiper from 'vue-awesome-swiper'
+// require styles
+// import 'swiper/dist/css/swiper.css'
+
+// Vue.use(VueAwesomeSwiper)
+
+
+
 import App from './App'
 import router from './router'
 

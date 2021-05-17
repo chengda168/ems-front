@@ -63,7 +63,7 @@
         <el-dialog top="0"
             :title="title" :show-close="false"
             :visible.sync="dialogVisible" :before-close="beforeClose">
-                <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
+                <div class="close iconfont icon-guanbi" @click="beforeClose()"></div>
                 <div class="dialogdiv">
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
                         <el-form-item label="广告图片:" prop="bn">
