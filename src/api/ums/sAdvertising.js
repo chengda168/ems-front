@@ -44,7 +44,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
     static async update(param) {
-        const url = `/ums/sAdvertising/add`;
+        const url = `/ums/sAdvertising/update`;
         const data = await this.$post(url, param);
         return data;
     }
