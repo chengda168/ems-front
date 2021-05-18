@@ -80,19 +80,34 @@ export default class login extends BaseApi {
     }
 
     /**
-     * 修改密码
+     * 修改密码（发送短信）
      * @param {*} account 
      * @param {*} passwordTwo 
      * @returns 
      */
-    static async updateNewPwd(account,passwordTwo){
+    static async updateNewPwd(account,encrypted){
         const url = `/ums/users/updateNewPwd`;
         let param = {
             "number" : account,
-            "newPwd":passwordTwo
+            "newPwd":encrypted
         }
         const data = await this.$post(url,param);
-        console.log(param)
+        return data;
+    }
+    /**
+     * 更新用户密码(旧密码)
+     * @param {*} account 
+     * @param {*} passwordTwo 
+     * @returns 
+     */
+    static async updatePwd(encryptedold,encryptednew){
+        console.log(passwordOld);
+        const url = `/ums/users/updatePwd`;
+        let param = {
+            "oldPwd" : encryptedold,
+            "newPwd":encryptednew
+        }
+        const data = await this.$post(url,param);
         return data;
     }
 

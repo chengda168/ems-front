@@ -3,7 +3,7 @@
         <div class="siemensLayoutSearchBox" :class="{'collspaseForm' : collapse}">
             <el-form :inline="true" :model="params" class="siemensLayoutSearchBoxForm flexBetween">
                 <el-form-item label="用户名：" class="treeFormItem">
-                    <el-input v-model="params.name" placeholder="请输入用户名"></el-input>
+                    <el-input v-model="params.userName" placeholder="请输入用户名"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号码：" class="treeFormItem">
                     <el-input v-model="params.mobile" placeholder="请输入手机号码"></el-input>
@@ -12,7 +12,7 @@
                     <el-input v-model="params.email" placeholder="请输入电子邮箱"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" class="fullBtn" @click="onSearch"><i class="iconfont icon-sousuo"></i>查询</el-button>
+                    <el-button type="primary" class="fullBtn" @click="getTableData"><i class="iconfont icon-sousuo"></i>查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -22,8 +22,8 @@
                 <div class="flexCenter">
                     <el-button type="primary" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
                     <el-button type="primary" @click="isDialog=true"><i class="iconfont icon-shanchu"></i>删除</el-button>
-                    <el-button type="primary" @click="onSuspend"><i class="iconfont icon-zanting"></i>暂停</el-button>
-                    <el-button type="primary" @click="onRecover"><i class="iconfont icon-runtongyiyaoyihuifu_biyan"></i>恢复</el-button>
+                    <el-button type="primary" @click="suspendBatch"><i class="iconfont icon-zanting"></i>暂停</el-button>
+                    <el-button type="primary" @click="recoverBatch"><i class="iconfont icon-runtongyiyaoyihuifu_biyan"></i>恢复</el-button>
                 </div>
             </div>
             <div class="siemensLayoutResultCon">
@@ -39,11 +39,11 @@
                         :width="width">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="bn" 
+                        prop="userCode" 
                         label="用户编号">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="name"
+                        prop="userName"
                         label="用户姓名">
                     </el-table-column>
                     <el-table-column align="center"
@@ -55,16 +55,17 @@
                         label="电子邮箱">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="department"
+                        prop="customerId"
                         label="所属园区">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="role"
+                        prop="userRole"
                         label="所属角色">
                     </el-table-column>
                     <el-table-column align="center"
                         prop="status"
-                        label="状 态">
+                        label="状 态"
+                        :formatter="$typeFormatter">
                     </el-table-column>
                     <el-table-column align="center"
                         label="操 作">
@@ -94,11 +95,11 @@
                 <div class="dialogdiv">
                 
                     <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm" :label-width="labelWidth" >
-                        <el-form-item label="用户编码:" prop="bn">
-                            <el-input type="text" v-model="ruleForm.bn"></el-input>
+                        <el-form-item label="用户编码:" prop="userCode">
+                            <el-input type="text" v-model="ruleForm.userCode"></el-input>
                         </el-form-item>
-                        <el-form-item label="用户姓名:" prop="name">
-                            <el-input type="text" v-model="ruleForm.name"></el-input>
+                        <el-form-item label="用户姓名:" prop="userName">
+                            <el-input type="text" v-model="ruleForm.userName"></el-input>
                         </el-form-item>
                         <el-form-item label="手机号码:" prop="mobile">
                             <el-input v-model="ruleForm.mobile"></el-input>
@@ -106,8 +107,8 @@
                         <el-form-item label="电子邮箱:"  prop="email">
                             <el-input v-model="ruleForm.email"></el-input>
                         </el-form-item>
-                        <el-form-item label="所属园区:" prop="department">
-                            <el-select v-model="ruleForm.department" placeholder="" popper-class="dialogSelect">
+                        <el-form-item label="所属园区:" prop="customerId">
+                            <el-select v-model="ruleForm.customerId" placeholder="" popper-class="dialogSelect">
                                 <el-option
                                 v-for="item in departmentList"
                                 :key="item.value"
@@ -116,8 +117,8 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="所属角色:" prop="role">
-                            <el-select v-model="ruleForm.role" placeholder="" popper-class="dialogSelect">
+                        <el-form-item label="所属角色:" prop="userRole">
+                            <el-select v-model="ruleForm.userRole" placeholder="" popper-class="dialogSelect">
                                 <el-option
                                 v-for="item in roleList"
                                 :key="item.value"
@@ -128,11 +129,11 @@
                         </el-form-item>
                         <el-form-item label="状　　态:" prop="status">
                             <el-radio-group v-model="ruleForm.status">
-                                <el-radio label="启用">启 用</el-radio>
-                                <el-radio label="禁用">禁 用</el-radio>
+                                <el-radio label="1">启 用</el-radio>
+                                <el-radio label="0">禁 用</el-radio>
                             </el-radio-group>
                         </el-form-item>
-                        <el-form-item label="系统权限:" prop="power" class="requireIcon">
+                       <el-form-item label="系统权限:" prop="power" class="requireIcon">
                             <div class="systemPowerBox">
                                 <div class="flexEnd">
                                     <el-checkbox v-model="ruleForm.watch" @change="handleAllWatch">全部</el-checkbox>
@@ -152,7 +153,7 @@
                                     </span>
                                 </el-tree>
                             </div>
-                        </el-form-item>
+                        </el-form-item> 
                     </el-form>
                 </div>
                 <div class="dialogbuttom">
@@ -187,6 +188,7 @@
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
+import SUser from "@/api/ums/sUser";
   export default {
     computed:{
         ...mapGetters({
@@ -220,7 +222,7 @@ import Tips from "@/components/ftd-tips/tips";
       };
       return {
         dialogPassword: false,
-          isDialog:false,
+        isDialog:false,
         dialogVisible:false,
         title:"新建人员信息",
         index:0,
@@ -240,48 +242,48 @@ import Tips from "@/components/ftd-tips/tips";
         },
         roleList:[
             {
-                value: '搭建员',
+                value: '0',
                 label: '搭建员'
             }, 
             {
-                value: '角色2',
+                value: '1',
                 label: '角色2'
             },
         ],
         departmentList:[
             {
-                value: '电力公司搭建部门',
+                value: '0',
                 label: '电力公司搭建部门'
             }, 
             {
-                value: '电力公司搭建部门1',
+                value: '1',
                 label: '电力公司搭建部门1'
             },
         ],
         isEdit:false,
         editIndex:null,
         params: {
-          name: '',
+          userName: '',
           mobile: '',
           email:''
         },
         ruleForm: {
-            bn: '',
-            name: '',
+            userCode: '',
+            userName: '',
             mobile: '',
             email: '',
-            department: '',
-            role:'',
-            status: '启用',
+            customerId: '',
+            userRole:'',
+            status: '1',
             watch:false,
             edit:false,
             power:''
         },
         rules: {
-          bn: [
+          userCode: [
             { required: true, message: '请输入用户编码', trigger: 'blur' },
           ],
-          name: [
+          userName: [
             { required: true, message: '请输入用户姓名', trigger: 'blur' },
           ],
           mobile: [
@@ -290,17 +292,19 @@ import Tips from "@/components/ftd-tips/tips";
           email: [
             { required: true, message: '请输入电子邮箱', trigger: 'blur' },
           ],
-          department: [
-           { required: true, message: '请选择所属园区', trigger: 'change' },
-          ],
-          role: [
-            { required: true, message: '请选择所属角色', trigger: 'change' }
-          ],
+        //   customerId: [
+        //    { required: true, message: '请选择所属园区', trigger: 'change' },
+        //   ],
+        //   userRole: [
+        //     { required: true, message: '请选择所属角色', trigger: 'change' }
+        //   ],
           status: [
             { required: true, message: '请选择状态', trigger: 'blur' }
           ],
         },
         currentPage: 1,
+        totalElements : 0,
+        pageSize : 15,
         width:50,
         data :[
             {
@@ -449,173 +453,7 @@ import Tips from "@/components/ftd-tips/tips";
                 ]
             }, 
         ],
-        tableData: [
-            {
-                bn: '345678568998',
-                id:0,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            }, 
-            {
-                bn: '345678568998',
-                id:1,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            }, 
-            {
-                bn: '345678568998',
-                id:2,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            },
-            {
-                bn: '345678568998',
-                id:3,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            },
-            {
-                bn: '345678568998',
-                id:4,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            }, 
-            {
-                bn: '345678568998',
-                id:5,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            }, 
-            {
-                bn: '345678568998',
-                id:6,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            },
-            {
-                bn: '345678568998',
-                id:7,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            },
-            {
-                bn: '345678568998',
-                id:8,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            }, 
-            {
-                bn: '345678568998',
-                id:9,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            }, 
-            {
-                bn: '345678568998',
-                id:10,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            },
-            {
-                bn: '345678568998',
-                id:11,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            },
-            {
-                bn: '345678568998',
-                id:12,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            },
-            {
-                bn: '345678568998',
-                id:13,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            },
-            {
-                bn: '345678568998',
-                id:14,
-                name: '赵丽艳',
-                mobile: '12345678909',
-                email: '123456@163.com',
-                account: '123456sdhyyj',
-                department: '电力公司搭建部门',
-                role:'搭建员',
-                status: '启用',
-            }
-        ],
+        tableData: [],
         tableSeelctVal:[],
         isSelectWatch:false,
         isSelectEdiot:false
@@ -648,6 +486,7 @@ import Tips from "@/components/ftd-tips/tips";
          onPageChange(val){
             console.log(val)
             this.currentPage = val;
+             this.getTableData();
         },
         resetForm1(){
             this.dialogPassword = false;
@@ -666,24 +505,24 @@ import Tips from "@/components/ftd-tips/tips";
             }
             });
         },
-        onConfirm(){
-            this.tableSeelctVal.map((item) => {
-                this.tableData.map((child, index) => {
-                if (item.id == child.id) {
-                    this.tableData.splice(index, 1);
-                }
-                });
+       async  onConfirm(){
+            let ids = this.tableSeelctVal.map((item) => item.id);
+            let res = await SUser.deleteBatch(ids);
+            this.$message({
+            message: res.msg,
+            type: res.code == 200 ? "success" : "error",
             });
-            this.isDialog = false
+           this.getTableData();
+           this.isDialog = false;
         },
         beforeClose(){
             this.ruleForm={
-                bn: '',
+                userCode: '',
                 name: '',
                 mobile: '',
                 email: '',
-                department: '',
-                role:'',
+                customerId: '',
+                userRole:'',
                 status: '启用',
                 watch:false,
                 edit:false,
@@ -697,7 +536,7 @@ import Tips from "@/components/ftd-tips/tips";
         OnAdd(){
             this.isEdit = false;
             this.title = '新建人员信息'
-            this.ruleForm.id=this.tableData.length;
+            // this.ruleForm.id=this.tableData.length;
             this.dialogVisible = true;
         },
         onEdit(row,index){
@@ -708,35 +547,25 @@ import Tips from "@/components/ftd-tips/tips";
             this.dialogVisible = true
         },
         submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+            this.$refs[formName].validate(async (valid) => {
             if (valid) {
                if(this.isEdit){
                 // 编辑
-                console.log(this.ruleForm)
                 this.tableData[this.editIndex]=JSON.parse(JSON.stringify(this.ruleForm));
+                let res = await SUser.update(this.ruleForm)
+                console.log(res);
                 this.index++;
-                console.log(this.tableData)
                }else{
                 // 新建
                 this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
-               }
-                this.ruleForm={
-                    bn: '',
-                    name: '',
-                    mobile: '',
-                    email: '',
-                    department: '',
-                    role:'',
-                    status: '启用',
-                    watch:false,
-                    edit:false,
-                    power:''
-                }
+                let res = await SUser.add(this.ruleForm)
+                console.log(res);
                 this.$refs.ruleForm.resetFields()
+               }
                this.dialogVisible = false
-              
+               
             } else {
-                console.log('error submit!!');
+                console.log('error submit!!')
                 return false;
             }
             });
@@ -758,7 +587,18 @@ import Tips from "@/components/ftd-tips/tips";
         handleSelectionChange(val){
             this.tableSeelctVal = val;
         },
+        async getTableData() {
+            let params = this.$deepCopy(this.params);
+            console.log(params)
+            params['pageIndex'] = this.currentPage;
+            params['length'] = this.pageSize;
+            let res = await SUser.list(params);
+            console.log(res);
+            this.tableData = res.data.content || [];
+            this.totalElements = res.data.totalElements;
+        },
         resizeFn() {
+            
             if(!this.collapse){
                 if (document.body.clientWidth > 1664) {
                     this.width = 50;
@@ -777,8 +617,31 @@ import Tips from "@/components/ftd-tips/tips";
             } else {
                 this.labelWidth = '68px';
             }
-            
         },
+        async suspendBatch() {
+            let ids = this.tableSeelctVal.map(item => item.id);
+            if(ids.length > 0) {
+            let res = await SUser.suspendBatch(ids);
+            this.$message({
+            message: res.msg,
+            type: res.code == 200 ? "success" : "error",
+            });
+           this.getTableData();
+           this.isDialog = false;
+            }
+        },
+        async recoverBatch() {
+            let ids = this.tableSeelctVal.map(item => item.id);
+            if(ids.length > 0) {
+            let res = await SUser.recoverBatch(ids);
+            this.$message({
+            message: res.msg,
+            type: res.code == 200 ? "success" : "error",
+            });
+           this.getTableData();
+           this.isDialog = false;
+            }
+        }
     },
     mounted(){
         let self = this;
@@ -786,6 +649,7 @@ import Tips from "@/components/ftd-tips/tips";
         window.addEventListener("resize", function () {
             self.resizeFn();
         });
+        this.getTableData();
     }
   }
 </script>

@@ -9,7 +9,7 @@
                     <el-input v-model="params.contacts" placeholder="请输入联系人"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" class="fullBtn" @click="onSearch"><i class="iconfont icon-sousuo"></i>查询</el-button>
+                    <el-button type="primary" class="fullBtn" @click="getTableData"><i class="iconfont icon-sousuo"></i>查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -34,31 +34,31 @@
                         :width="width">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="a" 
+                        prop="parentId" 
                         label="上级单位">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="b"
+                        prop="customerName"
                         label="客户名称">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="c"
+                        prop="customerCode"
                         label="客户编号">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="d"
+                        prop="contactUserName"
                         label="联系人">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="e"
+                        prop="contactUserMobile"
                         label="手机号码">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="f"
+                        prop="contactUserEmail"
                         label="电子邮箱">
                     </el-table-column>
                     <el-table-column align="center"
-                        prop="g"
+                        prop="operationsId"
                         label="所属运维单位">
                     </el-table-column>
                     <el-table-column align="center"
@@ -171,6 +171,7 @@
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
+import SCustomer from "@/api/ums/sCustomer.js";
   export default {
     computed:{
         ...mapGetters({
@@ -236,343 +237,13 @@ import Tips from "@/components/ftd-tips/tips";
         currentPage: 1,
         width:50,
         labelWidth:'84px',
-        tableData: [
-            {
-                a: '电力信息有限公司',
-                id:0,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:1,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:2,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:3,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:4,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:5,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:6,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:7,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:8,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:9,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:10,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:11,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:12,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:13,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-            {
-                a: '电力信息有限公司',
-                id:14,
-                b: '电力公司搭建部',
-                c: '09876554',
-                d: '赵丽颖',
-                e: '12345678909',
-                f: '123456@163.com',
-                g:'电力公司',
-                h: {
-                    city: '上海市',
-                    area: '',
-                    area1: '浦东区',
-                    address: '陆家嘴'
-                },
-            }, 
-        ],
+        tableData: [ ],
         isEdit:false,
         editIndex:null,
         tableSeelctVal:[],
-        departmentList:[
-            {
-                value: '电力公司搭建部门',
-                label: '电力公司搭建部门'
-            }, 
-            {
-                value: '电力公司搭建部门1',
-                label: '电力公司搭建部门1'
-            },
-        ],
-        departmentList1:[
-            {
-                value: '电力公司搭建部门',
-                label: '电力公司搭建部门'
-            }, 
-            {
-                value: '电力公司搭建部门1',
-                label: '电力公司搭建部门1'
-            },
-        ],
-        roleList:[
-            {
-                value: '上海市',
-                label: '上海市'
-            }, 
-            {
-                value: '江苏市',
-                label: '江苏市'
-            },
-        ],
-        roleList1:[
-            {
-                value: '上海市',
-                label: '上海市'
-            }, 
-        ],
-        roleList2:[
-            {
-                value: '苏州市',
-                label: '苏州市'
-            }, 
-            {
-                value: '南通市',
-                label: '南通市'
-            },
-        ],
-        roleList3:[
-            {
-                value: '上海市',
-                label: '上海市'
-            }, 
-        ],
-        roleList4:[
-            {
-                value: '静安区',
-                label: '静安区'
-            }, 
-            {
-                value: '嘉定区',
-                label: '嘉定区'
-            },
-        ],
-        roleList5:[
-            {
-                value: '常熟市',
-                label: '常熟市'
-            }, 
-            {
-                value: '吴中区',
-                label: '吴中区'
-            },
-        ],
-        roleList6:[
-            {
-                value: '海门市',
-                label: '海门市'
-            }, 
-            {
-                value: '如皋市',
-                label: '如皋市'
-            },
-        ],
-        roleList10:[
-            {
-                value: '静安区',
-                label: '静安区'
-            }, 
-            {
-                value: '嘉定区',
-                label: '嘉定区'
-            },
-        ],
+        departmentList:[ ],
+        departmentList1:[                ],
+        roleList:[ ], 
       };
     },
     watch:{
@@ -649,7 +320,7 @@ import Tips from "@/components/ftd-tips/tips";
            
             this.isEdit = false;
             this.title = '新建客户信息'
-            this.ruleForm.id=this.tableData.length;
+            // this.ruleForm.id=this.tableData.length;
             this.dialogVisible = true;
         },
         onEdit(row,index){
@@ -659,8 +330,8 @@ import Tips from "@/components/ftd-tips/tips";
             this.editIndex = index;
             this.dialogVisible = true
         },
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+      async  submitForm(formName) {
+            let valid = await this.$refs[formName].validate();
             if (valid) {
                if(this.isEdit){
                 //    编辑
@@ -671,28 +342,17 @@ import Tips from "@/components/ftd-tips/tips";
                }else{
                 //    新建
                 this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
+                let res = await SCustomer.add(this.ruleForm)
+                console.log(res);
+                this.$refs.ruleForm.resetFields()
                }
                this.dialogVisible = false
-                this.ruleForm={
-                    a: '',
-                    b: '',
-                    c: '',
-                    d: '',
-                    e: '',
-                    f:'',
-                    g: '',
-                    h: {
-                        city: '',
-                        area: '',
-                        address: ''
-                    },
-                }
-                this.$refs.ruleForm.resetFields()
+     
             } else {
                 console.log('error submit!!');
                 return false;
             }
-            });
+
         },
         resetForm() {
             this.beforeClose()
@@ -718,6 +378,16 @@ import Tips from "@/components/ftd-tips/tips";
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
+        },
+        async getTableData() {
+            let params = this.$deepCopy(this.params);
+            console.log(params)
+            params['pageIndex'] = this.currentPage;
+            params['length'] = this.pageSize;
+            let res = await SCustomer.list(params);
+            console.log(res);
+            this.tableData = res.data.content || [];
+            this.totalElements = res.data.totalElements;
         },
         resizeFn() {
             if(!this.collapse){
