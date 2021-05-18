@@ -10,8 +10,8 @@ export default class sOperationTeam extends BaseApi {
      * @param {查询参数} param 
      * @returns 
      */
-    static async list(param){
-        const url = `/ums/sOperationTeam/list`;
+    static async page(param){
+        const url = `/ums/sOperationTeam/page`;
         const data = await this.$post(url,param);
         return data;
     }

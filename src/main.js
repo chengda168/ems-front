@@ -49,6 +49,10 @@ Vue.prototype.GLOBAL = globalVariable;
 import TypeFormatter from "./utils/TypeFormatter";
 Vue.prototype.$typeFormatter = TypeFormatter.typeFormatter;
 
+// 全局引入深拷贝方法
+import { deepCopy } from "./utils/datatransfer.js";
+Vue.prototype.$deepCopy = deepCopy;
+
 Vue.use(ElementUI);
 Vue.use(VueAwesomeSwiper);
 
