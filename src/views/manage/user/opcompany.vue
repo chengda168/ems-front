@@ -18,7 +18,7 @@
       <div class="siemensLayoutResultTitle flexBetween">
         <span>查询结果</span>
         <div class="flexCenter">
-          <el-button type="primary" class="fullBtn" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
+          <el-button type="primary" class="fullBtn" @click="onAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
           <el-button type="primary" class="fullBtn" @click="isDialog = true"><i class="iconfont icon-shanchu"></i>删除
           </el-button>
         </div>
@@ -54,8 +54,8 @@
       </div>
       <Page :total="totalElements" :pageSize="pageSize" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
     </div>
-    <el-dialog top="0" :title="title" :show-close="false" :visible.sync="dialogVisible" :before-close="beforeClose">
-      <div class="close iconfont icon-guanbi" @click="beforeClose()"></div>
+    <el-dialog top="0" :title="title" :show-close="false" :visible.sync="dialogVisible" @close="$resetForm('ruleForm')">
+      <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
       <div class="dialogdiv">
 
         <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
@@ -75,16 +75,16 @@
           <el-form-item label="电子邮箱:" prop="contactUserEmail">
             <el-input v-model="ruleForm.contactUserEmail"></el-input>
           </el-form-item>
-          <el-form-item label="所属角色:" prop="roleId">
+          <!-- <el-form-item label="所属角色:" prop="roleId">
             <el-select v-model="ruleForm.roleId" placeholder="" popper-class="dialogSelect">
               <el-option v-for="item in roleList" :key="item.id" :label="item.dicInfo" :value="item.id">
               </el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
       </div>
       <div class="dialogbuttom">
-        <div @click="resetForm('ruleForm')">取 消</div>
+        <div @click="dialogVisible = false">取 消</div>
         <div class="dialogbuttomclose" @click="submitForm('ruleForm')">保 存</div>
       </div>
     </el-dialog>
@@ -120,14 +120,12 @@ export default {
       },
       roleList: [],
       isEdit: false,
-      editIndex: null,
       ruleForm: {
         unitName: "",
         unitCode: "",
         contactUserName: "",
         contactUserMobile: "",
         contactUserEmail: "",
-        roleId: "",
       },
       rules: {
         unitName: [
@@ -181,23 +179,10 @@ export default {
   },
   methods: {
     onPageChange(val) {
-      console.log(val);
       this.currentPage = val;
       this.getTableData();
     },
-    beforeClose() {
-      this.ruleForm = {
-        bn: "",
-        name: "",
-        mobile: "",
-        email: "",
-        department: "",
-        account: "",
-      };
-      this.$refs.ruleForm.resetFields();
-      this.dialogVisible = false;
-    },
-    OnAdd() {
+    onAdd() {
       this.isEdit = false;
       this.title = "新建运维单位信息";
       this.ruleForm.id = this.tableData.length;
@@ -206,8 +191,8 @@ export default {
     onEdit(row, index) {
       this.isEdit = true;
       this.title = "编辑运维单位信息";
-      this.ruleForm = JSON.parse(JSON.stringify(row));
-      this.editIndex = index;
+      this.ruleForm = this.$deepCopy(row);
+      console.log(this.ruleForm);
       this.dialogVisible = true;
     },
     async submitForm(formName) {
@@ -215,44 +200,21 @@ export default {
       let res = null;
       if (valid) {
         if (this.isEdit) {
-          //   // 编辑
-          //   console.log(this.ruleForm);
-          //   this.tableData[this.editIndex] = JSON.parse(
-          //     JSON.stringify(this.ruleForm)
-          //   );
-          //   this.index++;
-            console.log(this.ruleForm);
           res = await SOperationUnit.update(this.ruleForm);
         } else {
-          console.log(this.ruleForm);
           res = await SOperationUnit.add(this.ruleForm);
-          // 新建
-          // this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
         }
         this.$message({
           message: res.msg,
           type: res.code == 200 ? "success" : "error",
         });
 
-        //    this.dialogVisible = false
-        //     this.ruleForm={
-        //         bn: '',
-        //         name: '',
-        //         mobile: '',
-        //         email: '',
-        //         department:'',
-        //         account: ''
-        //     }
-        //     this.$refs.ruleForm.resetFields()
+        this.dialogVisible = false;
+        this.getTableData();
       } else {
         console.log("error submit!!");
         return false;
       }
-    },
-    resetForm(formName) {
-      this.beforeClose();
-      // this.$refs[formName].resetFields();
-      // this.dialogVisible = false
     },
     async onConfirm() {
       let ids = this.tableSeelctVal.map((item) => item.id);
@@ -286,9 +248,7 @@ export default {
       let params = this.$deepCopy(this.params);
       params["pageIndex"] = this.currentPage;
       params["length"] = this.pageSize;
-      console.log(params);
       let res = await SOperationUnit.page(params);
-      console.log(res);
       this.tableData = res.data.content || [];
       this.totalElements = res.data.totalElements;
     },
@@ -304,7 +264,7 @@ export default {
       self.resizeFn();
     });
     this.getTableData();
-    this.getRoleList();
+    // this.getRoleList();
   },
 };
 </script>

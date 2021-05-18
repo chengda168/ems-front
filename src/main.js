@@ -53,6 +53,10 @@ Vue.prototype.$typeFormatter = TypeFormatter.typeFormatter;
 import { deepCopy } from "./utils/datatransfer.js";
 Vue.prototype.$deepCopy = deepCopy;
 
+// 全局引入自定义reset
+import { resetForm } from "./utils/reset.js";
+Vue.prototype.$resetForm = resetForm;
+
 Vue.use(ElementUI);
 Vue.use(VueAwesomeSwiper);
 
