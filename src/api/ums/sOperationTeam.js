@@ -44,7 +44,7 @@ export default class sOperationTeam extends BaseApi {
      * @returns 
      */
     static async update(param){
-        const url = `/ums/sOperationTeam/add`;
+        const url = `/ums/sOperationTeam/update`;
         const data = await this.$post(url,param);
         return data;
     }

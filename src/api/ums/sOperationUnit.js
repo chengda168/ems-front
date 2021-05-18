@@ -59,4 +59,14 @@ export default class sOperationUnit extends BaseApi {
         const data = await this.$post(url,ids);
         return data;
     } 
+
+    /**
+     * 查询所有
+     * @returns 
+     */
+     static async list(){
+        const url = `/ums/sOperationUnit/list`;
+        const data = await this.$get(url);
+        return data;
+    }
 }

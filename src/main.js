@@ -50,8 +50,9 @@ import TypeFormatter from "./utils/TypeFormatter";
 Vue.prototype.$typeFormatter = TypeFormatter.typeFormatter;
 
 // 全局引入深拷贝方法
-import { deepCopy } from "./utils/datatransfer.js";
+import { deepCopy,copyBean } from "./utils/datatransfer.js";
 Vue.prototype.$deepCopy = deepCopy;
+Vue.prototype.$copyBean = copyBean;
 
 // 全局引入自定义reset
 import { resetForm } from "./utils/reset.js";
