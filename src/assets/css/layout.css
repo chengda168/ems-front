@@ -191,6 +191,22 @@ el-input__inner::placeholder{
     display: none;
 }
 
+
+/* 时间弹窗选中状态 */
+.el-month-table td.current .cell {
+    width: 28px;
+    height: 28px;
+    background: #009999;
+    margin-top: 4px;
+    line-height: 28px;
+    color: #ffffff !important;
+}
+
+.el-month-table td.today .cell {
+    color: #606266;
+    font-weight: 400;
+}
+
 /* 1920 */
 @media screen and (min-width: 1665px) {
     .radiusCss{
