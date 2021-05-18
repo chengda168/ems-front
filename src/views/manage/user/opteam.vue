@@ -280,8 +280,6 @@ export default {
       this.isEdit = true;
       this.title = "编辑人员信息";
       this.$copyBean(row, this.ruleForm);
-      console.log(row);
-      console.log(this.ruleForm);
       this.dialogVisible = true;
     },
     onPassword(mobile) {
@@ -318,10 +316,14 @@ export default {
         jse.setPublicKey(
           `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
         );
-       let encrypted = jse.encrypt(this.ruleForm1.password);
-       console.log(this.ruleForm1.mobile,encrypted);
-       let pwdRes = await Login.updateNewPwd(this.ruleForm1.mobile, encrypted);
-        console.log(pwdRes);
+        let encrypted = jse.encrypt(this.ruleForm1.password);
+        let res = await Login.resetPwd(this.ruleForm1.mobile, encrypted, 2);
+        this.$message({
+          message: res.msg,
+          type: res.code == 200 ? "success" : "error",
+        });
+
+        this.dialogPassword = false;
       } else {
         console.log("error submit!!");
         return false;
