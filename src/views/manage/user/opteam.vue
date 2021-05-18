@@ -115,7 +115,14 @@
                             <el-input type="text" v-model="ruleForm.email"></el-input>
                         </el-form-item>
                         <el-form-item label="运维单位:" prop="department">
-                            <el-input v-model="ruleForm.department"></el-input>
+                            <el-select v-model="ruleForm.department" placeholder="" popper-class="dialogSelect">
+                                <el-option
+                                v-for="item in customerList1"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                         <el-form-item label="园区名称:" prop="customerId">
                             <el-select v-model="ruleForm.customerId" placeholder="" popper-class="dialogSelect">
@@ -208,6 +215,16 @@ import SOperationTeam from "@/api/ums/sOperationTeam"
         labelWidth1:'96px',
         isEdit:false,
         editIndex:null,
+        customerList1:[
+            {
+                value: '园区1',
+                label: '园区1'
+            }, 
+            {
+                value: '园区2',
+                label: '园区2'
+            },
+        ],
         customerList:[
             {
                 value: '园区1',
