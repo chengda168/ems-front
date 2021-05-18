@@ -70,4 +70,10 @@ export default class sCustomer extends BaseApi {
         return data;
     }
 
+    static async getAllCustomer(){
+        const url = `/ums/sCustomer/getAllCustomer`;
+        const data = await this.$get(url);
+        return data;
+    }
+
 }

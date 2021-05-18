@@ -185,14 +185,12 @@ export default {
     onAdd() {
       this.isEdit = false;
       this.title = "新建运维单位信息";
-      this.ruleForm.id = this.tableData.length;
       this.dialogVisible = true;
     },
     onEdit(row, index) {
       this.isEdit = true;
       this.title = "编辑运维单位信息";
       this.ruleForm = this.$deepCopy(row);
-      console.log(this.ruleForm);
       this.dialogVisible = true;
     },
     async submitForm(formName) {

@@ -62,6 +62,7 @@
 </template>
 <script>
 import Login from "@/api/ums/login.js";
+import JsEncrypt from "jsencrypt";
 
 export default {
   computed: {
@@ -193,7 +194,6 @@ export default {
     async nonNext(formName){
       let res=await Login.verificationCode(this.ruleForm.account,this.ruleForm.code)
          
-   
       this.$refs[formName].validate((valid) => {
           if (valid) {
             if(res.code==200){
@@ -206,7 +206,14 @@ export default {
         });
     },
     async commit(){
-       let pwdRes=await  Login.updateNewPwd(this.ruleForm.account,this.ruleForm.passwordTwo);
+        let pu = await Login.getPublicKey(this.ruleForm.account);
+        let publicKey = pu.data;
+        let jse = new JsEncrypt();
+        jse.setPublicKey(
+          `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
+        );
+       let encrypted = jse.encrypt(this.ruleForm.passwordTwo);
+       let pwdRes=await  Login.updateNewPwd(this.ruleForm.account,encrypted);
        console.log(this.ruleForm.account,this.ruleForm.passwordTwo);
        if(pwdRes.code==200){
           this.activeIndex++;

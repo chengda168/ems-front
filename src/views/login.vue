@@ -167,7 +167,7 @@ export default {
       }
     },
     async sumbile(params) {
-      //let code=await Login.verifyCode();
+      let code=await Login.verifyCode();
       let valid = this.$refs[params].validate();
       // this.$refs[params].validate((valid) => {
       if (valid) {

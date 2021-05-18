@@ -51,6 +51,8 @@
   </div>
 </template>
 <script>
+import Login from "@/api/ums/login.js";
+import JsEncrypt from "jsencrypt";
 export default {
   computed: {
     classTextObj: function () {
@@ -152,8 +154,20 @@ export default {
         }
       },1000)
     },
-    nonNext(formName){
-      this.$refs[formName].validate((valid) => {
+    async nonNext(ruleForm){
+    let pu = await Login.getPublicKey(this.ruleForm.account);
+        let publicKey = pu.data;
+        let jse = new JsEncrypt();
+        jse.setPublicKey(
+          `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
+        );
+        console.log(this.ruleForm.passwordOld)
+      let encryptedold = jse.encrypt(this.ruleForm.passwordOld);
+      let encryptednew = jse.encrypt(this.ruleForm.passwordTwo);
+      let res= await Login.updatePwd(encryptedold,encryptednew);
+
+      console.log(res)
+      this.$refs[ruleForm].validate((valid) => {
           if (valid) {
               this.activeIndex++;
           } else {
