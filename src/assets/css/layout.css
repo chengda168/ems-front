@@ -196,7 +196,10 @@ el-input__inner::placeholder{
 .el-time-panel__btn.confirm,
 .el-date-table td.available:hover,
 .el-year-table td .cell:hover, 
-.el-year-table td.current:not(.disabled) .cell{
+.el-year-table td.current:not(.disabled) .cell，
+.el-date-picker__header-label.active, 
+.el-date-picker__header-label:hover,
+.el-picker-panel__icon-btn:hover{
     color: #009999;
 }
 .el-date-table td.current:not(.disabled) span{
@@ -210,6 +213,11 @@ el-input__inner::placeholder{
     border-color: #009999;
     color: #009999; 
 }
+.el-date-table th{
+    color: #3C464B;
+    border-bottom:1px dashed #BECDD7
+}
+
 
 /* 1920 */
 @media screen and (min-width: 1665px) {
@@ -441,12 +449,15 @@ el-input__inner::placeholder{
         cursor: pointer;
     }
     .tableOper i+i{
-        margin-left: 30%;
+        margin-left: 20%;
     }
     .tableOper .icon-bianji,
     .tableOper .icon-copy{
         font-size: 20px;
-    }  
+    }
+    .tableOper .icon-xinjian{
+        font-size: 17px;
+    }
 
     .el-table .el-table__expand-icon{
         width: 8px !important;
@@ -902,11 +913,14 @@ el-input__inner::placeholder{
         cursor: pointer;
     }
     .tableOper i+i{
-        margin-left: 30%;
+        margin-left: 20%;
     }
     .tableOper .icon-bianji,
     .tableOper .icon-copy{
         font-size: 14px;
+    }
+    .tableOper .icon-xinjian{
+        font-size: 13px;
     }
     .el-table .el-table__expand-icon{
         width: 6px !important;
