@@ -42,7 +42,7 @@
           </el-table-column>
           <el-table-column align="center" prop="contactUserEmail" label="电子邮箱">
           </el-table-column>
-          <el-table-column align="center" prop="operationsId" label="所属运维单位">
+          <el-table-column align="center" prop="operationsName" label="所属运维单位">
           </el-table-column>
           <el-table-column align="center" prop="h" label="所属地址">
             <template slot-scope="scope">
@@ -105,14 +105,12 @@
               </el-select>
               <el-select v-model="ruleForm.cityCode" placeholder="" popper-class="dialogSelect " class="SelectYihang"
                 @change="selectArea">
-                <el-option v-for="item in cityList" :key="item.id" :label="item.dicInfo"
-                  :value="item.dicCode">
+                <el-option v-for="item in cityList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
                 </el-option>
               </el-select>
               <el-select v-model="ruleForm.areaCode" placeholder="" popper-class="dialogSelect " class="SelectYihang"
                 @change="selectTown">
-                <el-option v-for="item in areaList" :key="item.id" :label="item.dicInfo"
-                  :value="item.dicCode">
+                <el-option v-for="item in areaList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
                 </el-option>
               </el-select>
             </div>
@@ -241,11 +239,11 @@ export default {
       let res = await SDic.list({
         parentCode: provinceCode,
       });
-        this.cityList = res.data;
+      this.cityList = res.data;
     },
     async selectArea(cityCode) {
       let item = this.cityList.find((item) => item.dicCode == cityCode);
-      console.log(item)
+      console.log(item);
       this.ruleForm.cityName = item.dicInfo;
       let res = await SDic.list({
         parentCode: cityCode,
@@ -254,12 +252,10 @@ export default {
     },
     async selectTown(areaCode) {
       let item = this.areaList.find((item) => item.dicCode == areaCode);
-      console.log(item)
+      console.log(item);
       this.ruleForm.areaName = item.dicInfo;
     },
     async OnAdd(ruleForm) {
-      let res = await SCustomer.getAllCustomer();
-      this.customList = res.data;
       let operation = await SCustomer.getOperationUnit();
       this.operationList = operation.data;
       //获取省
@@ -272,9 +268,28 @@ export default {
       this.dialogVisible = true;
     },
     async onEdit(row, index) {
+      console.log(row);
       this.isEdit = true;
       this.title = "编辑客户信息";
       this.ruleForm = JSON.parse(JSON.stringify(row));
+      let operation = await SCustomer.getOperationUnit();
+      this.operationList = operation.data;
+
+      let province = await SDic.list({
+        dicType: "province",
+      });
+      this.provinceList = province.data;
+
+      let city = await SDic.list({
+        dicType: "city",
+      });
+      this.cityList = city.data;
+
+      let area = await SDic.list({
+        dicType: "area",
+      });
+      this.areaList = area.data;
+
       this.editIndex = index;
       this.dialogVisible = true;
     },
@@ -304,10 +319,9 @@ export default {
         return false;
       }
     },
-
-    onSearch() {},
-   async onConfirm() {
-       let ids = this.tableSeelctVal.map((item) => item.id);
+    async onConfirm() {
+      let ids = this.tableSeelctVal.map(item => item.id);
+            if(ids.length > 0) {
             let res = await SCustomer.deleteBatch(ids);
             this.$message({
             message: res.msg,
@@ -315,29 +329,22 @@ export default {
             });
            this.getTableData();
            this.isDialog = false;
+            }
     },
     handleSelectionChange(val) {
       this.tableSeelctVal = val;
     },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    },
     async getTableData() {
       let params = this.$deepCopy(this.params);
-      console.log(params);
       params["pageIndex"] = this.currentPage;
       params["length"] = this.pageSize;
       let res = await SCustomer.list(params);
-      console.log(res);
       this.tableData = res.data.content || [];
       this.totalElements = res.data.totalElements;
     },
     async getAllCustomer() {
       let res = await SCustomer.getAllCustomer();
-      console.log(res);
+      this.customList = res.data;
     },
     resizeFn() {
       if (!this.collapse) {
@@ -367,6 +374,7 @@ export default {
       self.resizeFn();
     });
     this.getTableData();
+    this.getAllCustomer();
   },
 };
 </script>

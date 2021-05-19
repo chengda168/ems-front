@@ -71,5 +71,10 @@ export default class sUser extends BaseApi {
         return data;
     }
 
+    static async menuList(){
+        const url = `/ums/sMenu/list`;
+        const data = await this.$get(url);
+        return data;
+    }
 
 }
