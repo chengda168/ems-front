@@ -55,7 +55,7 @@
                         label="电子邮箱">
                     </el-table-column>
                      <el-table-column align="center"
-                        prop="customerId"
+                        prop="customerName"
                         label="所属园区">
                     </el-table-column>
                     <el-table-column align="center"
@@ -109,15 +109,17 @@
                         </el-form-item>
                         <el-form-item label="所属园区:" prop="customerId">
                             <el-select v-model="ruleForm.customerId" placeholder="" popper-class="dialogSelect">
+                                 <el-option :value="null" label="无"></el-option>
                                 <el-option
-                                v-for="item in departmentList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                v-for="item in customList"
+                                :key="item.id"
+                                :label="item.customerName"
+                                :value="item.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="所属角色:" prop="userRole">
+                            
                             <el-select v-model="ruleForm.userRole" placeholder="" popper-class="dialogSelect">
                                 <el-option
                                 v-for="item in roleList"
@@ -145,8 +147,8 @@
                                     default-expand-all
                                     >
                                     <span class="customTreeNode" slot-scope="{ node, data }">
-                                        <span>{{ node.label }}</span>
-                                        <span v-if="!data.children" style="display: flex;">
+                                        <span>{{ data.name }}</span>
+                                        <span v-if="data.children.length == 0" style="display: flex;">
                                             <el-checkbox v-model="node.watch" @change="(val)=>handleWatchChange(val,data)" >浏览</el-checkbox>
                                             <el-checkbox v-model="node.edit" @change="(val)=>handleEditChange(val,data)">编辑</el-checkbox>
                                         </span>
@@ -189,6 +191,7 @@ import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
 import SUser from "@/api/ums/sUser";
+import SCustomer from "@/api/ums/sCustomer.js";
   export default {
     computed:{
         ...mapGetters({
@@ -250,16 +253,7 @@ import SUser from "@/api/ums/sUser";
                 label: '角色2'
             },
         ],
-        departmentList:[
-            {
-                value: '0',
-                label: '电力公司搭建部门'
-            }, 
-            {
-                value: '1',
-                label: '电力公司搭建部门1'
-            },
-        ],
+        customList: [],
         isEdit:false,
         editIndex:null,
         params: {
@@ -306,153 +300,7 @@ import SUser from "@/api/ums/sUser";
         totalElements : 0,
         pageSize : 15,
         width:50,
-        data :[
-            {
-                id: '2',
-                label: '能耗看板',
-                watch:false,
-                edit:false,
-            }, 
-            {
-                id: '3',
-                label: '能耗统计',
-                children: [
-                    {
-                        id:' 3-1', 
-                        label:"能耗分析",
-                        watch:false,
-                        edit:false,
-                    },
-                    {
-                        id:' 3-2', 
-                        label:"成本分析",
-                        watch:false,
-                        edit:false,
-                    },
-                    {
-                        id:'3-3', 
-                        label:"指标分析",
-                        watch:false,
-                        edit:false,
-                    }
-                ]
-            }, 
-            {
-                id: '4',
-                label: '告警运维',
-                children: [
-                    {
-                        id:' 4-1', 
-                        label:"运维管理",
-                        watch:false,
-                        edit:false,
-                    },
-                    {
-                        id:' 4-2', 
-                        label:"工单管理",
-                        watch:false,
-                        edit:false,
-                    }
-                ]
-            }, 
-            {
-                id: '5',
-                label: '能耗报表',
-            }, 
-            {
-                id: '1',
-                label: '综合管理',
-                children: [
-                    {
-                        id:' 1-1',
-                        label: '用户管理',
-                        children: [
-                            {
-                                id: '1-1-1',
-                                label: '人员信息管理',
-                                watch:false,
-                                edit:false,
-                            }, {
-                                id: '1-1-2',
-                                label: '客户信息管理',
-                                watch:false,
-                                edit:false,
-                            }
-                        ]
-                    },
-                    {
-                        id: '1-2',
-                        label: '档案管理',
-                        children: [
-                            {
-                                id: '1-2-1',
-                                label: '建筑信息管理',
-                                watch:false,
-                                edit:false,
-                            }, 
-                            {
-                                id: '1-2-2',
-                                label: '设备信息管理',
-                                watch:false,
-                                edit:false,
-                            },
-                            {
-                                id: '1-2-3',
-                                label: '表计、传感器信息管理',
-                                watch:false,
-                                edit:false,
-                            },
-                            {
-                                id: '1-2-4',
-                                label: '规则定义',
-                                watch:false,
-                                edit:false,
-                            },
-                            {
-                                id: '1-2-5',
-                                label: '能耗指标设定',
-                                watch:false,
-                                edit:false,
-                            },
-                            {
-                                id: '1-2-6',
-                                label: '价格录入',
-                                watch:false,
-                                edit:false,
-                            }
-                        ]
-                    },
-                    {
-                        id: '1-3',
-                        label: '系统管理',
-                        children: [
-                            {
-                                id: '1-3-1',
-                                label: '数据字典管理',
-                                watch:false,
-                                edit:false,
-                            }, 
-                            {
-                                id: '1-3-2',
-                                label: '系统日志管理',
-                                watch:false,
-                                edit:false,
-                            },
-                            {
-                                id: '1-3-3',
-                                label: '首页广告位管理',
-                                watch:false,
-                                edit:false,
-                            }
-                        ]
-                    },
-                    {
-                        id: '1-4',
-                        label: '信息发布',
-                    }
-                ]
-            }, 
-        ],
+        data :[ ],
         tableData: [],
         tableSeelctVal:[],
         isSelectWatch:false,
@@ -505,6 +353,11 @@ import SUser from "@/api/ums/sUser";
             }
             });
         },
+        async getAllCustomer() {
+        let res = await SCustomer.getAllCustomer();
+        this.customList = res.data;
+        console.log(this.customList)
+        },
        async  onConfirm(){
             let ids = this.tableSeelctVal.map((item) => item.id);
             let res = await SUser.deleteBatch(ids);
@@ -556,6 +409,7 @@ import SUser from "@/api/ums/sUser";
                 console.log(res);
                 this.index++;
                }else{
+
                 // 新建
                 this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
                 let res = await SUser.add(this.ruleForm)
@@ -596,6 +450,11 @@ import SUser from "@/api/ums/sUser";
             console.log(res);
             this.tableData = res.data.content || [];
             this.totalElements = res.data.totalElements;
+        },
+        async menuList(){
+            let res = await SUser.menuList();
+            console.log(res.data)
+            this.data=res.data
         },
         resizeFn() {
             
@@ -650,6 +509,8 @@ import SUser from "@/api/ums/sUser";
             self.resizeFn();
         });
         this.getTableData();
+        this.getAllCustomer();
+        this.menuList();
     }
   }
 </script>
