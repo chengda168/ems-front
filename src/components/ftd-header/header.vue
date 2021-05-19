@@ -45,7 +45,7 @@ export default {
                 },
                 {
                     name:'能耗看板',
-                    path:'/'
+                    path:'/board/index'
                 },
                 {
                     name:'数据统计',
@@ -65,7 +65,7 @@ export default {
                 },
                 {
                     name:'综合管理',
-                    path:'/custom'
+                    path:'/manage/custom'
                 }
             ],
             activeIndex:'Cn',

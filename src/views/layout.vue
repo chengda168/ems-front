@@ -7,8 +7,8 @@
             <div class="logoBox" v-if="!isCollapse">
                 <img src="../assets/images/layout/logo.png">
             </div>
-            <!-- <Tree v-if="$route.path == '/home'"></Tree> -->
-            <Menu v-if="$route.meta.path == '/custom'"></Menu>
+            <Tree v-if="$route.meta.isTree"></Tree>
+            <Menu v-if="$route.meta.path == '/manage/custom'"></Menu>
         </div>
         <div class="layoutRight">
             <Header></Header>
@@ -31,6 +31,10 @@ import { mapGetters } from 'vuex'
     watch:{
         collapse(newVal){
             this.isCollapse = newVal;
+        },
+        $route(){
+            this.isCollapse = false
+            this.$store.dispatch('setCollapse',this.isCollapse);
         }
     },
     components:{
@@ -48,6 +52,9 @@ import { mapGetters } from 'vuex'
             this.isCollapse = !this.isCollapse;
             this.$store.dispatch('setCollapse',this.isCollapse);
         }
+    },
+    mounted(){
+        
     }
 }
 </script>

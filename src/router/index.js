@@ -27,6 +27,11 @@ import ManageLog from '@/views/manage/advertisement/log'
 
 import ManageInfo from '@/views/manage/info'
 
+
+import BoardIndex from '@/views/board/index'
+
+
+
 import Aa from '@/views/aa'
 
 
@@ -62,7 +67,6 @@ export default new Router({
       name: 'EditPass',
       component: EditPass,
     },
-
     {
       path: '/',
       name: 'Layout',
@@ -73,15 +77,41 @@ export default new Router({
           name: 'Home',
           component: Home,
           meta:{
-            path:'/home'
+            path:'/home',
+            isTree:true
           }
         },
+      ]
+    },
+    {
+      path: '/board',
+      name: 'Layout',
+      component: Layout,
+      redirect:'/board/index',
+      children:[
+        {
+          path: 'index',
+          name: 'BoardIndex',
+          component: BoardIndex,
+          meta:{
+            path:'/board/index',
+            isTree:true
+          }
+        },
+      ]
+    },
+    {
+      path: '/manage',
+      name: 'Layout',
+      component: Layout,
+      redirect:'/manage/custom',
+      children:[
         {
           path: 'staff',
           name: 'ManageStaff',
           component: ManageStaff,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -89,7 +119,7 @@ export default new Router({
           name: 'ManageCustom',
           component: ManageCustom,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -97,7 +127,7 @@ export default new Router({
           name: 'Aa',
           component: Aa,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -105,7 +135,7 @@ export default new Router({
           name: 'ManageOpcompany',
           component: ManageOpcompany,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -113,7 +143,7 @@ export default new Router({
           name: 'ManageOpteam',
           component: ManageOpteam,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         
@@ -122,7 +152,7 @@ export default new Router({
           name: 'ArchivesBuild',
           component: ArchivesBuild,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -130,7 +160,7 @@ export default new Router({
           name: 'ArchivesDevice',
           component: ArchivesDevice,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -138,7 +168,7 @@ export default new Router({
           name: 'ArchivesMeter',
           component: ArchivesMeter,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -146,7 +176,7 @@ export default new Router({
           name: 'ArchivesRule',
           component: ArchivesRule,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -154,7 +184,7 @@ export default new Router({
           name: 'ArchivesEnergy',
           component: ArchivesEnergy,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -162,7 +192,7 @@ export default new Router({
           name: 'ArchivesPrice',
           component: ArchivesPrice,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -170,7 +200,7 @@ export default new Router({
           name: 'ManageAdvertise',
           component: ManageAdvertise,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -178,7 +208,7 @@ export default new Router({
           name: 'ManageData',
           component: ManageData,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -186,7 +216,7 @@ export default new Router({
           name: 'ManageLog',
           component: ManageLog,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         },
         {
@@ -194,7 +224,7 @@ export default new Router({
           name: 'ManageInfo',
           component: ManageInfo,
           meta:{
-            path:'/custom'
+            path:'/manage/custom'
           }
         }
       ]

@@ -45,31 +45,31 @@ import { mapGetters } from 'vuex'
     },
     data(){
         return{
-            activeRourter:'/custom',
+            activeRourter:'/manage/custom',
             openedsIndex:['0'],
             menuList:[
                 {
                     title:'用户管理',
                     iconfont:'iconfont icon-yonghu',
-                    path:'/custom',
+                    path:'/manage/custom',
                     id:'0',
                     children:[
                         
                         {
                             name:'客户信息管理', 
-                            path:'/custom'
+                            path:'/manage/custom'
                         },
                         {
                             name:'人员信息管理',
-                            path:'/staff'
+                            path:'/manage/staff'
                         },
                         {
                             name:'运维单位信息管理', 
-                            path:'/opcompany'
+                            path:'/manage/opcompany'
                         },
                         {
                             name:'运维团队信息管理',
-                            path:'/opteam'
+                            path:'/manage/opteam'
                         }
                     ]
                 },
@@ -81,27 +81,27 @@ import { mapGetters } from 'vuex'
                     children:[
                         {
                             name:'建筑信息管理',
-                            path:'/build'
+                            path:'/manage/build'
                         },
                         {
                             name:'设备信息管理',
-                            path:'/device'
+                            path:'/manage/device'
                         },
                         {
                             name:'表计、传感器信息管理',
-                            path:'/meter'
+                            path:'/manage/meter'
                         },
                         {
                             name:'规则定义',
-                            path:'/rule'
+                            path:'/manage/rule'
                         },
                         {
                             name:'能耗指标设定',
-                            path:'/energy'
+                            path:'/manage/energy'
                         },
                         {
                             name:'价格录入',
-                            path:'/price'
+                            path:'/manage/price'
                         }
                     ]
                 },
@@ -112,15 +112,15 @@ import { mapGetters } from 'vuex'
                      children:[
                         {
                             name:'数据字典管理',
-                            path:'/data'
+                            path:'/manage/data'
                         },
                         {
                             name:'系统日志管理',
-                            path:'/log'
+                            path:'/manage/log'
                         },
                         {
                             name:'首页广告位管理',
-                            path:'/advertise'
+                            path:'/manage/advertise'
                         }
                     ]
                 },
@@ -128,7 +128,7 @@ import { mapGetters } from 'vuex'
                     title:'信息发布',
                     iconfont:'iconfont icon-xinxifabu',
                     id:'3',
-                    path:'/info'
+                    path:'/manage/info'
                 }
             ]
         }
