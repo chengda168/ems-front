@@ -1,18 +1,22 @@
-import { getToken,setToken,removeToken} from '../../../src/utils/auth'
+import { getToken, setToken, removeToken } from '../../../src/utils/auth'
 const user = {
   state: {
     token: getToken() || null,
+    user: {}
   },
   mutations: {
     SET_TOKEN: (state, token) => {
-      console.log("token",token)
+      console.log("token", token)
       state.token = token
+    },
+    SET_USER: (state, user) => {
+      state.user = user;
     }
   },
   actions: {
     // 用户登录
-    Token({commit}, token) {
-      console.log("token",token)
+    Token({ commit }, token) {
+      console.log("token", token)
       if (token === undefined) {
         return false
       }
@@ -20,8 +24,11 @@ const user = {
       commit('SET_TOKEN', token)
       // return data
     },
+    Login({ commit }, user) {
+      commit('SET_USER', user)
+    },
     // 退出
-    LogOut({commit, state}) {
+    LogOut({ commit, state }) {
       removeToken()
       commit('SET_TOKEN', null)
       // removeLanguage()

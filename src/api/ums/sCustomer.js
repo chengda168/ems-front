@@ -12,7 +12,7 @@ export default class sCustomer extends BaseApi {
      */
     static async list(param) {
         const url = `/ums/sCustomer/list`;
-        const data = await this.$get(url, param);
+        const data = await this.$post(url, param);
         return data;
     }
 
@@ -44,7 +44,7 @@ export default class sCustomer extends BaseApi {
      * @returns 
      */
     static async update(param) {
-        const url = `/ums/sCustomer/add`;
+        const url = `/ums/sCustomer/update`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -70,10 +70,25 @@ export default class sCustomer extends BaseApi {
         return data;
     }
 
+    /**
+     * 
+     * @returns 获取上级单位
+     */
     static async getAllCustomer(){
         const url = `/ums/sCustomer/getAllCustomer`;
         const data = await this.$get(url);
         return data;
     }
+
+    /**
+     * 获取运维团队
+     * @returns 
+     */
+    static async getOperationUnit(){
+        const url = `/ums/sOperationUnit/list`;
+        const data = await this.$get(url);
+        return data;
+    }
+
 
 }

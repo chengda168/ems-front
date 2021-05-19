@@ -111,5 +111,22 @@ export default class login extends BaseApi {
         return data;
     }
 
+    /**
+     * 重置密码(旧密码)
+     * @param {*} account 
+     * @param {*} passwordTwo 
+     * @returns 
+     */
+     static async resetPwd(account,encryptedNewPwd,type){
+        const url = `/ums/login/resetPwd`;
+        let param = {
+            "account" : account,
+            "newPwd" : encryptedNewPwd,
+            "type":type
+        }
+        const data = await this.$post(url,param);
+        return data;
+    }
+
  
 }
