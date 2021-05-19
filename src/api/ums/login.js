@@ -100,12 +100,12 @@ export default class login extends BaseApi {
      * @param {*} passwordTwo 
      * @returns 
      */
-    static async updatePwd(encryptedold,encryptednew){
-        console.log(passwordOld);
+    static async updatePwd(account,encryptedold,encryptednew){
         const url = `/ums/users/updatePwd`;
         let param = {
             "oldPwd" : encryptedold,
-            "newPwd":encryptednew
+            "newPwd":encryptednew,
+            "account":account
         }
         const data = await this.$post(url,param);
         return data;
@@ -124,7 +124,18 @@ export default class login extends BaseApi {
             "newPwd" : encryptedNewPwd,
             "type":type
         }
+        console.log(param)
         const data = await this.$post(url,param);
+        return data;
+    }
+
+    /**
+     * 登出
+     * @returns 
+     */
+    static async logout(){
+        const url = `/ums/users/logout`;
+        const data = await this.$post(url);
         return data;
     }
 

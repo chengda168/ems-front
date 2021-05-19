@@ -45,7 +45,7 @@
           </el-table-column>
           <el-table-column align="center" prop="customerName" label="所属园区">
           </el-table-column>
-          <el-table-column align="center" prop="userRole" label="所属角色">
+          <el-table-column align="center" prop="dicInfo" label="所属角色">
           </el-table-column>
           <el-table-column align="center" prop="status" label="状 态" :formatter="$typeFormatter">
           </el-table-column>
@@ -57,7 +57,7 @@
                 </el-tooltip>
 
                 <el-tooltip class="item" effect="dark" content="重置密码" placement="top">
-                  <i class="iconfont icon-ic_keyboard" @click="onPassword(scope.row,scope.$index)"></i>
+                  <i class="iconfont icon-ic_keyboard" @click="onPassword(scope.row.mobile)"></i>
                 </el-tooltip>
 
               </div>
@@ -97,7 +97,7 @@
           <el-form-item label="所属角色:" prop="userRole">
 
             <el-select v-model="ruleForm.userRole" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in roleList" :key="item.value" :label="item.label" :value="item.value">
+              <el-option v-for="item in roleList" :key="item.id" :label="item.dicInfo" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -159,6 +159,9 @@ import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
 import SUser from "@/api/ums/sUser";
 import SCustomer from "@/api/ums/sCustomer.js";
+import Login from "@/api/ums/login.js";
+import JsEncrypt from "jsencrypt";
+import SDic from "@/api/ums/sDic.js"
 export default {
   computed: {
     ...mapGetters({
@@ -206,16 +209,7 @@ export default {
         password: [{ validator: validatePass, trigger: "blur" }],
         password1: [{ validator: validatePass2, trigger: "blur" }],
       },
-      roleList: [
-        {
-          value: "0",
-          label: "搭建员",
-        },
-        {
-          value: "1",
-          label: "角色2",
-        },
-      ],
+      roleList: [ ],
       permissionCheckBox : {},
       customList: [],
       isEdit: false,
@@ -226,6 +220,7 @@ export default {
         email: "",
       },
       ruleForm: {
+        id : null,
         userCode: "",
         userName: "",
         mobile: "",
@@ -299,18 +294,31 @@ export default {
     resetForm1() {
       this.dialogPassword = false;
     },
-    onPassword(row, index) {
+    onPassword(mobile) {
+      this.ruleForm1["mobile"] = mobile;
       this.dialogPassword = true;
     },
-    submitForm1(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.dialogPassword = false;
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+   async submitForm1(formName) {
+       let valid = await this.$refs[formName].validate();
+      if (valid) {
+        let pk = await Login.getPublicKey(this.ruleForm1.mobile);
+        let publicKey = pk.data;
+        let jse = new JsEncrypt();
+        jse.setPublicKey(
+          `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
+        );
+        let encrypted = jse.encrypt(this.ruleForm1.password);
+        let res = await Login.resetPwd(this.ruleForm1.mobile, encrypted, 1);
+        this.$message({
+          message: res.msg,
+          type: res.code == 200 ? "success" : "error",
+        });
+
+        this.dialogPassword = false;
+      } else {
+        console.log("error submit!!");
+        return false;
+      }
     },
     async getAllCustomer() {
       let res = await SCustomer.getAllCustomer();
@@ -334,7 +342,10 @@ export default {
     onEdit(row, index) {
       this.isEdit = true;
       this.title = "编辑人员信息";
-      this.copyBean(row, this.ruleForm);
+      this.$copyBean(row, this.ruleForm);
+      this.ruleForm.id = row.id;
+      console.log(this.ruleForm)
+      this.getPermission(row.id)
       this.dialogVisible = true;
     },
     async submitForm(formName) {
@@ -382,7 +393,6 @@ export default {
     },
     async menuList() {
       let res = await SUser.menuList();
-      console.log(res.data);
       this.data = res.data;
     },
     resizeFn() {
@@ -417,6 +427,12 @@ export default {
         this.isDialog = false;
       }
     },
+    async getRole(){
+         let param = {"dicType":'role'}
+         let res = await SDic.list(param);
+         console.log(res)
+        this.roleList = res.data;
+    },
     async recoverBatch() {
       let ids = this.tableSeelctVal.map((item) => item.id);
       if (ids.length > 0) {
@@ -429,7 +445,7 @@ export default {
         this.isDialog = false;
       }
     },
-    getPermission() {
+   async getPermission(userId) {
         // let res = [];
         // res.push({id : 1 , browsePermissions : 1 , editPermissions: 1});
         // for(let i = 0 ; i < res.length ; i++) {
@@ -437,6 +453,8 @@ export default {
 
         //     }
         // }
+        let res= await SUser.getUserMenu(userId);
+        console.log(res)
     }
   },
   mounted() {
@@ -448,7 +466,7 @@ export default {
     this.getTableData();
     this.getAllCustomer();
     this.menuList();
-    this.getPermission();
+    this.getRole();
   },
 };
 </script>

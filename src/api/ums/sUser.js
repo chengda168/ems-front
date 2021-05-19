@@ -71,9 +71,22 @@ export default class sUser extends BaseApi {
         return data;
     }
 
+    /**
+     * 
+     * @returns 获取全部菜单
+     */
     static async menuList(){
         const url = `/ums/sMenu/list`;
         const data = await this.$get(url);
+        return data;
+    }
+
+    /**
+     * 获取用户权限
+     */
+     static async getUserMenu(userId){
+        const url = `/ums/sMenu/getUserMenu`;
+        const data = await this.$get(url,userId);
         return data;
     }
 

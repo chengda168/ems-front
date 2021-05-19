@@ -155,25 +155,25 @@ export default {
       },1000)
     },
     async nonNext(ruleForm){
-    let pu = await Login.getPublicKey(this.ruleForm.account);
+      let valid = this.$refs[ruleForm].validate();
+        if (valid) {
+        let detail=this.$store.getters;
+        let account=detail.user.mobile;
+        let pu = await Login.getPublicKey(account);
         let publicKey = pu.data;
         let jse = new JsEncrypt();
         jse.setPublicKey(
           `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
         );
-        console.log(this.ruleForm.passwordOld)
       let encryptedold = jse.encrypt(this.ruleForm.passwordOld);
       let encryptednew = jse.encrypt(this.ruleForm.passwordTwo);
-      let res= await Login.updatePwd(encryptedold,encryptednew);
-
-      console.log(res)
-      this.$refs[ruleForm].validate((valid) => {
-          if (valid) {
-              this.activeIndex++;
+      let res= await Login.updatePwd(account,encryptedold,encryptednew);
+      if(res.code==200){
+       this.activeIndex++;
+       }        
           } else {
             return false;
-          }
-        });
+          } ;
     },
     noRouter(){
        this.$router.push("/login");

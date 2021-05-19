@@ -165,6 +165,7 @@ export default {
           this.$store.dispatch("Login", loginRes.data);
           this.$router.push("/dashboard");
         } else {
+          this.getVerifyCode();
           this.errordis = "1";
         }
       }
