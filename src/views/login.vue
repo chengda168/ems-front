@@ -20,37 +20,20 @@
                 登录账户或密码错误！剩余{{loginFailedNum}}次机会，超过6次将冻结24小时。
               </div>
             </div>
-            <el-form
-              :model="params"
-              :rules="rule"
-              ref="params"
-              class="registerForm"
-            >
+            <el-form :model="params" :rules="rule" ref="params" class="registerForm">
               <el-form-item prop="name">
                 <el-input v-model="params.name" placeholder="邮箱账号/手机号">
                 </el-input>
                 <div class="inputicon iconfont icon-wode"></div>
               </el-form-item>
               <el-form-item prop="password">
-                <el-input
-                  :type="password1"
-                  v-model="params.password"
-                  placeholder="密码"
-                ></el-input>
+                <el-input :type="password1" v-model="params.password" placeholder="密码"></el-input>
                 <div class="inputicon iconfont icon-ic_keyboard"></div>
-                <div
-                  class="inputiconyanjing iconfont icon-yanjing"
-                  @click="showpassword"
-                ></div>
+                <div class="inputiconyanjing iconfont icon-yanjing" @click="showpassword"></div>
               </el-form-item>
               <el-form-item class="vcode" prop="vcode">
-                <el-input
-                  v-model="params.vcode"
-                  placeholder="验证码"
-                ></el-input>
-                <div
-                  class="inputicon iconfont icon-yunongtongqingshuruyanzhengma"
-                ></div>
+                <el-input v-model="params.vcode" placeholder="验证码"></el-input>
+                <div class="inputicon iconfont icon-yunongtongqingshuruyanzhengma"></div>
                 <div class="inputCodeimage">
                   <img :src="verifyCodeApi" @click="getVerifyCode" />
                 </div>
@@ -59,13 +42,9 @@
                 <div class="FL">
                   <el-checkbox v-model="checked" class="">记住密码</el-checkbox>
                 </div>
-                <router-link to="/forget" class="FR" style="color: #009999"
-                  >忘记密码?</router-link
-                >
+                <router-link to="/forget" class="FR" style="color: #009999">忘记密码?</router-link>
               </div>
-              <el-button class="loginBtn" @click="sumbile('params')"
-                >登 录</el-button
-              >
+              <el-button class="loginBtn" @click="sumbile('params')">登 录</el-button>
             </el-form>
           </div>
           <div class="LoginBot">
@@ -95,7 +74,6 @@ import Login from "@/api/ums/login.js";
 export default {
   data() {
     const validateVcode = (rule, value, callback) => {
-      console.log(this.code, value);
       if (this.code.toLowerCase() != value.toLowerCase()) {
         callback(new Error("验证码错误，请重新输入"));
       } else {
@@ -107,7 +85,7 @@ export default {
       errordis: "2",
       password1: "password",
       verifyCodeApi: this.GLOBAL.verifyCodeApi,
-      loginFailedNum:"",
+      loginFailedNum: "",
       params: {
         name: "",
         password: "",
@@ -167,7 +145,7 @@ export default {
       }
     },
     async sumbile(params) {
-      let code=await Login.verifyCode();
+      let code = await Login.verifyCode();
       let valid = this.$refs[params].validate();
       // this.$refs[params].validate((valid) => {
       if (valid) {
@@ -182,8 +160,9 @@ export default {
           account: this.params.name,
           password: encrypted,
         });
-        this.loginFailedNum=6-loginRes.data.loginFailedNum;
+        this.loginFailedNum = 6 - loginRes.data.loginFailedNum;
         if (loginRes.code == 200) {
+          this.$store.dispatch("Login", loginRes.data);
           this.$router.push("/dashboard");
         } else {
           this.errordis = "1";

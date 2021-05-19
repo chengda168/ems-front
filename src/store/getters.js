@@ -6,5 +6,6 @@ const getters = {
   collapse: state => state.app.collapse,
   
   token: state => state.user.token,
+  user: state => state.user.user
 }
 export default getters
