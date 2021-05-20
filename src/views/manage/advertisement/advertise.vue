@@ -354,7 +354,7 @@ export default {
     },
     api_Add() {
       this.entity = {};
-      this.entity.pictureUrl = this.ruleForm.pictureId;
+      this.entity.pictureId = this.ruleForm.pictureId;
       this.entity.startDate = this.ruleForm.startDate;
       this.entity.endDate = this.ruleForm.endDate;
       this.entity.showTime = this.inputTime;
