@@ -70,4 +70,14 @@ export default class sAdvertising extends BaseApi {
         return data;
     }
 
+    /**
+     * 查询展示广告详情
+     * @returns 
+     */
+    static async getShowAdv(){
+        const url = `/ums/sAdvertising/getShowAdv`;
+        const data = await this.$get(url);
+        return data;
+    }
+
 }
