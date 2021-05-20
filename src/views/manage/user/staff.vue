@@ -265,6 +265,7 @@ export default {
       browsePerm: {},
       editPerm: {},
       menuPerm: {},
+      allCheckBoxIds: [],
     };
   },
   watch: {
@@ -389,9 +390,51 @@ export default {
         return false;
       }
     },
-   
-    handleAllWatch(val) {},
-    handleAllEdit(val) {},
+    //  recursion(data, id) {
+    //     let result;
+    //     if (!data) {
+    //       return;
+    //     }
+    //     for (var i = 0; i < data.length; i++) {
+    //       let item = data[i];
+    //       if (item.id === id) {
+    //         result = item;
+    //         break;
+    //       } else if (item.children && item.children.length > 0) {
+    //         result = this.recursion(item.children, id);
+    //       }
+    //     }
+    //     console.log(result);
+    //     return result;
+    //   },
+    recursion(treeData) {
+      for (let i = 0; i < treeData.length; i++) {
+        if (treeData[i].children.length > 0) {
+          this.recursion(treeData[i].children);
+        } else {
+          this.allCheckBoxIds.push(treeData[i].id);
+        }
+      }
+    },
+    handleAllWatch(val) {
+      console.log(this.allCheckBoxIds);
+      for (let i = 0; i < this.allCheckBoxIds.length; i++) {
+        this.$set(this.browsePerm, this.allCheckBoxIds[i], val);
+        if(!this.menuPerm[this.allCheckBoxIds[i]]) {
+          this.menuPerm[this.allCheckBoxIds[i]] = new Object();
+        }
+        this.menuPerm[this.allCheckBoxIds[i]]["browsePermissions"] = val;
+      }
+    },
+    handleAllEdit(val) {
+      for (let i = 0; i < this.allCheckBoxIds.length; i++) {
+        this.$set(this.editPerm, this.allCheckBoxIds[i], val);
+        if(!this.menuPerm[this.allCheckBoxIds[i]]) {
+          this.menuPerm[this.allCheckBoxIds[i]] = new Object();
+        } 
+        this.menuPerm[this.allCheckBoxIds[i]]["editPermissions"] = val;
+      }
+    },
     handleWatchChange(value, data, node) {
       console.log(this.menuPerm);
       this.browsePerm[data.id] = value;
@@ -423,10 +466,10 @@ export default {
       this.totalElements = res.data.totalElements;
     },
     permInit() {
-      for(let i in this.browsePerm) {
+      for (let i in this.browsePerm) {
         this.$set(this.browsePerm, i, false);
       }
-      for(let i in this.editPerm) {
+      for (let i in this.editPerm) {
         this.$set(this.editPerm, i, false);
       }
       this.menuPerm = {};
@@ -434,6 +477,7 @@ export default {
     async menuList() {
       let res = await SUser.menuList();
       this.data = res.data;
+      this.recursion(this.data);
     },
     resizeFn() {
       if (!this.collapse) {
