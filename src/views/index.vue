@@ -68,6 +68,7 @@ import geoJson from "../assets/js/china.json";
 import { mapGetters } from "vuex";
 import SCustomer from "@/api/ums/sCustomer";
 import SNotice from "@/api/ums/sNotice"
+import Login from "@/api/ums/login"
 export default {
   computed: {
     ...mapGetters({
@@ -120,12 +121,14 @@ export default {
     };
   },
   methods: {
-    onSelectItem(index) {
+   async onSelectItem(index) {
       if (index == 0) {
         // 修改密码
         this.$router.push("/editPass");
       } else {
+        let res=await  Login.logout();
         // 退出登录
+        this.$store.dispatch("LogOut");
         this.$router.push("/login");
       }
     },
