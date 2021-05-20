@@ -227,6 +227,9 @@ import { mapGetters } from 'vuex'
      /deep/ .oneMenu .icon-xinxifabu{
           font-size: 20px;
      }
+     /deep/ .oneMenu span{
+          font-size: 16px;
+     }
     /deep/ .el-submenu__title .el-submenu__icon-arrow{
         color: #fff;
         transform: rotate(-90deg);
@@ -317,7 +320,7 @@ import { mapGetters } from 'vuex'
         font-size: 12px;
      }
      /deep/ .oneMenu .icon-xinxifabu{
-          font-size: 13px;
+          font-size: 14px;
      }
     /deep/ .el-submenu__title .el-submenu__icon-arrow{
         color: #fff;
