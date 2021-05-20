@@ -45,7 +45,7 @@
           </el-table-column>
           <el-table-column align="center" prop="customerName" label="所属园区">
           </el-table-column>
-          <el-table-column align="center" prop="userRole" label="所属角色">
+          <el-table-column align="center" prop="dicInfo" label="所属角色">
           </el-table-column>
           <el-table-column align="center" prop="status" label="状 态" :formatter="$typeFormatter">
           </el-table-column>
@@ -57,7 +57,7 @@
                 </el-tooltip>
 
                 <el-tooltip class="item" effect="dark" content="重置密码" placement="top">
-                  <i class="iconfont icon-ic_keyboard" @click="onPassword(scope.row,scope.$index)"></i>
+                  <i class="iconfont icon-ic_keyboard" @click="onPassword(scope.row.mobile)"></i>
                 </el-tooltip>
 
               </div>
@@ -97,7 +97,7 @@
           <el-form-item label="所属角色:" prop="userRole">
 
             <el-select v-model="ruleForm.userRole" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in roleList" :key="item.value" :label="item.label" :value="item.value">
+              <el-option v-for="item in roleList" :key="item.id" :label="item.dicInfo" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -117,8 +117,10 @@
                 <span class="customTreeNode" slot-scope="{ node, data }">
                   <span>{{ data.name }}</span>
                   <span v-if="data.children.length == 0" style="display: flex;">
-                    <el-checkbox v-model="node.watch" @change="(val)=>handleWatchChange(val,data)">浏览</el-checkbox>
-                    <el-checkbox v-model="node.edit" @change="(val)=>handleEditChange(val,data)">编辑</el-checkbox>
+                    <el-checkbox v-model="browsePerm[data.id]" @change="(val)=>handleWatchChange(val,data,node)">浏览
+                    </el-checkbox>
+                    <el-checkbox v-model="editPerm[data.id]" @change="(val)=>handleEditChange(val,data)">编辑
+                    </el-checkbox>
                   </span>
                 </span>
               </el-tree>
@@ -159,6 +161,9 @@ import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
 import SUser from "@/api/ums/sUser";
 import SCustomer from "@/api/ums/sCustomer.js";
+import Login from "@/api/ums/login.js";
+import JsEncrypt from "jsencrypt";
+import SDic from "@/api/ums/sDic.js";
 export default {
   computed: {
     ...mapGetters({
@@ -206,17 +211,7 @@ export default {
         password: [{ validator: validatePass, trigger: "blur" }],
         password1: [{ validator: validatePass2, trigger: "blur" }],
       },
-      roleList: [
-        {
-          value: "0",
-          label: "搭建员",
-        },
-        {
-          value: "1",
-          label: "角色2",
-        },
-      ],
-      permissionCheckBox : {},
+      roleList: [],
       customList: [],
       isEdit: false,
       editIndex: null,
@@ -226,6 +221,7 @@ export default {
         email: "",
       },
       ruleForm: {
+        id: null,
         userCode: "",
         userName: "",
         mobile: "",
@@ -236,6 +232,7 @@ export default {
         watch: false,
         edit: false,
         power: "",
+        userMenuList: [],
       },
       rules: {
         userCode: [
@@ -265,6 +262,9 @@ export default {
       tableSeelctVal: [],
       isSelectWatch: false,
       isSelectEdiot: false,
+      browsePerm: {},
+      editPerm: {},
+      menuPerm: {},
     };
   },
   watch: {
@@ -299,18 +299,31 @@ export default {
     resetForm1() {
       this.dialogPassword = false;
     },
-    onPassword(row, index) {
+    onPassword(mobile) {
+      this.ruleForm1["mobile"] = mobile;
       this.dialogPassword = true;
     },
-    submitForm1(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.dialogPassword = false;
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+    async submitForm1(formName) {
+      let valid = await this.$refs[formName].validate();
+      if (valid) {
+        let pk = await Login.getPublicKey(this.ruleForm1.mobile);
+        let publicKey = pk.data;
+        let jse = new JsEncrypt();
+        jse.setPublicKey(
+          `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
+        );
+        let encrypted = jse.encrypt(this.ruleForm1.password);
+        let res = await Login.resetPwd(this.ruleForm1.mobile, encrypted, 1);
+        this.$message({
+          message: res.msg,
+          type: res.code == 200 ? "success" : "error",
+        });
+
+        this.dialogPassword = false;
+      } else {
+        console.log("error submit!!");
+        return false;
+      }
     },
     async getAllCustomer() {
       let res = await SCustomer.getAllCustomer();
@@ -334,40 +347,65 @@ export default {
     onEdit(row, index) {
       this.isEdit = true;
       this.title = "编辑人员信息";
-      this.copyBean(row, this.ruleForm);
+      this.$copyBean(row, this.ruleForm);
+      this.ruleForm.id = row.id;
+      console.log(this.ruleForm);
+      this.getPermission(row.id);
       this.dialogVisible = true;
     },
     async submitForm(formName) {
-      let valid = await this.$refs[formName].validate();
-      let res = null;
-      if (valid) {
-        if (this.isEdit) {
-          // 编辑
-          res = await SUser.update(this.ruleForm);
-        } else {
-          // 新建
-          res = await SUser.add(this.ruleForm);
+      for (let i in this.menuPerm) {
+        if (
+          this.menuPerm[i]["browsePermissions"] ||
+          this.menuPerm[i]["editPermissions"]
+        ) {
+          this.ruleForm.userMenuList.push({
+            userId: this.ruleForm.id,
+            menuId: i,
+            browsePermissions: this.menuPerm[i]["browsePermissions"] ? 1 : 0,
+            editPermissions: this.menuPerm[i]["editPermissions"] ? 1 : 0,
+          });
         }
-        this.$message({
-          message: res.msg,
-          type: res.code == 200 ? "success" : "error",
-        });
-
-        this.dialogVisible = false;
-        this.getTableData();
-      } else {
-        console.log("error submit!!");
-        return false;
       }
+        let valid = await this.$refs[formName].validate();
+        let res = null;
+        if (valid) {
+          if (this.isEdit) {
+            // 编辑
+            res = await SUser.update(this.ruleForm);
+          } else {
+            // 新建
+            res = await SUser.add(this.ruleForm);
+          }
+          this.$message({
+            message: res.msg,
+            type: res.code == 200 ? "success" : "error",
+          });
+
+          this.dialogVisible = false;
+          this.getTableData();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
     },
     handleAllWatch(val) {},
     handleAllEdit(val) {},
-    handleWatchChange(value, data) {
-      data.watch = value;
+    handleWatchChange(value, data, node) {
+      this.browsePerm[data.id] = value;
+      if (!this.menuPerm[data.id]) {
+        this.menuPerm[data.id] = new Object();
+      }
+      this.menuPerm[data.id]["browsePermissions"] = value;
     },
     handleEditChange(value, data) {
-      data.edit = value;
+      this.editPerm[data.id] = value;
+      if (!this.menuPerm[data.id]) {
+        this.menuPerm[data.id] = new Object();
+      }
+      this.menuPerm[data.id]["editPermissions"] = value;
     },
+
     handleSelectionChange(val) {
       this.tableSeelctVal = val;
     },
@@ -382,7 +420,6 @@ export default {
     },
     async menuList() {
       let res = await SUser.menuList();
-      console.log(res.data);
       this.data = res.data;
     },
     resizeFn() {
@@ -417,6 +454,11 @@ export default {
         this.isDialog = false;
       }
     },
+    async getRole() {
+      let param = { dicType: "role" };
+      let res = await SDic.list(param);
+      this.roleList = res.data;
+    },
     async recoverBatch() {
       let ids = this.tableSeelctVal.map((item) => item.id);
       if (ids.length > 0) {
@@ -429,15 +471,17 @@ export default {
         this.isDialog = false;
       }
     },
-    getPermission() {
-        // let res = [];
-        // res.push({id : 1 , browsePermissions : 1 , editPermissions: 1});
-        // for(let i = 0 ; i < res.length ; i++) {
-        //     this.permissionCheckBox[res[i].menuId] = {
-
-        //     }
-        // }
-    }
+    async getPermission(userId) {
+      //   let res = [];
+      //   res.push({
+      //       menuId : 8,browsePermissions:1,editPermissions:1
+      //   });
+      let res = (await SUser.getUserMenu(userId)) || [];
+      for (let i = 0; i < res.length; i++)
+        browsePerm[res[i].menuId] =
+          res[i].browsePermissions == 1 ? true : false;
+      editPerm[res[i].menuId] = res[i].editPermissions == 1 ? true : false;
+    },
   },
   mounted() {
     let self = this;
@@ -448,7 +492,7 @@ export default {
     this.getTableData();
     this.getAllCustomer();
     this.menuList();
-    this.getPermission();
+    this.getRole();
   },
 };
 </script>
