@@ -24,7 +24,7 @@
           <router-link to="" class="siemensHomeInfoBtnBox siemensHomeInfoPer flexCenter"
             @click.native.stop="isShowHead = !isShowHead"><i class="iconfont icon-iconfontgerenzhongxin"></i>
           </router-link>
-          <router-link to="/custom" class="siemensHomeInfoBtnBox siemensHomeInfoSetting flexCenter"><i
+          <router-link to="/manage/custom" class="siemensHomeInfoBtnBox siemensHomeInfoSetting flexCenter"><i
               class="iconfont icon-shezhi"></i></router-link>
           <ul class="selectItemBox" v-if="isShowHead">
             <li class="selectItems" v-for="(item,index) in headList" :key="index" @click.stop="onSelectItem(index)"><i
