@@ -97,6 +97,7 @@ import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
 import SOperationUnit from "@/api/ums/sOperationUnit";
 import SDic from "@/api/ums/sDic";
+import rules from "@/utils/rule.js";
 export default {
   computed: {
     ...mapGetters({
@@ -138,10 +139,10 @@ export default {
           { required: true, message: "请输入联系人", trigger: "blur" },
         ],
         contactUserMobile: [
-          { required: true, message: "请输入手机号码", trigger: "blur" },
+          { required: true, validator: rules.FormValidate.Form().validatePhone, trigger: "blur" },
         ],
         contactUserEmail: [
-          { required: true, message: "请输入电子邮箱", trigger: "blur" },
+          { required: true, validator: rules.FormValidate.Form().validateEmail, trigger: "blur" },
         ],
         roleId: [
           { required: true, message: "请选择所属角色", trigger: "change" },
@@ -248,7 +249,9 @@ export default {
       params["length"] = this.pageSize;
       let res = await SOperationUnit.page(params);
       this.tableData = res.data.content || [];
+      console.log(res);
       this.totalElements = res.data.totalElements;
+      console.log(this.tableData);
     },
     async getRoleList() {
       let res = await SDic.list({ dicType: "role" });

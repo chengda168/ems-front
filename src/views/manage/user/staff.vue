@@ -97,7 +97,7 @@
           <el-form-item label="所属角色:" prop="userRole">
 
             <el-select v-model="ruleForm.userRole" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in roleList" :key="item.id" :label="item.dicInfo" :value="item.id">
+              <el-option v-for="item in roleList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
               </el-option>
             </el-select>
           </el-form-item>
@@ -117,8 +117,10 @@
                 <span class="customTreeNode" slot-scope="{ node, data }">
                   <span>{{ data.name }}</span>
                   <span v-if="data.children.length == 0" style="display: flex;">
-                    <el-checkbox v-model="node.watch" @change="(val)=>handleWatchChange(val,data)">浏览</el-checkbox>
-                    <el-checkbox v-model="node.edit" @change="(val)=>handleEditChange(val,data)">编辑</el-checkbox>
+                    <el-checkbox v-model="browsePerm[data.id]" @change="(val)=>handleWatchChange(val,data,node)">浏览
+                    </el-checkbox>
+                    <el-checkbox v-model="editPerm[data.id]" @change="(val)=>handleEditChange(val,data)">编辑
+                    </el-checkbox>
                   </span>
                 </span>
               </el-tree>
@@ -161,7 +163,7 @@ import SUser from "@/api/ums/sUser";
 import SCustomer from "@/api/ums/sCustomer.js";
 import Login from "@/api/ums/login.js";
 import JsEncrypt from "jsencrypt";
-import SDic from "@/api/ums/sDic.js"
+import SDic from "@/api/ums/sDic.js";
 export default {
   computed: {
     ...mapGetters({
@@ -209,8 +211,7 @@ export default {
         password: [{ validator: validatePass, trigger: "blur" }],
         password1: [{ validator: validatePass2, trigger: "blur" }],
       },
-      roleList: [ ],
-      permissionCheckBox : {},
+      roleList: [],
       customList: [],
       isEdit: false,
       editIndex: null,
@@ -220,7 +221,7 @@ export default {
         email: "",
       },
       ruleForm: {
-        id : null,
+        id: null,
         userCode: "",
         userName: "",
         mobile: "",
@@ -231,6 +232,7 @@ export default {
         watch: false,
         edit: false,
         power: "",
+        userMenuList: [],
       },
       rules: {
         userCode: [
@@ -260,6 +262,10 @@ export default {
       tableSeelctVal: [],
       isSelectWatch: false,
       isSelectEdiot: false,
+      browsePerm: {},
+      editPerm: {},
+      menuPerm: {},
+      allCheckBoxIds: [],
     };
   },
   watch: {
@@ -287,7 +293,6 @@ export default {
       console.log("点击恢复按钮");
     },
     onPageChange(val) {
-      console.log(val);
       this.currentPage = val;
       this.getTableData();
     },
@@ -298,8 +303,8 @@ export default {
       this.ruleForm1["mobile"] = mobile;
       this.dialogPassword = true;
     },
-   async submitForm1(formName) {
-       let valid = await this.$refs[formName].validate();
+    async submitForm1(formName) {
+      let valid = await this.$refs[formName].validate();
       if (valid) {
         let pk = await Login.getPublicKey(this.ruleForm1.mobile);
         let publicKey = pk.data;
@@ -335,20 +340,34 @@ export default {
       this.isDialog = false;
     },
     OnAdd() {
+      this.permInit();
       this.isEdit = false;
       this.title = "新建人员信息";
       this.dialogVisible = true;
     },
     onEdit(row, index) {
+      this.permInit();
       this.isEdit = true;
       this.title = "编辑人员信息";
       this.$copyBean(row, this.ruleForm);
       this.ruleForm.id = row.id;
-      console.log(this.ruleForm)
-      this.getPermission(row.id)
+      this.getPermission(row.id);
       this.dialogVisible = true;
     },
     async submitForm(formName) {
+      for (let i in this.menuPerm) {
+        if (
+          this.menuPerm[i]["browsePermissions"] ||
+          this.menuPerm[i]["editPermissions"]
+        ) {
+          this.ruleForm.userMenuList.push({
+            userId: this.ruleForm.id,
+            menuId: i,
+            browsePermissions: this.menuPerm[i]["browsePermissions"] ? 1 : 0,
+            editPermissions: this.menuPerm[i]["editPermissions"] ? 1 : 0,
+          });
+        }
+      }
       let valid = await this.$refs[formName].validate();
       let res = null;
       if (valid) {
@@ -371,14 +390,69 @@ export default {
         return false;
       }
     },
-    handleAllWatch(val) {},
-    handleAllEdit(val) {},
-    handleWatchChange(value, data) {
-      data.watch = value;
+    //  recursion(data, id) {
+    //     let result;
+    //     if (!data) {
+    //       return;
+    //     }
+    //     for (var i = 0; i < data.length; i++) {
+    //       let item = data[i];
+    //       if (item.id === id) {
+    //         result = item;
+    //         break;
+    //       } else if (item.children && item.children.length > 0) {
+    //         result = this.recursion(item.children, id);
+    //       }
+    //     }
+    //     console.log(result);
+    //     return result;
+    //   },
+    recursion(treeData) {
+      for (let i = 0; i < treeData.length; i++) {
+        if (treeData[i].children.length > 0) {
+          this.recursion(treeData[i].children);
+        } else {
+          this.allCheckBoxIds.push(treeData[i].id);
+        }
+      }
+    },
+    handleAllWatch(val) {
+      console.log(this.allCheckBoxIds);
+      for (let i = 0; i < this.allCheckBoxIds.length; i++) {
+        this.$set(this.browsePerm, this.allCheckBoxIds[i], val);
+        if(!this.menuPerm[this.allCheckBoxIds[i]]) {
+          this.menuPerm[this.allCheckBoxIds[i]] = new Object();
+        }
+        this.menuPerm[this.allCheckBoxIds[i]]["browsePermissions"] = val;
+      }
+    },
+    handleAllEdit(val) {
+      for (let i = 0; i < this.allCheckBoxIds.length; i++) {
+        this.$set(this.editPerm, this.allCheckBoxIds[i], val);
+        if(!this.menuPerm[this.allCheckBoxIds[i]]) {
+          this.menuPerm[this.allCheckBoxIds[i]] = new Object();
+        } 
+        this.menuPerm[this.allCheckBoxIds[i]]["editPermissions"] = val;
+      }
+    },
+    handleWatchChange(value, data, node) {
+      console.log(this.menuPerm);
+      this.browsePerm[data.id] = value;
+      if (!this.menuPerm[data.id]) {
+        this.menuPerm[data.id] = new Object();
+      }
+      console.log(data.id);
+      this.menuPerm[data.id]["browsePermissions"] = value;
     },
     handleEditChange(value, data) {
-      data.edit = value;
+      this.editPerm[data.id] = value;
+      if (!this.menuPerm[data.id]) {
+        this.menuPerm[data.id] = new Object();
+      }
+      console.log(data.id);
+      this.menuPerm[data.id]["editPermissions"] = value;
     },
+
     handleSelectionChange(val) {
       this.tableSeelctVal = val;
     },
@@ -391,9 +465,19 @@ export default {
       this.tableData = res.data.content || [];
       this.totalElements = res.data.totalElements;
     },
+    permInit() {
+      for (let i in this.browsePerm) {
+        this.$set(this.browsePerm, i, false);
+      }
+      for (let i in this.editPerm) {
+        this.$set(this.editPerm, i, false);
+      }
+      this.menuPerm = {};
+    },
     async menuList() {
       let res = await SUser.menuList();
       this.data = res.data;
+      this.recursion(this.data);
     },
     resizeFn() {
       if (!this.collapse) {
@@ -427,11 +511,10 @@ export default {
         this.isDialog = false;
       }
     },
-    async getRole(){
-         let param = {"dicType":'role'}
-         let res = await SDic.list(param);
-         console.log(res)
-        this.roleList = res.data;
+    async getRole() {
+      let param = { dicType: "role" };
+      let res = await SDic.list(param);
+      this.roleList = res.data;
     },
     async recoverBatch() {
       let ids = this.tableSeelctVal.map((item) => item.id);
@@ -445,17 +528,31 @@ export default {
         this.isDialog = false;
       }
     },
-   async getPermission(userId) {
-        // let res = [];
-        // res.push({id : 1 , browsePermissions : 1 , editPermissions: 1});
-        // for(let i = 0 ; i < res.length ; i++) {
-        //     this.permissionCheckBox[res[i].menuId] = {
-
-        //     }
-        // }
-        let res= await SUser.getUserMenu(userId);
-        console.log(res)
-    }
+    async getPermission(userId) {
+      let res = await SUser.getUserMenu(userId);
+      let resData = res.data || [];
+      for (let i = 0; i < resData.length; i++) {
+        this.$set(
+          this.browsePerm,
+          resData[i].menuId,
+          resData[i].browsePermissions == 1 ? true : false
+        );
+        this.$set(
+          this.editPerm,
+          resData[i].menuId,
+          resData[i].editPermissions == 1 ? true : false
+        );
+        // this.browsePerm[resData[i].menuId] =
+        //   resData[i].browsePermissions == 1 ? true : false;
+        // this.editPerm[resData[i].menuId] =
+        //   resData[i].editPermissions == 1 ? true : false;
+        this.menuPerm[resData[i].menuId] = new Object();
+        this.menuPerm[resData[i].menuId]["browsePermissions"] =
+          resData[i].browsePermissions == 1 ? true : false;
+        this.menuPerm[resData[i].menuId]["editPermissions"] =
+          resData[i].editPermissions == 1 ? true : false;
+      }
+    },
   },
   mounted() {
     let self = this;

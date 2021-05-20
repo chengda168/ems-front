@@ -214,10 +214,15 @@ el-input__inner::placeholder{
 .el-year-table td.current:not(.disabled) .cell，
 .el-date-picker__header-label.active, 
 .el-date-picker__header-label:hover,
-.el-picker-panel__icon-btn:hover{
+.el-picker-panel__icon-btn:hover,
+.el-year-table td .cell:hover, 
+.el-year-table td.current:not(.disabled) .cell,
+.el-year-table td.today .cell{
     color: #009999;
 }
-.el-date-table td.current:not(.disabled) span{
+.el-date-table td.current:not(.disabled) span,
+.el-date-table td.end-date span, 
+.el-date-table td.start-date span{
     background-color: #009999;
 }
 .el-picker-panel__footer .el-button--text{
@@ -228,17 +233,50 @@ el-input__inner::placeholder{
     border-color: #009999;
     color: #009999; 
 }
+.el-range-editor.is-active, .el-range-editor.is-active:hover{
+    border-color: #BECDD7;
+}
 .el-date-table th{
     color: #3C464B;
     border-bottom:1px dashed #BECDD7
 }
+.el-date-editor .el-range-separator{
+    padding: 0;
+    color: #879BAA;
+}
 
-/* .el-picker-panel__icon-btn{
+.el-picker-panel__icon-btn{
     width: 22px;
     height: 22px;
     border-radius: 50%;
     margin-top:0 ;
-} */
+    background-color: rgba(0,153,153,0.2);
+    color: #009999;
+}
+.el-picker-panel__icon-btn,
+.el-date-picker__prev-btn,
+.el-date-picker__next-btn{
+    margin:4px 3px;
+}
+.el-date-picker__header-label,
+.el-date-range-picker__header{
+    font-family: "Arial Black";
+    font-weight: bold;
+    color: #3C464B;
+}
+.el-date-picker__header-label+.el-date-picker__header-label{
+    color: #009999;
+}
+.el-date-picker .popper__arrow,
+.el-picker-panel .popper__arrow{
+    display: none;
+}
+.el-picker-panel{
+    border: none;
+    box-shadow: 4px 18px 24px 0px rgba(0, 55, 55, 0.15);
+    border-radius: 10px;
+}
+
 
 
 /* 1920 */
@@ -662,7 +700,9 @@ el-input__inner::placeholder{
     .dateBox /deep/ .el-input__inner::placeholder{
         font-size: 14px;
     }
-    .dateBox /deep/ .el-input__prefix{
+    .dateBox /deep/ .el-input__prefix,
+    .dateBox /deep/ .el-range__icon{
+        position: absolute;
         left: auto;
         right: 8px;
         top: 50%;
@@ -1139,7 +1179,9 @@ el-input__inner::placeholder{
     .dateBox /deep/ .el-input__inner::placeholder{
         font-size: 12px;
     }
-    .dateBox /deep/ .el-input__prefix{
+    .dateBox /deep/ .el-input__prefix,
+    .dateBox /deep/ .el-range__icon{
+        position: absolute;
         left: auto;
         right: 6px;
         top: 50%;

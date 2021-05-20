@@ -85,8 +85,8 @@ export default class sUser extends BaseApi {
      * 获取用户权限
      */
      static async getUserMenu(userId){
-        const url = `/ums/sMenu/getUserMenu`;
-        const data = await this.$get(url,userId);
+        const url = `/ums/sMenu/getUserMenu/${userId}`;
+        const data = await this.$get(url);
         return data;
     }
 
