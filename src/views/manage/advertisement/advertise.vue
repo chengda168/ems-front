@@ -51,7 +51,7 @@
         <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
           :label-width="labelWidth">
           <el-form-item label="广告图片:" prop="pictureUrl">
-            <el-upload :with-credentials="true" class="upload-demo" action="http://192.168.22.107:9987/upload/pic" :limit="1"
+            <el-upload :with-credentials="true" class="upload-demo" :action="uploadPicUrl" :limit="1"
               :file-list="ruleForm.pictureUrl" list-type="picture" :on-remove="onRemove" :on-success="onSuccess">
               <div>
                 <el-button class="updataImg">点击上传</el-button>
@@ -145,6 +145,7 @@ export default {
       }
     };
     return {
+      uploadPicUrl: this.GLOBAL.uploadPicUrl,
       isDialog: false,
       dialogVisible: false,
       title: "新建首页广告",
