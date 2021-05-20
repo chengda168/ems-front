@@ -117,8 +117,10 @@
                 <span class="customTreeNode" slot-scope="{ node, data }">
                   <span>{{ data.name }}</span>
                   <span v-if="data.children.length == 0" style="display: flex;">
-                    <el-checkbox v-model="node.watch" @change="(val)=>handleWatchChange(val,data)">浏览</el-checkbox>
-                    <el-checkbox v-model="node.edit" @change="(val)=>handleEditChange(val,data)">编辑</el-checkbox>
+                    <el-checkbox v-model="browsePerm[data.id]" @change="(val)=>handleWatchChange(val,data,node)">浏览
+                    </el-checkbox>
+                    <el-checkbox v-model="editPerm[data.id]" @change="(val)=>handleEditChange(val,data)">编辑
+                    </el-checkbox>
                   </span>
                 </span>
               </el-tree>
@@ -161,7 +163,7 @@ import SUser from "@/api/ums/sUser";
 import SCustomer from "@/api/ums/sCustomer.js";
 import Login from "@/api/ums/login.js";
 import JsEncrypt from "jsencrypt";
-import SDic from "@/api/ums/sDic.js"
+import SDic from "@/api/ums/sDic.js";
 export default {
   computed: {
     ...mapGetters({
@@ -209,8 +211,7 @@ export default {
         password: [{ validator: validatePass, trigger: "blur" }],
         password1: [{ validator: validatePass2, trigger: "blur" }],
       },
-      roleList: [ ],
-      permissionCheckBox : {},
+      roleList: [],
       customList: [],
       isEdit: false,
       editIndex: null,
@@ -220,7 +221,7 @@ export default {
         email: "",
       },
       ruleForm: {
-        id : null,
+        id: null,
         userCode: "",
         userName: "",
         mobile: "",
@@ -231,6 +232,7 @@ export default {
         watch: false,
         edit: false,
         power: "",
+        userMenuList: [],
       },
       rules: {
         userCode: [
@@ -260,6 +262,9 @@ export default {
       tableSeelctVal: [],
       isSelectWatch: false,
       isSelectEdiot: false,
+      browsePerm: {},
+      editPerm: {},
+      menuPerm: {},
     };
   },
   watch: {
@@ -298,8 +303,8 @@ export default {
       this.ruleForm1["mobile"] = mobile;
       this.dialogPassword = true;
     },
-   async submitForm1(formName) {
-       let valid = await this.$refs[formName].validate();
+    async submitForm1(formName) {
+      let valid = await this.$refs[formName].validate();
       if (valid) {
         let pk = await Login.getPublicKey(this.ruleForm1.mobile);
         let publicKey = pk.data;
@@ -344,41 +349,63 @@ export default {
       this.title = "编辑人员信息";
       this.$copyBean(row, this.ruleForm);
       this.ruleForm.id = row.id;
-      console.log(this.ruleForm)
-      this.getPermission(row.id)
+      console.log(this.ruleForm);
+      this.getPermission(row.id);
       this.dialogVisible = true;
     },
     async submitForm(formName) {
-      let valid = await this.$refs[formName].validate();
-      let res = null;
-      if (valid) {
-        if (this.isEdit) {
-          // 编辑
-          res = await SUser.update(this.ruleForm);
-        } else {
-          // 新建
-          res = await SUser.add(this.ruleForm);
+      for (let i in this.menuPerm) {
+        if (
+          this.menuPerm[i]["browsePermissions"] ||
+          this.menuPerm[i]["editPermissions"]
+        ) {
+          this.ruleForm.userMenuList.push({
+            userId: this.ruleForm.id,
+            menuId: i,
+            browsePermissions: this.menuPerm[i]["browsePermissions"] ? 1 : 0,
+            editPermissions: this.menuPerm[i]["editPermissions"] ? 1 : 0,
+          });
         }
-        this.$message({
-          message: res.msg,
-          type: res.code == 200 ? "success" : "error",
-        });
-
-        this.dialogVisible = false;
-        this.getTableData();
-      } else {
-        console.log("error submit!!");
-        return false;
       }
+        let valid = await this.$refs[formName].validate();
+        let res = null;
+        if (valid) {
+          if (this.isEdit) {
+            // 编辑
+            res = await SUser.update(this.ruleForm);
+          } else {
+            // 新建
+            res = await SUser.add(this.ruleForm);
+          }
+          this.$message({
+            message: res.msg,
+            type: res.code == 200 ? "success" : "error",
+          });
+
+          this.dialogVisible = false;
+          this.getTableData();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
     },
     handleAllWatch(val) {},
     handleAllEdit(val) {},
-    handleWatchChange(value, data) {
-      data.watch = value;
+    handleWatchChange(value, data, node) {
+      this.browsePerm[data.id] = value;
+      if (!this.menuPerm[data.id]) {
+        this.menuPerm[data.id] = new Object();
+      }
+      this.menuPerm[data.id]["browsePermissions"] = value;
     },
     handleEditChange(value, data) {
-      data.edit = value;
+      this.editPerm[data.id] = value;
+      if (!this.menuPerm[data.id]) {
+        this.menuPerm[data.id] = new Object();
+      }
+      this.menuPerm[data.id]["editPermissions"] = value;
     },
+
     handleSelectionChange(val) {
       this.tableSeelctVal = val;
     },
@@ -427,11 +454,10 @@ export default {
         this.isDialog = false;
       }
     },
-    async getRole(){
-         let param = {"dicType":'role'}
-         let res = await SDic.list(param);
-         console.log(res)
-        this.roleList = res.data;
+    async getRole() {
+      let param = { dicType: "role" };
+      let res = await SDic.list(param);
+      this.roleList = res.data;
     },
     async recoverBatch() {
       let ids = this.tableSeelctVal.map((item) => item.id);
@@ -445,17 +471,17 @@ export default {
         this.isDialog = false;
       }
     },
-   async getPermission(userId) {
-        // let res = [];
-        // res.push({id : 1 , browsePermissions : 1 , editPermissions: 1});
-        // for(let i = 0 ; i < res.length ; i++) {
-        //     this.permissionCheckBox[res[i].menuId] = {
-
-        //     }
-        // }
-        let res= await SUser.getUserMenu(userId);
-        console.log(res)
-    }
+    async getPermission(userId) {
+      //   let res = [];
+      //   res.push({
+      //       menuId : 8,browsePermissions:1,editPermissions:1
+      //   });
+      let res = (await SUser.getUserMenu(userId)) || [];
+      for (let i = 0; i < res.length; i++)
+        browsePerm[res[i].menuId] =
+          res[i].browsePermissions == 1 ? true : false;
+      editPerm[res[i].menuId] = res[i].editPermissions == 1 ? true : false;
+    },
   },
   mounted() {
     let self = this;
