@@ -4,8 +4,8 @@
       <div class="siemensLogin">
         <div class="LoginImage">
           <el-carousel :interval="5000" arrow="never" class="carousel">
-            <el-carousel-item v-for="(item, index) in imageicon" :key="index">
-              <img :src="item.images" />
+            <el-carousel-item v-for="item in imageicon" :key="item.id">
+              <img :src="item.pictureUrl" />
             </el-carousel-item>
           </el-carousel>
         </div>
@@ -70,6 +70,7 @@
 <script>
 import JsEncrypt from "jsencrypt";
 import Login from "@/api/ums/login.js";
+import SAdertising from "@/api/ums/sAdvertising.js"
 
 export default {
   data() {
@@ -128,6 +129,7 @@ export default {
   },
   mounted() {
     this.getVerifyCode();
+    this.getShowAdv();
   },
   methods: {
     // 获取图片验证码
@@ -136,6 +138,11 @@ export default {
       let res = await Login.verifyCode();
       this.verifyCodeApi = "data:image/gif;base64," + res.data.img;
       this.code = res.data.code;
+    },
+    async getShowAdv(){
+       let res = await SAdertising.getShowAdv();
+       this.imageicon=res.data
+       console.log(this.imageicon)
     },
     showpassword() {
       if (this.password1 == "password") {

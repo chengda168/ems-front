@@ -97,7 +97,7 @@
           <el-form-item label="所属角色:" prop="userRole">
 
             <el-select v-model="ruleForm.userRole" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in roleList" :key="item.id" :label="item.dicInfo" :value="item.id">
+              <el-option v-for="item in roleList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
               </el-option>
             </el-select>
           </el-form-item>
@@ -292,7 +292,6 @@ export default {
       console.log("点击恢复按钮");
     },
     onPageChange(val) {
-      console.log(val);
       this.currentPage = val;
       this.getTableData();
     },
@@ -340,16 +339,17 @@ export default {
       this.isDialog = false;
     },
     OnAdd() {
+      this.permInit();
       this.isEdit = false;
       this.title = "新建人员信息";
       this.dialogVisible = true;
     },
     onEdit(row, index) {
+      this.permInit();
       this.isEdit = true;
       this.title = "编辑人员信息";
       this.$copyBean(row, this.ruleForm);
       this.ruleForm.id = row.id;
-      console.log(this.ruleForm);
       this.getPermission(row.id);
       this.dialogVisible = true;
     },
@@ -367,35 +367,38 @@ export default {
           });
         }
       }
-        let valid = await this.$refs[formName].validate();
-        let res = null;
-        if (valid) {
-          if (this.isEdit) {
-            // 编辑
-            res = await SUser.update(this.ruleForm);
-          } else {
-            // 新建
-            res = await SUser.add(this.ruleForm);
-          }
-          this.$message({
-            message: res.msg,
-            type: res.code == 200 ? "success" : "error",
-          });
-
-          this.dialogVisible = false;
-          this.getTableData();
+      let valid = await this.$refs[formName].validate();
+      let res = null;
+      if (valid) {
+        if (this.isEdit) {
+          // 编辑
+          res = await SUser.update(this.ruleForm);
         } else {
-          console.log("error submit!!");
-          return false;
+          // 新建
+          res = await SUser.add(this.ruleForm);
         }
+        this.$message({
+          message: res.msg,
+          type: res.code == 200 ? "success" : "error",
+        });
+
+        this.dialogVisible = false;
+        this.getTableData();
+      } else {
+        console.log("error submit!!");
+        return false;
+      }
     },
+   
     handleAllWatch(val) {},
     handleAllEdit(val) {},
     handleWatchChange(value, data, node) {
+      console.log(this.menuPerm);
       this.browsePerm[data.id] = value;
       if (!this.menuPerm[data.id]) {
         this.menuPerm[data.id] = new Object();
       }
+      console.log(data.id);
       this.menuPerm[data.id]["browsePermissions"] = value;
     },
     handleEditChange(value, data) {
@@ -403,6 +406,7 @@ export default {
       if (!this.menuPerm[data.id]) {
         this.menuPerm[data.id] = new Object();
       }
+      console.log(data.id);
       this.menuPerm[data.id]["editPermissions"] = value;
     },
 
@@ -417,6 +421,15 @@ export default {
       let res = await SUser.list(params);
       this.tableData = res.data.content || [];
       this.totalElements = res.data.totalElements;
+    },
+    permInit() {
+      for(let i in this.browsePerm) {
+        this.$set(this.browsePerm, i, false);
+      }
+      for(let i in this.editPerm) {
+        this.$set(this.editPerm, i, false);
+      }
+      this.menuPerm = {};
     },
     async menuList() {
       let res = await SUser.menuList();
@@ -472,15 +485,29 @@ export default {
       }
     },
     async getPermission(userId) {
-      //   let res = [];
-      //   res.push({
-      //       menuId : 8,browsePermissions:1,editPermissions:1
-      //   });
-      let res = (await SUser.getUserMenu(userId)) || [];
-      for (let i = 0; i < res.length; i++)
-        browsePerm[res[i].menuId] =
-          res[i].browsePermissions == 1 ? true : false;
-      editPerm[res[i].menuId] = res[i].editPermissions == 1 ? true : false;
+      let res = await SUser.getUserMenu(userId);
+      let resData = res.data || [];
+      for (let i = 0; i < resData.length; i++) {
+        this.$set(
+          this.browsePerm,
+          resData[i].menuId,
+          resData[i].browsePermissions == 1 ? true : false
+        );
+        this.$set(
+          this.editPerm,
+          resData[i].menuId,
+          resData[i].editPermissions == 1 ? true : false
+        );
+        // this.browsePerm[resData[i].menuId] =
+        //   resData[i].browsePermissions == 1 ? true : false;
+        // this.editPerm[resData[i].menuId] =
+        //   resData[i].editPermissions == 1 ? true : false;
+        this.menuPerm[resData[i].menuId] = new Object();
+        this.menuPerm[resData[i].menuId]["browsePermissions"] =
+          resData[i].browsePermissions == 1 ? true : false;
+        this.menuPerm[resData[i].menuId]["editPermissions"] =
+          resData[i].editPermissions == 1 ? true : false;
+      }
     },
   },
   mounted() {
