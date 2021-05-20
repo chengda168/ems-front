@@ -61,11 +61,21 @@ export default class sAdvertising extends BaseApi {
     }
 
     /**
-     * 查询登录用户下的客户
+     * 查询详情
      * @returns 
      */
-    static async allByLoginUser() {
-        const url = `/ums/sAdvertising/allByLoginUser`;
+    static async detail(id) {
+        const url = `/ums/sAdvertising/detail/` + id;
+        const data = await this.$get(url);
+        return data;
+    }
+
+    /**
+     * 更新展示时间
+     * @returns 
+     */
+     static async updateShowTime(time) {
+        const url = `/ums/sAdvertising/updateShowTime/` + time;
         const data = await this.$get(url);
         return data;
     }
