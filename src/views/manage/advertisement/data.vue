@@ -4,7 +4,7 @@
             <div class="swiperBox">
                 <div class="swiperBoxContain">
                     <ul class="swiperWrapper" ref="swiperBox" :style="styleObj">
-                        <li class="swiperSlide" :class="{'swiperSlideActive' : acativeIndex == index}" 
+                        <li class="swiperSlide" :class="{'swiperSlideActive' : activeIndex == index}" 
                         v-for="(item,index) in list" :key="index" @click="onChange(index)">
                         
                             <el-tooltip effect="dark" :content="item" placement="top" :disabled="item.length<=6">
@@ -120,7 +120,7 @@ import Tips from "@/components/ftd-tips/tips";
         return{
             translateX:0,
             isShowArrow:false,
-            acativeIndex:0,
+            activeIndex:0,
             list:['设备层级','设备类型','设备型号','设备使用场景','额定电压','开关柜柜型','测试测试1','测试测试测试测试'],
             dic_type_name:'',
             currentPage:1,
@@ -215,7 +215,7 @@ import Tips from "@/components/ftd-tips/tips";
             this.totalElements = this.content.length;
         },
         onChange(index){
-            this.acativeIndex = index;
+            this.activeIndex = index;
         },
         onPrev(){
             let outerWidth = $(".swiperSlideActive").outerWidth(true);
@@ -389,7 +389,6 @@ import Tips from "@/components/ftd-tips/tips";
         text-overflow: ellipsis;
     }
     .swiperSlideActive{
-        font-family: "PingFang Bold";
         font-weight: 500;
         color:#3C464B
     }
