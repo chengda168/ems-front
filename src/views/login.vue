@@ -17,7 +17,9 @@
             <div class="error" v-if="errordis == '1'">
               <div class="errorimage iconfont icon-jinggaozhuyi"></div>
               <div class="errorfont">
-                登录账户或密码错误！剩余{{loginFailedNum}}次机会，超过6次将冻结24小时。
+
+                {{msg}}
+                <!-- 登录账户或密码错误！剩余{{loginFailedNum}}次机会，超过6次将冻结24小时。 -->
               </div>
             </div>
             <el-form :model="params" :rules="rule" ref="params" class="registerForm">
@@ -70,7 +72,7 @@
 <script>
 import JsEncrypt from "jsencrypt";
 import Login from "@/api/ums/login.js";
-import SAdertising from "@/api/ums/sAdvertising.js"
+import SAdertising from "@/api/ums/sAdvertising.js";
 
 export default {
   data() {
@@ -125,6 +127,7 @@ export default {
         ],
       },
       code: "",
+      msg : ""
     };
   },
   mounted() {
@@ -139,10 +142,10 @@ export default {
       this.verifyCodeApi = "data:image/gif;base64," + res.data.img;
       this.code = res.data.code;
     },
-    async getShowAdv(){
-       let res = await SAdertising.getShowAdv();
-       this.imageicon=res.data
-       console.log(this.imageicon)
+    async getShowAdv() {
+      let res = await SAdertising.getShowAdv();
+      this.imageicon = res.data;
+      console.log(this.imageicon);
     },
     showpassword() {
       if (this.password1 == "password") {
@@ -167,7 +170,28 @@ export default {
           account: this.params.name,
           password: encrypted,
         });
-        this.loginFailedNum = 6 - loginRes.data.loginFailedNum;
+        console.log(loginRes);
+        if (loginRes.code != 200) {
+          if (!loginRes.data) {
+            console.log(loginRes.msg)
+            this.msg = loginRes.msg;
+            // $(".errorfont").html(loginRes.msg);
+          } else if (loginRes.data.loginFailedNum == 0) {
+            // $(".errorfont").html("賬戶已凍結,請於24小時后再重試");
+            this.msg = `賬戶已凍結,請於${loginRes.data.canLoginTime}后再重試`;
+          } else if (loginRes.data.loginFailedNum > 0) {
+            let loginFailedNum = loginRes.data.loginFailedNum;
+            let msg = `登录账户或密码错误！剩余${loginFailedNum}次机会，超过6次将冻结24小时。`;
+            // console.log('num',msg)
+            // $(".errorfont").html(msg);
+            this.msg = msg;
+          }
+        }
+
+        // this.loginFailedNum = 6 - loginRes.data.loginFailedNum;
+        // if (this.loginFailedNum == 0) {
+        //   $(".errorfont").html("賬戶已凍結,請於24小時后再重試");
+        // }
         if (loginRes.code == 200) {
           this.$store.dispatch("Login", loginRes.data);
           this.$router.push("/dashboard");
