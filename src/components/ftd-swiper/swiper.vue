@@ -69,13 +69,17 @@ export default {
         }
     },
     resizeFn(){
-        let scrollWidth = this.$refs.swiperBox.scrollWidth;
-        let offsetWidth = this.$refs.swiperBox.offsetWidth;
-        if(scrollWidth>offsetWidth){
-            this.isShowArrow = true;
-        }else{
-            this.isShowArrow = false;
-        }
+        this.translateX=0;
+        this.$nextTick(function(){
+            let scrollWidth = this.$refs.swiperBox.scrollWidth;
+            let offsetWidth = this.$refs.swiperBox.offsetWidth;
+            if(scrollWidth>offsetWidth){
+                this.isShowArrow = true;
+            }else{
+                this.isShowArrow = false;
+            }
+        })
+        
     }
   },
   mounted(){

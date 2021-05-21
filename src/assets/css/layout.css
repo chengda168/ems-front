@@ -43,6 +43,7 @@ li,ol{
 	list-style: none;
 }
 
+
 .flexBox{
     display: flex;
 }
@@ -99,11 +100,27 @@ li,ol{
 .redColor{
     color: #D00202;
 }
+.redColor1{
+    color: #ED5565;
+}
 .yellowColor{
     color:#FF9C00 ;
 }
+.yellowColor1{
+    color:#FF9200 ;
+}
 .greenColor{
     color: #00C100;
+}
+.blueColor{
+    color: #009999;
+}
+.blueColor1{
+    color: #4461F2;
+}
+.linkText{
+    color: #4461F2;
+    text-decoration: underline;
 }
 /*控制整个滚动条*/
 ::-webkit-scrollbar {
@@ -145,7 +162,8 @@ li,ol{
     border-color:#BECDD7 ;
 }
 .el-input.is-active .el-input__inner,
-.el-input__inner:focus{
+.el-input__inner:focus,
+.el-textarea__inner:focus{
     border-color:#BECDD7 ;
 }
 el-input__inner::placeholder{
@@ -162,6 +180,13 @@ el-input__inner::placeholder{
 .el-message-box__input input.invalid, 
 .el-message-box__input input.invalid:focus{
     border-color: #BECDD7;
+}
+.el-textarea{
+    resize: none;
+}
+.el-textarea .el-input__count{
+    line-height: 1;
+    color: #BECDD7;
 }
 
 
@@ -208,16 +233,17 @@ el-input__inner::placeholder{
 }
 /* 日期选择器 */
 .el-date-table td.today span,
-.el-time-panel__btn.confirm,
-.el-date-table td.available:hover,
-.el-year-table td .cell:hover, 
-.el-year-table td.current:not(.disabled) .cell，
 .el-date-picker__header-label.active, 
 .el-date-picker__header-label:hover,
-.el-picker-panel__icon-btn:hover,
+.el-date-table td.available:hover,
 .el-year-table td .cell:hover, 
 .el-year-table td.current:not(.disabled) .cell,
-.el-year-table td.today .cell{
+.el-year-table td .cell:hover, 
+.el-year-table td.current:not(.disabled) .cell,
+.el-year-table td.today .cell,
+.el-time-panel__btn.confirm,
+.el-picker-panel__icon-btn:hover,
+.el-month-table td .cell:hover{
     color: #009999;
 }
 .el-date-table td.current:not(.disabled) span,
@@ -276,6 +302,7 @@ el-input__inner::placeholder{
     box-shadow: 4px 18px 24px 0px rgba(0, 55, 55, 0.15);
     border-radius: 10px;
 }
+
 
 
 
@@ -657,7 +684,7 @@ el-input__inner::placeholder{
         width: 100%;
         display: flex;
         justify-content: space-between;
-        margin-top: 40px;
+        margin-top: 20px;
         padding: 0 90px 0 60px;
     }
 
@@ -700,6 +727,10 @@ el-input__inner::placeholder{
     .dateBox /deep/ .el-input__inner::placeholder{
         font-size: 14px;
     }
+    .dateBox /deep/  .el-range-input, 
+    .dateBox /deep/ .el-range-separator{
+        font-size: 14px;
+    }
     .dateBox /deep/ .el-input__prefix,
     .dateBox /deep/ .el-range__icon{
         position: absolute;
@@ -738,6 +769,8 @@ el-input__inner::placeholder{
         font-size: 16px;
         color: #ED5565;
     }
+
+
 }
 
 /* 1280*/
@@ -809,6 +842,7 @@ el-input__inner::placeholder{
         font-size: 12px;
         line-height: 26px;
     }
+    
      /* 检索条件 */
      .siemensLayoutCon{
         display: flex;
@@ -1127,7 +1161,7 @@ el-input__inner::placeholder{
         width: 100%;
         display: flex;
         justify-content: space-between;
-        margin-top: 27px;
+        margin-top: 14px;
         padding: 0 60px 0 40px;
     }
 
@@ -1179,6 +1213,14 @@ el-input__inner::placeholder{
     .dateBox /deep/ .el-input__inner::placeholder{
         font-size: 12px;
     }
+    .dateBox /deep/  .el-range-input, 
+    .dateBox /deep/  .el-range-separator{
+        font-size: 12px;
+    }
+    .dateBox /deep/  .el-range-separator{
+        width: 6%;
+        line-break: 18px;
+    }
     .dateBox /deep/ .el-input__prefix,
     .dateBox /deep/ .el-range__icon{
         position: absolute;
@@ -1219,6 +1261,7 @@ el-input__inner::placeholder{
         color: #ED5565;
     }
 
+ 
 }
 
 

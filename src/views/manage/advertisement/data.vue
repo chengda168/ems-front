@@ -306,6 +306,7 @@ import Tips from "@/components/ftd-tips/tips";
                     this.operWidth= 140;
                 }
             }
+            this.translateX=0;
             let scrollWidth = this.$refs.swiperBox.scrollWidth;
             let offsetWidth = this.$refs.swiperBox.offsetWidth;
             if(scrollWidth>offsetWidth){
