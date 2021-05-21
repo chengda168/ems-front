@@ -67,7 +67,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <Page :total="400" :pageSize="15" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
+      <Page :total="totalElements" :pageSize="pageSize" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
     </div>
     <el-dialog top="0" :title="title" :show-close="false" :visible.sync="dialogVisible" @close="$resetForm('ruleForm')">
       <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>

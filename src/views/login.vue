@@ -178,10 +178,10 @@ export default {
             // $(".errorfont").html(loginRes.msg);
           } else if (loginRes.data.loginFailedNum == 0) {
             // $(".errorfont").html("賬戶已凍結,請於24小時后再重試");
-            this.msg = `賬戶已凍結,請於${loginRes.data.canLoginTime}后再重試`;
+            this.msg = loginRes.msg;
           } else if (loginRes.data.loginFailedNum > 0) {
-            let loginFailedNum = loginRes.data.loginFailedNum;
-            let msg = `登录账户或密码错误！剩余${loginFailedNum}次机会，超过6次将冻结24小时。`;
+            // let loginFailedNum = loginRes.data.loginFailedNum;
+            let msg = loginRes.msg;
             // console.log('num',msg)
             // $(".errorfont").html(msg);
             this.msg = msg;
