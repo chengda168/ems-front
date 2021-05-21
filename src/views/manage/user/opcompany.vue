@@ -97,7 +97,7 @@ import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
 import SOperationUnit from "@/api/ums/sOperationUnit";
 import SDic from "@/api/ums/sDic";
-import rules from "@/utils/rule.js";
+import Rules from "@/utils/rule.js";
 export default {
   computed: {
     ...mapGetters({
@@ -139,10 +139,10 @@ export default {
           { required: true, message: "请输入联系人", trigger: "blur" },
         ],
         contactUserMobile: [
-          { required: true, validator: rules.FormValidate.Form().validatePhone, trigger: "blur" },
+          { required: true, validator: Rules.FormValidate.Form().validatePhone, trigger: "blur" },
         ],
         contactUserEmail: [
-          { required: true, validator: rules.FormValidate.Form().validateEmail, trigger: "blur" },
+          { required: true, validator: Rules.FormValidate.Form().validateEmail, trigger: "blur" },
         ],
         roleId: [
           { required: true, message: "请选择所属角色", trigger: "change" },

@@ -135,6 +135,7 @@ import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
 import SCustomer from "@/api/ums/sCustomer.js";
 import SDic from "@/api/ums/sDic.js";
+import Rules from "@/utils/rule.js";
 export default {
   computed: {
     ...mapGetters({
@@ -181,10 +182,10 @@ export default {
           { required: true, message: "请输入联系人", trigger: "blur" },
         ],
         contactUserMobile: [
-          { required: true, message: "请输入手机号码", trigger: "blur" },
+          { required: true, validator: Rules.FormValidate.Form().validatePhone, trigger: "blur"  },
         ],
         contactUserEmail: [
-          { required: true, message: "请输入电子邮箱", trigger: "blur" },
+          {required: true, validator: Rules.FormValidate.Form().validateEmail, trigger: "blur" },
         ],
         g: [{ required: true, message: "请输入运维单位", trigger: "blur" }],
         h: [{ required: true, message: "请输入园区地址", trigger: "blur" }],
