@@ -90,4 +90,13 @@ export default class sAdvertising extends BaseApi {
         return data;
     }
 
+    /**
+     * 查询轮播时间最大值
+     * @returns 
+     */
+     static async getMaxShowTime(){
+        const url = `/ums/sAdvertising/getMaxShowTime`;
+        const data = await this.$get(url);
+        return data;
+    }
 }

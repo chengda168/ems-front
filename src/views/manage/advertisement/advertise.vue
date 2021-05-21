@@ -6,7 +6,7 @@
         <div class="flexCenter">
           <div class="adverDiv">
             <div class="adver">秒</div>
-            <el-input v-model="inputTime" class="adverInput" @blur="updateShowTime($event)"></el-input>
+            <el-input v-model="inputShowTime" class="adverInput" @blur="updateShowTime($event)"></el-input>
             <div class="adver">轮播时间</div>
           </div>
           <el-button type="primary" class="fullBtn" @click="onAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
@@ -185,7 +185,7 @@ export default {
           },
         ],
       },
-      inputTime: "10",
+      inputShowTime: "10",
       params: {
         position: "",
         mobile: "",
@@ -357,7 +357,7 @@ export default {
       this.entity.pictureId = this.ruleForm.pictureId;
       this.entity.startDate = this.ruleForm.startDate;
       this.entity.endDate = this.ruleForm.endDate;
-      this.entity.showTime = this.inputTime;
+      this.entity.showTime = this.inputShowTime;
       this.entity.position = this.ruleForm.position;
       this.entity.describe = this.ruleForm.describe;
       SAdvertising.add(this.entity).then(res => {
@@ -378,6 +378,7 @@ export default {
       }
       this.entity.describe = this.ruleForm.describe;
       this.entity.position = this.ruleForm.position;
+      this.entity.showTime = this.inputShowTime
       SAdvertising.update(this.entity).then(res => {
         self.api_Page()
       });
@@ -404,6 +405,14 @@ export default {
         self.api_Page()
       });
     },
+    async api_GetMaxShowTime() {
+      let res = await SAdvertising.getMaxShowTime();
+      if (res.data == null) {
+        this.inputShowTime = 10
+      } else{
+        this.inputShowTime = res.data
+      }
+    },
   },
   mounted() {
     self = this
@@ -413,6 +422,7 @@ export default {
     });
     //api获取数据
     this.api_Page();
+    this.api_GetMaxShowTime();
   },
 };
 </script>
