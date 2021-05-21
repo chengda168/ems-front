@@ -417,7 +417,6 @@ export default {
       }
     },
     handleAllWatch(val) {
-      console.log(this.allCheckBoxIds);
       for (let i = 0; i < this.allCheckBoxIds.length; i++) {
         this.$set(this.browsePerm, this.allCheckBoxIds[i], val);
         if(!this.menuPerm[this.allCheckBoxIds[i]]) {
@@ -436,12 +435,10 @@ export default {
       }
     },
     handleWatchChange(value, data, node) {
-      console.log(this.menuPerm);
       this.browsePerm[data.id] = value;
       if (!this.menuPerm[data.id]) {
         this.menuPerm[data.id] = new Object();
       }
-      console.log(data.id);
       this.menuPerm[data.id]["browsePermissions"] = value;
     },
     handleEditChange(value, data) {
@@ -449,7 +446,6 @@ export default {
       if (!this.menuPerm[data.id]) {
         this.menuPerm[data.id] = new Object();
       }
-      console.log(data.id);
       this.menuPerm[data.id]["editPermissions"] = value;
     },
 
@@ -458,11 +454,9 @@ export default {
     },
     async getTableData() {
       let params = this.$deepCopy(this.params);
-      console.log(params);
       params["pageIndex"] = this.currentPage;
       params["length"] = this.pageSize;
       let res = await SUser.list(params);
-      console.log(res)
       this.tableData = res.data.content || [];
       this.totalElements = res.data.totalElements;
     },

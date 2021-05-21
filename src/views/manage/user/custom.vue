@@ -236,8 +236,8 @@ export default {
     async selectCity(provinceCode) {
       let item = this.provinceList.find((item) => item.dicCode == provinceCode);
       this.ruleForm.provinceName = item.dicInfo;
-      this.ruleForm.cityCode=null;
-      this.ruleForm.areaCode=null;
+      this.ruleForm.cityCode = null;
+      this.ruleForm.areaCode = null;
       let res = await SDic.list({
         parentCode: provinceCode,
       });
@@ -247,7 +247,7 @@ export default {
       let item = this.cityList.find((item) => item.dicCode == cityCode);
       console.log(item);
       this.ruleForm.cityName = item.dicInfo;
-      this.ruleForm.areaCode=null;
+      this.ruleForm.areaCode = null;
       let res = await SDic.list({
         parentCode: cityCode,
       });
@@ -298,41 +298,36 @@ export default {
     },
     async submitForm(formName) {
       let valid = await this.$refs[formName].validate();
+      let res = null;
       if (valid) {
         if (this.isEdit) {
-          //    编辑
-          console.log(this.ruleForm);
-          this.tableData[this.editIndex] = JSON.parse(
-            JSON.stringify(this.ruleForm)
-          );
-          let res = await SCustomer.update(this.ruleForm);
-          this.index++;
-          console.log(this.tableData);
+          res = await SCustomer.update(this.ruleForm);
         } else {
-          //    新建
-          this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)));
-          console.log(this.ruleForm);
-          let res = await SCustomer.add(this.ruleForm);
-          console.log(res);
-          this.$refs.ruleForm.resetFields();
+          res = await SCustomer.add(this.ruleForm);
         }
+        this.$message({
+          message: res.msg,
+          type: res.code == 200 ? "success" : "error",
+        });
+
         this.dialogVisible = false;
+        this.getTableData();
       } else {
         console.log("error submit!!");
         return false;
       }
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map(item => item.id);
-            if(ids.length > 0) {
-            let res = await SCustomer.deleteBatch(ids);
-            this.$message({
-            message: res.msg,
-            type: res.code == 200 ? "success" : "error",
-            });
-           this.getTableData();
-           this.isDialog = false;
-            }
+      let ids = this.tableSeelctVal.map((item) => item.id);
+      if (ids.length > 0) {
+        let res = await SCustomer.deleteBatch(ids);
+        this.$message({
+          message: res.msg,
+          type: res.code == 200 ? "success" : "error",
+        });
+        this.getTableData();
+        this.isDialog = false;
+      }
     },
     handleSelectionChange(val) {
       this.tableSeelctVal = val;
