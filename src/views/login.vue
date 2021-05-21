@@ -17,7 +17,6 @@
             <div class="error" v-if="errordis == '1'">
               <div class="errorimage iconfont icon-jinggaozhuyi"></div>
               <div class="errorfont">
-
                 {{msg}}
                 <!-- 登录账户或密码错误！剩余{{loginFailedNum}}次机会，超过6次将冻结24小时。 -->
               </div>
@@ -145,7 +144,6 @@ export default {
     async getShowAdv() {
       let res = await SAdertising.getShowAdv();
       this.imageicon = res.data;
-      console.log(this.imageicon);
     },
     showpassword() {
       if (this.password1 == "password") {
@@ -155,10 +153,8 @@ export default {
       }
     },
     async sumbile(params) {
-      let code = await Login.verifyCode();
-      let valid = this.$refs[params].validate();
-      // this.$refs[params].validate((valid) => {
-      if (valid) {
+      let valid = await this.$refs[params].validate();
+      if (valid) {     
         let res = await Login.getPublicKey(this.params.name);
         let publicKey = res.data;
         let jse = new JsEncrypt();
@@ -170,35 +166,15 @@ export default {
           account: this.params.name,
           password: encrypted,
         });
-        console.log(loginRes);
-        if (loginRes.code != 200) {
-          if (!loginRes.data) {
-            console.log(loginRes.msg)
-            this.msg = loginRes.msg;
-            // $(".errorfont").html(loginRes.msg);
-          } else if (loginRes.data.loginFailedNum == 0) {
-            // $(".errorfont").html("賬戶已凍結,請於24小時后再重試");
-            this.msg = loginRes.msg;
-          } else if (loginRes.data.loginFailedNum > 0) {
-            // let loginFailedNum = loginRes.data.loginFailedNum;
-            let msg = loginRes.msg;
-            // console.log('num',msg)
-            // $(".errorfont").html(msg);
-            this.msg = msg;
-          }
-        }
-
-        // this.loginFailedNum = 6 - loginRes.data.loginFailedNum;
-        // if (this.loginFailedNum == 0) {
-        //   $(".errorfont").html("賬戶已凍結,請於24小時后再重試");
-        // }
         if (loginRes.code == 200) {
           this.$store.dispatch("Login", loginRes.data);
           this.$router.push("/dashboard");
         } else {
+          console.log(loginRes.msg);
+          this.msg = loginRes.msg
+          this.errordis = 1;
           this.getVerifyCode();
-          this.errordis = "1";
-        }
+        } 
       }
     },
   },

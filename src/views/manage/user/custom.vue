@@ -236,6 +236,8 @@ export default {
     async selectCity(provinceCode) {
       let item = this.provinceList.find((item) => item.dicCode == provinceCode);
       this.ruleForm.provinceName = item.dicInfo;
+      this.ruleForm.cityCode=null;
+      this.ruleForm.areaCode=null;
       let res = await SDic.list({
         parentCode: provinceCode,
       });
@@ -245,6 +247,7 @@ export default {
       let item = this.cityList.find((item) => item.dicCode == cityCode);
       console.log(item);
       this.ruleForm.cityName = item.dicInfo;
+      this.ruleForm.areaCode=null;
       let res = await SDic.list({
         parentCode: cityCode,
       });

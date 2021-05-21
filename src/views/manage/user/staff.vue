@@ -462,6 +462,7 @@ export default {
       params["pageIndex"] = this.currentPage;
       params["length"] = this.pageSize;
       let res = await SUser.list(params);
+      console.log(res)
       this.tableData = res.data.content || [];
       this.totalElements = res.data.totalElements;
     },
