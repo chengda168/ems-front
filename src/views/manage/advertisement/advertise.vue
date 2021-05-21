@@ -6,7 +6,7 @@
         <div class="flexCenter">
           <div class="adverDiv">
             <div class="adver">秒</div>
-            <el-input v-model="inputTime" class="adverInput"></el-input>
+            <el-input v-model="inputShowTime" class="adverInput" @blur="updateShowTime($event)"></el-input>
             <div class="adver">轮播时间</div>
           </div>
           <el-button type="primary" class="fullBtn" @click="onAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
@@ -28,7 +28,7 @@
           </el-table-column>
           <el-table-column align="center" prop="position" label="广告轮转位置">
           </el-table-column>
-          <el-table-column align="center" prop="showTime" label="广告展示时限">
+          <el-table-column align="center" prop="limitTime" label="广告展示时限">
           </el-table-column>
           <el-table-column align="center" prop="describe" label="广告描述" :width="width1">
           </el-table-column>
@@ -51,7 +51,7 @@
         <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
           :label-width="labelWidth">
           <el-form-item label="广告图片:" prop="pictureUrl">
-            <el-upload :with-credentials="true" class="upload-demo" action="http://192.168.22.107:9987/upload/pic" :limit="1"
+            <el-upload :with-credentials="true" class="upload-demo" :action="uploadPicUrl" :limit="1"
               :file-list="ruleForm.pictureUrl" list-type="picture" :on-remove="onRemove" :on-success="onSuccess">
               <div>
                 <el-button class="updataImg">点击上传</el-button>
@@ -91,6 +91,7 @@ import { mapGetters } from "vuex";
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
 import SAdvertising from "@/api/ums/sAdvertising";
+let self;
 export default {
   computed: {
     ...mapGetters({
@@ -130,7 +131,6 @@ export default {
   },
   data() {
     var validateDate = (rule, value, callback) => {
-      console.log(value);
       if (value == null || value.length != 2) {
         callback(new Error("请输入广告展示时间"));
       } else {
@@ -145,6 +145,7 @@ export default {
       }
     };
     return {
+      uploadPicUrl: this.GLOBAL.uploadPicUrl,
       isDialog: false,
       dialogVisible: false,
       title: "新建首页广告",
@@ -184,7 +185,7 @@ export default {
           },
         ],
       },
-      inputTime: "10",
+      inputShowTime: "10",
       params: {
         position: "",
         mobile: "",
@@ -196,6 +197,7 @@ export default {
       width1: 540,
       tableData: [],
       tableSelectVal: [],
+      tableSelectIds: []
     };
   },
   watch: {
@@ -223,17 +225,15 @@ export default {
       this.ruleForm.data[1] = this.ruleForm.endDate;
     },
     onPageChange(val) {
-      console.log(val);
       this.currentPage = val;
+      this.api_Page();
     },
     onSuccess(response, file, fileList) {
-      console.log(fileList);
-
       this.ruleForm.pictureUrl = fileList;
+      this.ruleForm.pictureId = fileList[0].response.data[0].id;
       this.$refs.ruleForm.validateField("pictureUrl");
     },
     onRemove(file, fileList) {
-      console.log(fileList);
       this.ruleForm.pictureUrl = fileList;
       this.$refs.ruleForm.validateField("pictureUrl");
     },
@@ -257,48 +257,30 @@ export default {
       this.dialogVisible = true;
     },
     onEdit(row, index) {
-      console.log(row);
+      this.api_Detail(row.id);
+      this.editIndex = index;
       this.isEdit = true;
       this.title = "编辑首页广告";
-      this.ruleForm = JSON.parse(JSON.stringify(row));
-      this.editIndex = index;
-      this.data[0] = row.startDate;
-      this.data[1] = row.endDate;
       this.dialogVisible = true;
     },
-    submitForm(formName) {
+    async submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+
           if (this.isEdit) {
             // 编辑
-            console.log(this.ruleForm);
-            this.tableData[this.editIndex] = JSON.parse(
-              JSON.stringify(this.ruleForm)
-            );
-            this.index++;
-            console.log(this.tableData);
+            this.api_Update()
           } else {
             // 新建
-            this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)));
-            console.log(this.ruleForm);
-            this.entity = {};
-            this.entity.pictureUrl = this.ruleForm.pictureUrl[0].response.data[0].loadPath;
-            this.entity.startDate = this.ruleForm.data[0];
-            this.entity.endDate = this.ruleForm.data[1];
-            this.entity.showTime = this.inputTime;
-            this.entity.position = this.ruleForm.position;
-            this.entity.describe = this.ruleForm.describe;
-            console.log(this.entity);
             this.api_Add();
-            this.api_Page();
           }
-          console.log(this.ruleForm);
-
           this.dialogVisible = false;
-
           this.$refs.ruleForm.resetFields();
+          this.ruleForm.startDate = "";
+          this.ruleForm.endDate = "";
+          this.api_Page();
         } else {
-          console.log("error submit!!");
+          //console.log("error submit!!");
           return false;
         }
       });
@@ -317,23 +299,22 @@ export default {
     },
 
     onConfirm() {
+      this.tableSelectIds = [];
       this.tableSelectVal.map((item) => {
-        this.tableData.map((child, index) => {
-          if (item.id == child.id) {
-            this.tableData.splice(index, 1);
-          }
-        });
+        this.tableSelectIds.push(item.id)
       });
+      this.api_DeleteBatch();
       this.isDialog = false;
+      this.api_Page();
     },
     handleSelectionChange(val) {
       this.tableSelectVal = val;
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      //console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      //console.log(`当前页: ${val}`);
     },
     resizeFn() {
       if (!this.collapse) {
@@ -360,34 +341,88 @@ export default {
         this.labelWidth = "95px";
       }
     },
+    updateShowTime(event){
+      let updateTime = event.target.value;
+      this.api_UpdateShowTime(updateTime);
+    },
     async api_Page() {
-      console.log("getData");
       this.params.pageIndex = this.currentPage;
       this.params.length = 15;
       let res = await SAdvertising.page(this.params);
       this.totalElements = res.data.totalElements;
-      console.log(res.data);
       this.tableData = res.data.content;
     },
-    async api_Add() {
-      console.log("api_Add");
-      let res = await SAdvertising.add(this.entity);
-      console.log(res);
+    api_Add() {
+      this.entity = {};
+      this.entity.pictureId = this.ruleForm.pictureId;
+      this.entity.startDate = this.ruleForm.startDate;
+      this.entity.endDate = this.ruleForm.endDate;
+      this.entity.showTime = this.inputShowTime;
+      this.entity.position = this.ruleForm.position;
+      this.entity.describe = this.ruleForm.describe;
+      SAdvertising.add(this.entity).then(res => {
+        self.api_Page()
+      });
     },
-    async api_Update() {
-      console.log("api_Update");
-      //let res = await SAdvertising.update(this.entity);
-      //console.log(res);
+    api_Update() {
+      this.entity = {};
+      this.entity.id = this.ruleForm.id;
+      this.entity.startDate = this.ruleForm.startDate;
+      this.entity.endDate = this.ruleForm.endDate;
+      if (this.ruleForm.pictureId == null){
+        let url = this.ruleForm.pictureUrl[0].url
+        this.entity.pictureId = url.substring(url.lastIndexOf('/') + 1);
+      } else
+      {
+        this.entity.pictureId = this.ruleForm.pictureId 
+      }
+      this.entity.describe = this.ruleForm.describe;
+      this.entity.position = this.ruleForm.position;
+      this.entity.showTime = this.inputShowTime
+      SAdvertising.update(this.entity).then(res => {
+        self.api_Page()
+      });
+    },
+    api_DeleteBatch() {
+      SAdvertising.deleteBatch(this.tableSelectIds).then(res => {
+        self.api_Page()
+      });
+    },
+    async api_Detail(id) {
+      let res = await SAdvertising.detail(id);
+      this.ruleForm.data = [];
+      this.ruleForm.data[0] = res.data.startDate;
+      this.ruleForm.data[1] =  res.data.endDate;
+      this.ruleForm.startDate = res.data.startDate;
+      this.ruleForm.endDate = res.data.endDate;
+      this.ruleForm.id = res.data.id;
+      this.ruleForm.pictureUrl = res.data.picList;
+      this.ruleForm.describe = res.data.describe;
+      this.ruleForm.position = res.data.position;
+    },
+    async api_UpdateShowTime(time) {
+      SAdvertising.updateShowTime(time).then(res => {
+        self.api_Page()
+      });
+    },
+    async api_GetMaxShowTime() {
+      let res = await SAdvertising.getMaxShowTime();
+      if (res.data == null) {
+        this.inputShowTime = 10
+      } else{
+        this.inputShowTime = res.data
+      }
     },
   },
   mounted() {
-    let self = this;
+    self = this
     this.resizeFn();
     window.addEventListener("resize", function () {
       self.resizeFn();
     });
     //api获取数据
     this.api_Page();
+    this.api_GetMaxShowTime();
   },
 };
 </script>

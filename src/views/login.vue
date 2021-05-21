@@ -4,8 +4,8 @@
       <div class="siemensLogin">
         <div class="LoginImage">
           <el-carousel :interval="5000" arrow="never" class="carousel">
-            <el-carousel-item v-for="(item, index) in imageicon" :key="index">
-              <img :src="item.images" />
+            <el-carousel-item v-for="item in imageicon" :key="item.id">
+              <img :src="item.pictureUrl" />
             </el-carousel-item>
           </el-carousel>
         </div>
@@ -17,7 +17,8 @@
             <div class="error" v-if="errordis == '1'">
               <div class="errorimage iconfont icon-jinggaozhuyi"></div>
               <div class="errorfont">
-                登录账户或密码错误！剩余{{loginFailedNum}}次机会，超过6次将冻结24小时。
+                {{msg}}
+                <!-- 登录账户或密码错误！剩余{{loginFailedNum}}次机会，超过6次将冻结24小时。 -->
               </div>
             </div>
             <el-form :model="params" :rules="rule" ref="params" class="registerForm">
@@ -70,6 +71,7 @@
 <script>
 import JsEncrypt from "jsencrypt";
 import Login from "@/api/ums/login.js";
+import SAdertising from "@/api/ums/sAdvertising.js";
 
 export default {
   data() {
@@ -124,10 +126,12 @@ export default {
         ],
       },
       code: "",
+      msg : ""
     };
   },
   mounted() {
     this.getVerifyCode();
+    this.getShowAdv();
   },
   methods: {
     // 获取图片验证码
@@ -137,6 +141,10 @@ export default {
       this.verifyCodeApi = "data:image/gif;base64," + res.data.img;
       this.code = res.data.code;
     },
+    async getShowAdv() {
+      let res = await SAdertising.getShowAdv();
+      this.imageicon = res.data;
+    },
     showpassword() {
       if (this.password1 == "password") {
         this.password1 = "text";
@@ -145,10 +153,8 @@ export default {
       }
     },
     async sumbile(params) {
-      let code = await Login.verifyCode();
-      let valid = this.$refs[params].validate();
-      // this.$refs[params].validate((valid) => {
-      if (valid) {
+      let valid = await this.$refs[params].validate();
+      if (valid) {     
         let res = await Login.getPublicKey(this.params.name);
         let publicKey = res.data;
         let jse = new JsEncrypt();
@@ -160,14 +166,15 @@ export default {
           account: this.params.name,
           password: encrypted,
         });
-        this.loginFailedNum = 6 - loginRes.data.loginFailedNum;
         if (loginRes.code == 200) {
           this.$store.dispatch("Login", loginRes.data);
           this.$router.push("/dashboard");
         } else {
+          console.log(loginRes.msg);
+          this.msg = loginRes.msg
+          this.errordis = 1;
           this.getVerifyCode();
-          this.errordis = "1";
-        }
+        } 
       }
     },
   },

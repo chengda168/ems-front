@@ -134,8 +134,8 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async logout(){
-        const url = `/ums/users/logout`;
-        const data = await this.$post(url);
+        const url = `/ums/login/logout`;
+        const data = await this.$get(url);
         return data;
     }
 

@@ -150,6 +150,7 @@ import SOperationUnit from "@/api/ums/sOperationUnit";
 import SCustomer from "@/api/ums/sCustomer";
 import Login from "@/api/ums/login.js";
 import JsEncrypt from "jsencrypt";
+import Rules from "@/utils/rule.js";
 export default {
   computed: {
     ...mapGetters({
@@ -219,10 +220,20 @@ export default {
           { required: true, message: "请输入用户姓名", trigger: "blur" },
         ],
         mobile: [
-          { required: true, message: "请输入手机号码", trigger: "blur" },
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validatePhone,
+            trigger: "blur",
+          },
         ],
         job: [{ required: true, message: "请输入职务/角色", trigger: "blur" }],
-        email: [{ required: true, message: "请输入电子邮箱", trigger: "blur" }],
+        email: [
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validateEmail,
+            trigger: "blur",
+          },
+        ],
         unitId: [
           { required: true, message: "请选择运维单位", trigger: "change" },
         ],
@@ -330,7 +341,10 @@ export default {
       }
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSeelctVal.map((item) => item.id) || [];
+      if (ids.length == 0) {
+        return false;
+      }
       let res = await SOperationTeam.deleteBatch(ids);
       this.$message({
         message: res.msg,

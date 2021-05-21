@@ -24,7 +24,7 @@
           <router-link to="" class="siemensHomeInfoBtnBox siemensHomeInfoPer flexCenter"
             @click.native.stop="isShowHead = !isShowHead"><i class="iconfont icon-iconfontgerenzhongxin"></i>
           </router-link>
-          <router-link to="/custom" class="siemensHomeInfoBtnBox siemensHomeInfoSetting flexCenter"><i
+          <router-link to="/manage/custom" class="siemensHomeInfoBtnBox siemensHomeInfoSetting flexCenter"><i
               class="iconfont icon-shezhi"></i></router-link>
           <ul class="selectItemBox" v-if="isShowHead">
             <li class="selectItems" v-for="(item,index) in headList" :key="index" @click.stop="onSelectItem(index)"><i
@@ -68,6 +68,7 @@ import geoJson from "../assets/js/china.json";
 import { mapGetters } from "vuex";
 import SCustomer from "@/api/ums/sCustomer";
 import SNotice from "@/api/ums/sNotice"
+import Login from "@/api/ums/login"
 export default {
   computed: {
     ...mapGetters({
@@ -120,12 +121,14 @@ export default {
     };
   },
   methods: {
-    onSelectItem(index) {
+   async onSelectItem(index) {
       if (index == 0) {
         // 修改密码
         this.$router.push("/editPass");
       } else {
+        let res=await  Login.logout();
         // 退出登录
+        this.$store.dispatch("LogOut");
         this.$router.push("/login");
       }
     },

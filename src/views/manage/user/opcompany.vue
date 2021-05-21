@@ -97,6 +97,7 @@ import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
 import SOperationUnit from "@/api/ums/sOperationUnit";
 import SDic from "@/api/ums/sDic";
+import Rules from "@/utils/rule.js";
 export default {
   computed: {
     ...mapGetters({
@@ -138,10 +139,18 @@ export default {
           { required: true, message: "请输入联系人", trigger: "blur" },
         ],
         contactUserMobile: [
-          { required: true, message: "请输入手机号码", trigger: "blur" },
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validatePhone,
+            trigger: "blur",
+          },
         ],
         contactUserEmail: [
-          { required: true, message: "请输入电子邮箱", trigger: "blur" },
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validateEmail,
+            trigger: "blur",
+          },
         ],
         roleId: [
           { required: true, message: "请选择所属角色", trigger: "change" },
@@ -215,8 +224,12 @@ export default {
       }
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSeelctVal.map((item) => item.id) || [];
+      if (ids.length == 0) {
+        return false;
+      }
       let res = await SOperationUnit.deleteBatch(ids);
+
       this.$message({
         message: res.msg,
         type: res.code == 200 ? "success" : "error",
@@ -248,7 +261,9 @@ export default {
       params["length"] = this.pageSize;
       let res = await SOperationUnit.page(params);
       this.tableData = res.data.content || [];
+      console.log(res);
       this.totalElements = res.data.totalElements;
+      console.log(this.tableData);
     },
     async getRoleList() {
       let res = await SDic.list({ dicType: "role" });

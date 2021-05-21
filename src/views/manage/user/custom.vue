@@ -61,7 +61,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <Page :total="400" :pageSize="15" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
+      <Page :total="totalElements" :pageSize="pageSize" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
     </div>
     <el-dialog :title="title" :show-close="false" top="0" :visible.sync="dialogVisible" @close="$resetForm('ruleForm')">
       <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
@@ -135,6 +135,7 @@ import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
 import SCustomer from "@/api/ums/sCustomer.js";
 import SDic from "@/api/ums/sDic.js";
+import Rules from "@/utils/rule.js";
 export default {
   computed: {
     ...mapGetters({
@@ -181,10 +182,10 @@ export default {
           { required: true, message: "请输入联系人", trigger: "blur" },
         ],
         contactUserMobile: [
-          { required: true, message: "请输入手机号码", trigger: "blur" },
+          { required: true, validator: Rules.FormValidate.Form().validatePhone, trigger: "blur"  },
         ],
         contactUserEmail: [
-          { required: true, message: "请输入电子邮箱", trigger: "blur" },
+          {required: true, validator: Rules.FormValidate.Form().validateEmail, trigger: "blur" },
         ],
         g: [{ required: true, message: "请输入运维单位", trigger: "blur" }],
         h: [{ required: true, message: "请输入园区地址", trigger: "blur" }],
@@ -236,6 +237,8 @@ export default {
     async selectCity(provinceCode) {
       let item = this.provinceList.find((item) => item.dicCode == provinceCode);
       this.ruleForm.provinceName = item.dicInfo;
+      this.ruleForm.cityCode = null;
+      this.ruleForm.areaCode = null;
       let res = await SDic.list({
         parentCode: provinceCode,
       });
@@ -245,6 +248,7 @@ export default {
       let item = this.cityList.find((item) => item.dicCode == cityCode);
       console.log(item);
       this.ruleForm.cityName = item.dicInfo;
+      this.ruleForm.areaCode = null;
       let res = await SDic.list({
         parentCode: cityCode,
       });
@@ -295,41 +299,36 @@ export default {
     },
     async submitForm(formName) {
       let valid = await this.$refs[formName].validate();
+      let res = null;
       if (valid) {
         if (this.isEdit) {
-          //    编辑
-          console.log(this.ruleForm);
-          this.tableData[this.editIndex] = JSON.parse(
-            JSON.stringify(this.ruleForm)
-          );
-          let res = await SCustomer.update(this.ruleForm);
-          this.index++;
-          console.log(this.tableData);
+          res = await SCustomer.update(this.ruleForm);
         } else {
-          //    新建
-          this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)));
-          console.log(this.ruleForm);
-          let res = await SCustomer.add(this.ruleForm);
-          console.log(res);
-          this.$refs.ruleForm.resetFields();
+          res = await SCustomer.add(this.ruleForm);
         }
+        this.$message({
+          message: res.msg,
+          type: res.code == 200 ? "success" : "error",
+        });
+
         this.dialogVisible = false;
+        this.getTableData();
       } else {
         console.log("error submit!!");
         return false;
       }
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map(item => item.id);
-            if(ids.length > 0) {
-            let res = await SCustomer.deleteBatch(ids);
-            this.$message({
-            message: res.msg,
-            type: res.code == 200 ? "success" : "error",
-            });
-           this.getTableData();
-           this.isDialog = false;
-            }
+      let ids = this.tableSeelctVal.map((item) => item.id);
+      if (ids.length > 0) {
+        let res = await SCustomer.deleteBatch(ids);
+        this.$message({
+          message: res.msg,
+          type: res.code == 200 ? "success" : "error",
+        });
+        this.getTableData();
+        this.isDialog = false;
+      }
     },
     handleSelectionChange(val) {
       this.tableSeelctVal = val;

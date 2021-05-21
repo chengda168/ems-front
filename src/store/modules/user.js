@@ -11,6 +11,9 @@ const user = {
     },
     SET_USER: (state, user) => {
       state.user = user;
+    },
+    CLEAR_USER: (state) => {
+      state.user = {};
     }
   },
   actions: {
@@ -31,6 +34,7 @@ const user = {
     LogOut({ commit, state }) {
       removeToken()
       commit('SET_TOKEN', null)
+      commit('CLEAR_USER');
       // removeLanguage()
       // removeCompany()
     },
