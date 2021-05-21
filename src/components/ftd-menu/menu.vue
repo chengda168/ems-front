@@ -96,7 +96,7 @@ import { mapGetters } from 'vuex'
                             path:'/manage/rule'
                         },
                         {
-                            name:'能耗指标设定',
+                            name:'能耗指标定义',
                             path:'/manage/energy'
                         },
                         {
