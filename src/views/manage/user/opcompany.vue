@@ -139,10 +139,18 @@ export default {
           { required: true, message: "请输入联系人", trigger: "blur" },
         ],
         contactUserMobile: [
-          { required: true, validator: Rules.FormValidate.Form().validatePhone, trigger: "blur" },
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validatePhone,
+            trigger: "blur",
+          },
         ],
         contactUserEmail: [
-          { required: true, validator: Rules.FormValidate.Form().validateEmail, trigger: "blur" },
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validateEmail,
+            trigger: "blur",
+          },
         ],
         roleId: [
           { required: true, message: "请选择所属角色", trigger: "change" },
@@ -216,8 +224,12 @@ export default {
       }
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSeelctVal.map((item) => item.id) || [];
+      if (ids.length == 0) {
+        return false;
+      }
       let res = await SOperationUnit.deleteBatch(ids);
+
       this.$message({
         message: res.msg,
         type: res.code == 200 ? "success" : "error",
