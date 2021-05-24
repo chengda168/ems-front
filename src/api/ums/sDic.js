@@ -59,4 +59,14 @@ export default class sDic extends BaseApi {
         const data = await this.$post(url,ids);
         return data;
     } 
+
+    /**
+     * 获取省市区
+     * @returns 
+     */
+     static async getPCA(){
+        const url = `/ums/sDic/getPCA`;
+        const data = await this.$get(url);
+        return data;
+    }
 }

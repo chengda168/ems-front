@@ -303,6 +303,9 @@ export default {
       this.tableSelectVal.map((item) => {
         this.tableSelectIds.push(item.id)
       });
+      if(this.tableSelectIds.length == 0) {
+        return false;
+      }
       this.api_DeleteBatch();
       this.isDialog = false;
       this.api_Page();
