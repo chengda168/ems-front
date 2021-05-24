@@ -14,9 +14,9 @@
         <el-form-item label="电子邮箱：" class="treeFormItem">
           <el-input v-model="params.email" placeholder="请输入电子邮箱"></el-input>
         </el-form-item>
-        <el-form-item label="运维客户：" class="treeFormItem">
+        <!-- <el-form-item label="运维客户：" class="treeFormItem">
           <el-input v-model="params.customerName" placeholder="请输入运维客户"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" class="fullBtn" @click="getTableData"><i class="iconfont icon-sousuo"></i>查询
           </el-button>
