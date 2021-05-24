@@ -62,9 +62,8 @@
                         </el-table-column>
                     </el-table>
                 </div>
+                <Page :total="totalElements" :pageSize="pageSize" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
             </div>
-            
-            <Page :total="totalElements" :pageSize="pageSize" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
         </div>
         <el-dialog top="0"  class="dialogWrap"
         :title="title" :show-close="false" @close="$resetForm('ruleForm')"
@@ -354,6 +353,10 @@ import Tips from "@/components/ftd-tips/tips";
  @media screen and (min-width: 1665px) {
     .whiteBg{
         height: 100%;
+        padding-bottom: 30px;
+    }
+    .pageBox{
+        margin-top: 20px;
     }
     .swiperBox{
         position: relative;
@@ -466,6 +469,10 @@ import Tips from "@/components/ftd-tips/tips";
  @media screen and (max-width: 1664px) {
     .whiteBg{
         height: 100%;
+         padding-bottom: 20px;
+    }
+    .pageBox{
+        margin-top: 14px;
     }
     .swiperBox{
         position: relative;

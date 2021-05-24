@@ -176,7 +176,7 @@ export default {
       if (value === "") {
         callback(new Error("请再次输入密码"));
       } else if (value !== this.ruleForm1.password) {
-        callback(new Error("两次输入密码不一致!"));
+        callback(new Error("新密码不一致，请重新输入!"));
       } else {
         callback();
       }
