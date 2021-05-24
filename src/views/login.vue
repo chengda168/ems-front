@@ -153,6 +153,7 @@ export default {
       }
     },
     async sumbile(params) {
+      this.errordis = 0;
       let valid = await this.$refs[params].validate();
       if (valid) {     
         let res = await Login.getPublicKey(this.params.name);

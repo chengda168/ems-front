@@ -3,10 +3,10 @@
     <div class="siemensLayoutSearchBox" :class="{'collspaseForm' : collapse}">
       <el-form :inline="true" :model="params" class="siemensLayoutSearchBoxForm flexBetween">
         <el-form-item label="姓名：" class="treeFormItem">
-          <el-input v-model="params.userName" placeholder="请输入运维单位名称"></el-input>
+          <el-input v-model="params.userName" placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="单位：" class="treeFormItem">
-          <el-input v-model="params.unitName" placeholder="请输入联系人"></el-input>
+          <el-input v-model="params.unitName" placeholder="请输入单位"></el-input>
         </el-form-item>
         <el-form-item label="手机号码：" class="treeFormItem">
           <el-input v-model="params.mobile" placeholder="请输入手机号码"></el-input>
@@ -15,7 +15,7 @@
           <el-input v-model="params.email" placeholder="请输入电子邮箱"></el-input>
         </el-form-item>
         <el-form-item label="运维客户：" class="treeFormItem">
-          <el-input v-model="params.customerName" placeholder="请输入联系人"></el-input>
+          <el-input v-model="params.customerName" placeholder="请输入运维客户"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" class="fullBtn" @click="getTableData"><i class="iconfont icon-sousuo"></i>查询
@@ -284,12 +284,12 @@ export default {
     },
     onAdd() {
       this.isEdit = false;
-      this.title = "新建人员信息";
+      this.title = "新建运维团队信息";
       this.dialogVisible = true;
     },
     onEdit(row) {
       this.isEdit = true;
-      this.title = "编辑人员信息";
+      this.title = "编辑运维团队信息";
       this.$copyBean(row, this.ruleForm);
       this.dialogVisible = true;
     },
