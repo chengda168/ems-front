@@ -98,18 +98,16 @@
           </el-form-item>
           <el-form-item label="园区地址:" prop="demo">
             <div class="SelectYihang1">
-              <el-select v-model="ruleForm.provinceCode" placeholder="" popper-class="dialogSelect" class="SelectYihang"
-                @change="selectCity">
+              <el-select v-model="ruleForm.provinceCode" placeholder="" popper-class="dialogSelect"
+                class="SelectYihang">
                 <el-option v-for="item in provinceList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
                 </el-option>
               </el-select>
-              <el-select v-model="ruleForm.cityCode" placeholder="" popper-class="dialogSelect " class="SelectYihang"
-                @change="selectArea">
+              <el-select v-model="ruleForm.cityCode" placeholder="" popper-class="dialogSelect " class="SelectYihang">
                 <el-option v-for="item in cityList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
                 </el-option>
               </el-select>
-              <el-select v-model="ruleForm.areaCode" placeholder="" popper-class="dialogSelect " class="SelectYihang"
-                @change="selectTown">
+              <el-select v-model="ruleForm.areaCode" placeholder="" popper-class="dialogSelect " class="SelectYihang">
                 <el-option v-for="item in areaList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
                 </el-option>
               </el-select>
@@ -153,6 +151,7 @@ export default {
       title: "新建客户信息",
       dialogVisible: false,
       ruleForm: {
+        id: null,
         parentId: null,
         customerName: "",
         customerCode: "",
@@ -160,18 +159,15 @@ export default {
         contactUserMobile: "",
         contactUserEmail: "",
         operationsId: "",
-        provinceCode: "",
-        cityCode: "",
-        areaCode: "",
+        provinceCode: null,
+        cityCode: null,
+        areaCode: null,
         address: "",
         provinceName: "",
         cityName: "",
         areaName: "",
       },
       rules: {
-        //   a: [
-        //     { required: true, message: '请输入上级单位', trigger: 'blur' }
-        //   ],
         customerName: [
           { required: true, message: "请输入园区名称", trigger: "blur" },
         ],
@@ -182,10 +178,18 @@ export default {
           { required: true, message: "请输入联系人", trigger: "blur" },
         ],
         contactUserMobile: [
-          { required: true, validator: Rules.FormValidate.Form().validatePhone, trigger: "blur"  },
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validatePhone,
+            trigger: "blur",
+          },
         ],
         contactUserEmail: [
-          {required: true, validator: Rules.FormValidate.Form().validateEmail, trigger: "blur" },
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validateEmail,
+            trigger: "blur",
+          },
         ],
         g: [{ required: true, message: "请输入运维单位", trigger: "blur" }],
         h: [{ required: true, message: "请输入园区地址", trigger: "blur" }],
@@ -201,7 +205,6 @@ export default {
       labelWidth: "84px",
       tableData: [],
       isEdit: false,
-      editIndex: null,
       tableSeelctVal: [],
       operationList: [],
       customList: [],
@@ -227,74 +230,67 @@ export default {
         }
       }
     },
+    "ruleForm.provinceCode": function (newVal) {
+      if (newVal == null) {
+        this.ruleForm.cityName = "";
+        return;
+      }
+      let item = this.provinceList.find((item) => item.dicCode == newVal);
+      this.ruleForm.provinceName = item.dicCode;
+      // 下级市
+      this.cityList = item.children;
+      // 已选市级单位不属于所选省，清空所选市
+      if (this.ruleForm.cityCode != null) {
+        let cityItem = this.cityList.find(
+          (item) => item.dicCode == this.ruleForm.cityCode
+        );
+        if (!cityItem) {
+          this.ruleForm.cityCode = null;
+        }
+      }
+    },
+    "ruleForm.cityCode": function (newVal) {
+      if (newVal == null) {
+        this.ruleForm.cityName = "";
+        return;
+      }
+      let item = this.cityList.find((item) => item.dicCode == newVal);
+      // 下级区
+      this.ruleForm.cityName = item.dicCode;
+      // 已选区级单位不属于所选市，清空所选市
+      this.areaList = item.children;
+      if (this.ruleForm.areaCode != null) {
+        let areaItem = this.areaList.find(
+          (item) => item.dicCode == this.ruleForm.areaCode
+        );
+        if (!areaItem) {
+          this.ruleForm.areaCode = null;
+        }
+      }
+    },
+    "ruleForm.areaCode": function (newVal) {
+      if (newVal == null) {
+        this.ruleForm.areaName = "";
+        return;
+      }
+      let item = this.areaList.find((item) => item.dicCode == newVal);
+      this.ruleForm.areaName = item.dicInfo;
+    },
   },
   methods: {
     onPageChange(val) {
-      console.log(val);
       this.currentPage = val;
       this.getTableData();
     },
-    async selectCity(provinceCode) {
-      let item = this.provinceList.find((item) => item.dicCode == provinceCode);
-      this.ruleForm.provinceName = item.dicInfo;
-      this.ruleForm.cityCode = null;
-      this.ruleForm.areaCode = null;
-      let res = await SDic.list({
-        parentCode: provinceCode,
-      });
-      this.cityList = res.data;
-    },
-    async selectArea(cityCode) {
-      let item = this.cityList.find((item) => item.dicCode == cityCode);
-      console.log(item);
-      this.ruleForm.cityName = item.dicInfo;
-      this.ruleForm.areaCode = null;
-      let res = await SDic.list({
-        parentCode: cityCode,
-      });
-      this.areaList = res.data;
-    },
-    async selectTown(areaCode) {
-      let item = this.areaList.find((item) => item.dicCode == areaCode);
-      console.log(item);
-      this.ruleForm.areaName = item.dicInfo;
-    },
-    async OnAdd(ruleForm) {
-      let operation = await SCustomer.getOperationUnit();
-      this.operationList = operation.data;
-      //获取省
-      let province = await SDic.list({
-        dicType: "province",
-      });
-      this.provinceList = province.data;
+    async OnAdd() {
       this.isEdit = false;
       this.title = "新建客户信息";
       this.dialogVisible = true;
     },
-    async onEdit(row, index) {
-      console.log(row);
+    async onEdit(row) {
       this.isEdit = true;
       this.title = "编辑客户信息";
-      this.ruleForm = JSON.parse(JSON.stringify(row));
-      let operation = await SCustomer.getOperationUnit();
-      this.operationList = operation.data;
-
-      let province = await SDic.list({
-        dicType: "province",
-      });
-      this.provinceList = province.data;
-
-      let city = await SDic.list({
-        dicType: "city",
-      });
-      this.cityList = city.data;
-
-      let area = await SDic.list({
-        dicType: "area",
-      });
-      this.areaList = area.data;
-
-      this.editIndex = index;
+      this.$copyBean(row, this.ruleForm);
       this.dialogVisible = true;
     },
     async submitForm(formName) {
@@ -345,6 +341,14 @@ export default {
       let res = await SCustomer.getAllCustomer();
       this.customList = res.data;
     },
+    async getPCA() {
+      let res = await SDic.getPCA();
+      this.provinceList = res.data;
+    },
+    async getOperationUnit() {
+      let operation = await SCustomer.getOperationUnit();
+      this.operationList = operation.data;
+    },
     resizeFn() {
       if (!this.collapse) {
         if (document.body.clientWidth > 1664) {
@@ -374,6 +378,8 @@ export default {
     });
     this.getTableData();
     this.getAllCustomer();
+    this.getPCA();
+    this.getOperationUnit();
   },
 };
 </script>

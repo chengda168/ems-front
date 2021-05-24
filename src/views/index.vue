@@ -33,7 +33,7 @@
         </div>
         <div class="siemensHomeInfoText">
           <div class="siemensHomeInfoEn">EMS</div>
-          <div class="siemensHomeInfoCn">智能配电管理平台</div>
+          <div class="siemensHomeInfoCn">智慧能源管理平台</div>
         </div>
       </div>
       <div class="siemensHomeMap">

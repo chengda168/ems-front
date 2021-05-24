@@ -42,7 +42,7 @@ export const jsonToArray = (nodes) => {
 export const copyBean = (oldJson = {}, newJson = {}) => {
     if (Object.prototype.toString.call(oldJson) == "[object Object]") {
         for (var key in oldJson) {
-            if (newJson[key] != undefined) {
+            if (typeof (newJson[key]) != "undefined") {
                 if (Object.prototype.toString.call(oldJson[key]) == "[object Object]") {
                     copyBean(newJson[key], oldJson[key]);
                 } else {

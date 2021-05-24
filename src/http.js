@@ -19,9 +19,11 @@ if (process.env.NODE_ENV == "development") {
     // axios.defaults.baseURL = "/api";
     axios.defaults.baseURL = GLOBAL.umsURL
   } else if (process.env.NODE_ENV == "debug") {
-    axios.defaults.baseURL = "http://personal2.shenzhuo.vip:21463/gleagle";
+    axios.defaults.baseURL = GLOBAL.umsURL
+    // axios.defaults.baseURL = "http://personal2.shenzhuo.vip:21463/gleagle";
   } else if (process.env.NODE_ENV == "production") {
-    axios.defaults.baseURL = "http://personal2.shenzhuo.vip:21463/gleagle";
+    axios.defaults.baseURL = GLOBAL.deployURL;
+    // axios.defaults.baseURL = "http://personal2.shenzhuo.vip:21463/gleagle";
   }
 
 axios.defaults.retry = 4
@@ -30,13 +32,13 @@ axios.defaults.withCredentials = true;
 
 // request拦截器
 axios.interceptors.request.use(async config => {
-    console.log("getToken",getToken())
+    // console.log("getToken",getToken())
     if (getToken()) {
       config.headers['Authorization'] = getToken() || '';
     }
     return config
   }, error => {
-    console.log('axios_err', error)  // for debug
+    // console.log('axios_err', error)  // for debug
     return Promise.reject(error)
   })
 
@@ -61,8 +63,8 @@ axios.interceptors.response.use(
       }
     },
     error => {
-      console.log('err', error)// for debug
-      console.log('err', error.response.status)// for debug
+      // console.log('err', error)// for debug
+      // console.log('err', error.response.status)// for debug
       // 处理服务端返回的状态
       if (error.response.status === 500) {
         // Message.error('服务端异常，请联系技术支持');

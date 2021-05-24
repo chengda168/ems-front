@@ -1,15 +1,17 @@
-//全局变量文件
-// const baseURL = 'http://localhost:8909';
-
+// 本地测试url
 const umsURL = "http://localhost:8910";
+
+// 发布url
+const deployURL = "http://8.142.28.0/gateway/ems-ums"
 
 // 验证码生成接口
 const verifyCodeApi = umsURL + "/ums/verifyCode/generate";
 
-const uploadPicUrl = "http://192.168.22.107:9987/upload/pic";
+const uploadPicUrl = "http://8.142.28.0/file/upload/pic";
 
 export default {
     umsURL,
     verifyCodeApi,
-    uploadPicUrl
+    uploadPicUrl,
+    deployURL
 }
