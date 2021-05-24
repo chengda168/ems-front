@@ -145,9 +145,9 @@
 import { mapGetters } from "vuex";
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
-import SOperationTeam from "@/api/ums/sOperationTeam";
-import SOperationUnit from "@/api/ums/sOperationUnit";
-import SCustomer from "@/api/ums/sCustomer";
+import SOperationTeam from "@/api/sms/sOperationTeam";
+import SOperationUnit from "@/api/sms/sOperationUnit";
+import SCustomer from "@/api/sms/sCustomer";
 import Login from "@/api/ums/login.js";
 import JsEncrypt from "jsencrypt";
 import Rules from "@/utils/rule.js";

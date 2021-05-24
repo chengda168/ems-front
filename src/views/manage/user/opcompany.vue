@@ -3,7 +3,7 @@
     <div class="siemensLayoutSearchBox" :class="{'collspaseForm' : collapse}">
       <el-form :inline="true" :model="params" class="siemensLayoutSearchBoxForm flexBetween">
         <el-form-item label="运维单位名称：" class="treeFormItem">
-          <el-input v-model="params.unitName" placeholder="请输入客户名称"></el-input>
+          <el-input v-model="params.operatorOrgName" placeholder="请输入客户名称"></el-input>
         </el-form-item>
         <el-form-item label="联系人：" class="treeFormItem">
           <el-input v-model="params.contactUserName" placeholder="请输入联系人"></el-input>
@@ -30,15 +30,17 @@
           </el-table-column>
           <el-table-column label="序号" align="center" type="index" :width="width">
           </el-table-column>
-          <el-table-column align="center" prop="unitName" label="运维单位名称">
+          <el-table-column align="center" prop="operatorOrgName" label="运维单位名称">
           </el-table-column>
-          <el-table-column align="center" prop="unitCode" label="运维单位编号">
+          <el-table-column align="center" prop="operatorOrgCode" label="运维单位编号">
           </el-table-column>
           <el-table-column align="center" prop="contactUserName" label="联系人">
           </el-table-column>
           <el-table-column align="center" prop="contactUserMobile" label="手机号码">
           </el-table-column>
           <el-table-column align="center" prop="contactUserEmail" label="电子邮箱">
+          </el-table-column>
+          <el-table-column align="center" prop="versionInfo" label="版本">
           </el-table-column>
           <el-table-column align="center" label="操 作">
             <template slot-scope="scope">
@@ -60,11 +62,11 @@
 
         <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
           :label-width="labelWidth">
-          <el-form-item label="运维单位名称:" prop="unitName">
-            <el-input type="text" v-model="ruleForm.unitName"></el-input>
+          <el-form-item label="运维单位名称:" prop="operatorOrgName">
+            <el-input type="text" v-model="ruleForm.operatorOrgName"></el-input>
           </el-form-item>
-          <el-form-item label="运维单位编号:" prop="unitCode">
-            <el-input type="text" v-model="ruleForm.unitCode"></el-input>
+          <el-form-item label="运维单位编号:" prop="operatorOrgCode">
+            <el-input type="text" v-model="ruleForm.operatorOrgCode"></el-input>
           </el-form-item>
           <el-form-item label="联系　人:" prop="contactUserName">
             <el-input v-model="ruleForm.contactUserName"></el-input>
@@ -75,12 +77,12 @@
           <el-form-item label="电子邮箱:" prop="contactUserEmail">
             <el-input v-model="ruleForm.contactUserEmail"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="所属角色:" prop="roleId">
-            <el-select v-model="ruleForm.roleId" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in roleList" :key="item.id" :label="item.dicInfo" :value="item.id">
+          <el-form-item label="版本:" prop="versionCode">
+            <el-select v-model="ruleForm.versionCode" placeholder="" popper-class="dialogSelect">
+              <el-option v-for="item in versionSelect" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
               </el-option>
             </el-select>
-          </el-form-item> -->
+          </el-form-item>
         </el-form>
       </div>
       <div class="dialogbuttom">
@@ -95,8 +97,8 @@
 import { mapGetters } from "vuex";
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
-import SOperationUnit from "@/api/ums/sOperationUnit";
-import SDic from "@/api/ums/sDic";
+import SOperationUnit from "@/api/sms/sOperationUnit";
+import SDic from "@/api/sms/sDic";
 import Rules from "@/utils/rule.js";
 export default {
   computed: {
@@ -116,25 +118,27 @@ export default {
       title: "新建运维单位信息",
       index: 0,
       params: {
-        unitName: "",
+        operatorOrgName: "",
         contactUserName: "",
       },
       roleList: [],
       isEdit: false,
       ruleForm: {
-        unitName: "",
-        unitCode: "",
+        id : null,
+        versionCode: null,
+        operatorOrgName: "",
+        operatorOrgCode: null,
         contactUserName: "",
         contactUserMobile: "",
         contactUserEmail: "",
       },
       rules: {
-        unitName: [
+        operatorOrgName: [
           { required: true, message: "请输入运维单位名称", trigger: "blur" },
         ],
-        unitCode: [
-          { required: true, message: "请输入运维单位编号", trigger: "blur" },
-        ],
+        // operatorOrgCode: [
+        //   { required: true, message: "请输入运维单位编号", trigger: "blur" },
+        // ],
         contactUserName: [
           { required: true, message: "请输入联系人", trigger: "blur" },
         ],
@@ -152,8 +156,8 @@ export default {
             trigger: "blur",
           },
         ],
-        roleId: [
-          { required: true, message: "请选择所属角色", trigger: "change" },
+        versionCode: [
+          { required: true, message: "请选择版本", trigger: "change" },
         ],
       },
       currentPage: 1,
@@ -162,6 +166,8 @@ export default {
       width: 50,
       tableData: [],
       tableSeelctVal: [],
+      // 版本下拉框
+      versionSelect: []
     };
   },
   watch: {
@@ -199,7 +205,7 @@ export default {
     onEdit(row, index) {
       this.isEdit = true;
       this.title = "编辑运维单位信息";
-      this.ruleForm = this.$deepCopy(row);
+      this.$copyBean(row, this.ruleForm);
       this.dialogVisible = true;
     },
     async submitForm(formName) {
@@ -255,20 +261,23 @@ export default {
         }
       }
     },
+    // 分页查询表格数据
     async getTableData() {
+      // 查询参数
       let params = this.$deepCopy(this.params);
       params["pageIndex"] = this.currentPage;
       params["length"] = this.pageSize;
+      // 表格数据
       let res = await SOperationUnit.page(params);
       this.tableData = res.data.content || [];
-      console.log(res);
       this.totalElements = res.data.totalElements;
-      console.log(this.tableData);
     },
-    async getRoleList() {
-      let res = await SDic.list({ dicType: "role" });
-      this.roleList = res.data;
-    },
+    // 查询版本下拉框数据
+    async getVersionSelect() {
+      let res = await SDic.list({ dicType: "version" });
+      this.versionSelect = res.data;
+      console.log(this.versionSelect);
+    }
   },
   mounted() {
     let self = this;
@@ -277,7 +286,7 @@ export default {
       self.resizeFn();
     });
     this.getTableData();
-    // this.getRoleList();
+    this.getVersionSelect();
   },
 };
 </script>

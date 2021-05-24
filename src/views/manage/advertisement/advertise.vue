@@ -90,7 +90,7 @@
 import { mapGetters } from "vuex";
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
-import SAdvertising from "@/api/ums/sAdvertising";
+import SAdvertising from "@/api/sms/sAdvertising";
 let self;
 export default {
   computed: {

@@ -1,18 +1,15 @@
 import BaseApi from '@/api/request/baseApi.js'
+import GLOBAL from '@/constant/global-variable'
+let baseUrl = GLOBAL.baseUrl.umsURL;
 
 export default class login extends BaseApi {
-    static async login(){
-        // const url = `/ums/login`;
-        // const data = await this.$get(url);
-        // return data;
-    }
     /**
      * 获取公钥
      * @param {*} account （邮箱，手机号）
      * @returns 
      */
     static async getPublicKey(account){
-        const url = `/ums/login/getPublicKey`;
+        const url = baseUrl + `/ums/login/getPublicKey`;
         let param = {
             "account" : account
         }
@@ -25,7 +22,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async doLogin(userJson){
-        const url = `/ums/login/doLogin`;
+        const url = baseUrl + `/ums/login/doLogin`;
         // let param = {
         //     "userJson" : userJson
         // }
@@ -39,7 +36,7 @@ export default class login extends BaseApi {
      */
     static async verifyCode(){
         // console.log(uuid)
-        const url = `/ums/verifyCode/generate`;
+        const url = baseUrl + `/ums/verifyCode/generate`;
         // let param = {
         //     "uuid" : uuid
         // }
@@ -54,7 +51,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async sendVerificationCode(number){
-        const url = `/ums/users/sendVerificationCode`;
+        const url = baseUrl + `/ums/users/sendVerificationCode`;
         let param = {
             "number" : number
         }
@@ -70,7 +67,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async verificationCode(account,code){
-        const url = `/ums/users/verificationCode`;
+        const url = baseUrl + `/ums/users/verificationCode`;
         let param = {
             "number" : account,
             "vCode":code
@@ -86,7 +83,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async updateNewPwd(account,encrypted){
-        const url = `/ums/users/updateNewPwd`;
+        const url = baseUrl + `/ums/users/updateNewPwd`;
         let param = {
             "number" : account,
             "newPwd":encrypted
@@ -101,7 +98,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async updatePwd(account,encryptedold,encryptednew){
-        const url = `/ums/users/updatePwd`;
+        const url = baseUrl + `/ums/users/updatePwd`;
         let param = {
             "oldPwd" : encryptedold,
             "newPwd":encryptednew,
@@ -118,7 +115,7 @@ export default class login extends BaseApi {
      * @returns 
      */
      static async resetPwd(account,encryptedNewPwd,type){
-        const url = `/ums/login/resetPwd`;
+        const url = baseUrl + `/ums/login/resetPwd`;
         let param = {
             "account" : account,
             "newPwd" : encryptedNewPwd,
@@ -134,7 +131,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async logout(){
-        const url = `/ums/login/logout`;
+        const url = baseUrl + `/ums/login/logout`;
         const data = await this.$get(url);
         return data;
     }

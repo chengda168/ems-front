@@ -1,17 +1,18 @@
 import BaseApi from '@/api/request/baseApi.js'
-
+import GLOBAL from '@/constant/global-variable'
+let baseUrl = GLOBAL.baseUrl.smsURL;
 
 /**
- * 数据字典api接口
+ * 运维团队api接口
  */
-export default class sDic extends BaseApi {
+export default class sOperationUnit extends BaseApi {
     /**
-     * 查询所有
+     * 分页查询
      * @param {查询参数} param 
      * @returns 
      */
-    static async list(param){
-        const url = `/ums/sDic/list`;
+    static async page(param){
+        const url = baseUrl + `/ums/sOperationUnit/page`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -22,7 +23,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async add(param){
-        const url = `/ums/sDic/add`;
+        const url = baseUrl + `/ums/sOperationUnit/add`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -33,7 +34,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async delete(id){
-        const url = `/ums/sDic/delete/${id}`;
+        const url = baseUrl + `/ums/sOperationUnit/delete/${id}`;
         const data = await this.$post(url);
         return data;
     }
@@ -44,7 +45,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async update(param){
-        const url = `/ums/sDic/add`;
+        const url = baseUrl + `/ums/sOperationUnit/update`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -55,17 +56,17 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async deleteBatch(ids){
-        const url = `/ums/sDic/deleteBatch`;
+        const url = baseUrl + `/ums/sOperationUnit/deleteBatch`;
         const data = await this.$post(url,ids);
         return data;
     } 
 
     /**
-     * 获取省市区
+     * 查询所有
      * @returns 
      */
-     static async getPCA(){
-        const url = `/ums/sDic/getPCA`;
+     static async list(){
+        const url = baseUrl + `/ums/sOperationUnit/list`;
         const data = await this.$get(url);
         return data;
     }

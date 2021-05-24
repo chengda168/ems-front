@@ -38,7 +38,7 @@
       </div>
       <div class="siemensHomeMap">
         <div class="siemensHomeTop flexStartBetween">
-          <el-select v-model="value" placeholder="选择工业园区" popper-class="homeDropdownBox" @change="onChange">
+          <el-select filterable v-model="value" placeholder="选择工业园区" popper-class="homeDropdownBox" @change="onChange">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
@@ -66,8 +66,8 @@
 <script>
 import geoJson from "../assets/js/china.json";
 import { mapGetters } from "vuex";
-import SCustomer from "@/api/ums/sCustomer";
-import SNotice from "@/api/ums/sNotice"
+import SCustomer from "@/api/sms/sCustomer";
+import SNotice from "@/api/sms/sNotice"
 import Login from "@/api/ums/login"
 export default {
   computed: {

@@ -1,17 +1,17 @@
 import BaseApi from '@/api/request/baseApi.js'
-
-
+import GLOBAL from '@/constant/global-variable'
+let baseUrl = GLOBAL.baseUrl.smsURL;
 /**
  * 客户api接口
  */
-export default class sAdvertising extends BaseApi {
+export default class sCustomer extends BaseApi {
     /**
      * 分页查询
      * @param {查询参数} param 
      * @returns 
      */
-    static async page(param) {
-        const url = `/ums/sAdvertising/page`;
+    static async list(param) {
+        const url = baseUrl + `/ums/sCustomer/list`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -22,7 +22,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
     static async add(param) {
-        const url = `/ums/sAdvertising/add`;
+        const url = baseUrl + `/ums/sCustomer/add`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -33,7 +33,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
     static async delete(id) {
-        const url = `/ums/sAdvertising/delete/${id}`;
+        const url = baseUrl + `/ums/sCustomer/delete/${id}`;
         const data = await this.$post(url);
         return data;
     }
@@ -44,7 +44,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
     static async update(param) {
-        const url = `/ums/sAdvertising/update`;
+        const url = baseUrl + `/ums/sCustomer/update`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -55,48 +55,40 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
     static async deleteBatch(ids) {
-        const url = `/ums/sAdvertising/deleteBatch`;
+        const url = baseUrl + `/ums/sCustomer/deleteBatch`;
         const data = await this.$post(url, ids);
         return data;
     }
 
     /**
-     * 查询详情
+     * 查询登录用户下的客户
      * @returns 
      */
-    static async detail(id) {
-        const url = `/ums/sAdvertising/detail/` + id;
+    static async allByLoginUser() {
+        const url = baseUrl + `/ums/sCustomer/allByLoginUser`;
         const data = await this.$get(url);
         return data;
     }
 
     /**
-     * 更新展示时间
-     * @returns 
+     * 
+     * @returns 获取上级单位
      */
-     static async updateShowTime(time) {
-        const url = `/ums/sAdvertising/updateShowTime/` + time;
+    static async getAllCustomer(){
+        const url = baseUrl + `/ums/sCustomer/getAllCustomer`;
         const data = await this.$get(url);
         return data;
     }
 
     /**
-     * 查询展示广告详情
+     * 获取运维团队
      * @returns 
      */
-    static async getShowAdv(){
-        const url = `/ums/sAdvertising/getShowAdv`;
+    static async getOperationUnit(){
+        const url = baseUrl + `/ums/sOperationUnit/list`;
         const data = await this.$get(url);
         return data;
     }
 
-    /**
-     * 查询轮播时间最大值
-     * @returns 
-     */
-     static async getMaxShowTime(){
-        const url = `/ums/sAdvertising/getMaxShowTime`;
-        const data = await this.$get(url);
-        return data;
-    }
+
 }
