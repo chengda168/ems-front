@@ -4,8 +4,11 @@ const baseUrl = {
     smsURL : "http://localhost:8966"
 }
 
-// 发布url
-const deployURL = "http://8.142.28.0/gateway/ems-ums"
+// 部署环境
+if (process.env.NODE_ENV == "production") {
+    baseUrl.umsURL = "http://8.142.28.0/gateway/ems-ums"
+    baseUrl.smsURL = "http://8.142.28.0/gateway/ems-sms"
+}
 
 // 验证码生成接口
 const verifyCodeApi = baseUrl.umsURL + "/ums/verifyCode/generate";
