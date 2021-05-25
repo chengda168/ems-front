@@ -14,9 +14,9 @@
         <el-form-item label="电子邮箱：" class="treeFormItem">
           <el-input v-model="params.email" placeholder="请输入电子邮箱"></el-input>
         </el-form-item>
-        <el-form-item label="运维客户：" class="treeFormItem">
+        <!-- <el-form-item label="运维客户：" class="treeFormItem">
           <el-input v-model="params.customerName" placeholder="请输入运维客户"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" class="fullBtn" @click="getTableData"><i class="iconfont icon-sousuo"></i>查询
           </el-button>
@@ -145,9 +145,9 @@
 import { mapGetters } from "vuex";
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
-import SOperationTeam from "@/api/ums/sOperationTeam";
-import SOperationUnit from "@/api/ums/sOperationUnit";
-import SCustomer from "@/api/ums/sCustomer";
+import SOperationTeam from "@/api/sms/sOperationTeam";
+import SOperationUnit from "@/api/sms/sOperationUnit";
+import SCustomer from "@/api/sms/sCustomer";
 import Login from "@/api/ums/login.js";
 import JsEncrypt from "jsencrypt";
 import Rules from "@/utils/rule.js";

@@ -160,10 +160,10 @@ import { mapGetters } from "vuex";
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
 import SUser from "@/api/ums/sUser";
-import SCustomer from "@/api/ums/sCustomer.js";
+import SCustomer from "@/api/sms/sCustomer.js";
 import Login from "@/api/ums/login.js";
 import JsEncrypt from "jsencrypt";
-import SDic from "@/api/ums/sDic.js";
+import SDic from "@/api/sms/sDic.js";
 import Rules from "@/utils/rule.js";
 export default {
   computed: {

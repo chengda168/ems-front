@@ -131,8 +131,8 @@
 import { mapGetters } from "vuex";
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
-import SCustomer from "@/api/ums/sCustomer.js";
-import SDic from "@/api/ums/sDic.js";
+import SCustomer from "@/api/sms/sCustomer.js";
+import SDic from "@/api/sms/sDic.js";
 import Rules from "@/utils/rule.js";
 export default {
   computed: {
