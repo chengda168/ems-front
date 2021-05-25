@@ -280,7 +280,6 @@ export default {
           this.ruleForm.endDate = "";
           this.api_Page();
         } else {
-          //console.log("error submit!!");
           return false;
         }
       });
@@ -312,12 +311,6 @@ export default {
     },
     handleSelectionChange(val) {
       this.tableSelectVal = val;
-    },
-    handleSizeChange(val) {
-      //console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      //console.log(`当前页: ${val}`);
     },
     resizeFn() {
       if (!this.collapse) {

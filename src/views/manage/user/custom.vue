@@ -310,7 +310,6 @@ export default {
         this.dialogVisible = false;
         this.getTableData();
       } else {
-        console.log("error submit!!");
         return false;
       }
     },

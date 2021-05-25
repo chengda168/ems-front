@@ -126,7 +126,7 @@ export default {
         ],
       },
       code: "",
-      msg : ""
+      msg: "",
     };
   },
   mounted() {
@@ -155,7 +155,7 @@ export default {
     async sumbile(params) {
       this.errordis = 0;
       let valid = await this.$refs[params].validate();
-      if (valid) {     
+      if (valid) {
         let res = await Login.getPublicKey(this.params.name);
         let publicKey = res.data;
         let jse = new JsEncrypt();
@@ -171,11 +171,10 @@ export default {
           this.$store.dispatch("Login", loginRes.data);
           this.$router.push("/dashboard");
         } else {
-          console.log(loginRes.msg);
-          this.msg = loginRes.msg
+          this.msg = loginRes.msg;
           this.errordis = 1;
           this.getVerifyCode();
-        } 
+        }
       }
     },
   },

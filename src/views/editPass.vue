@@ -82,8 +82,6 @@ export default {
           if(/\W/.test(value)){//如果是非数字 字母 下划线
             modes++;
           }
-          console.log(length)
-          console.log(modes)
           if(length>=6&&length<=11&&modes==2){
             this.passType='弱'
             if (this.ruleForm.passwordTwo !== '') {

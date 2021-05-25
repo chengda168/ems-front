@@ -225,7 +225,6 @@ export default {
         this.dialogVisible = false;
         this.getTableData();
       } else {
-        console.log("error submit!!");
         return false;
       }
     },
@@ -276,7 +275,6 @@ export default {
     async getVersionSelect() {
       let res = await SDic.list({ dicType: "version" });
       this.versionSelect = res.data;
-      console.log(this.versionSelect);
     }
   },
   mounted() {

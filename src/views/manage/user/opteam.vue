@@ -314,7 +314,6 @@ export default {
         this.dialogVisible = false;
         this.getTableData();
       } else {
-        console.log("error submit!!");
         return false;
       }
     },
@@ -336,7 +335,6 @@ export default {
 
         this.dialogPassword = false;
       } else {
-        console.log("error submit!!");
         return false;
       }
     },
@@ -393,7 +391,6 @@ export default {
       let params = this.$deepCopy(this.params);
       params["pageIndex"] = this.currentPage;
       params["length"] = this.pageSize;
-      console.log(params);
       let res = await SOperationTeam.page(params);
       this.tableData = res.data.content || [];
       this.totalElements = res.data.totalElements;

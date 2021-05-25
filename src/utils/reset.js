@@ -1,6 +1,5 @@
 // 重置表单，formRef为表单的ref值，excludeFields为要排除重新初始化值得属性
 export function resetForm(formRef, formModel, ...excludeFields) {
-    console.log('resetform:',formRef);
     // formRef和formModel相同的场合
     if(!formModel) {   
         formModel = formRef;

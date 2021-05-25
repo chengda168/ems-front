@@ -287,12 +287,6 @@ export default {
     },
   },
   methods: {
-    onSuspend() {
-      console.log("点击暂停按钮");
-    },
-    onRecover() {
-      console.log("点击恢复按钮");
-    },
     onPageChange(val) {
       this.currentPage = val;
       this.getTableData();
