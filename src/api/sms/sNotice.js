@@ -1,4 +1,6 @@
 import BaseApi from '@/api/request/baseApi.js'
+import GLOBAL from '@/constant/global-variable'
+let baseUrl = GLOBAL.baseUrl.smsURL;
 
 
 /**
@@ -11,7 +13,7 @@ export default class sNotice extends BaseApi {
      * @returns 
      */
     static async list(param) {
-        const url = `/ums/sNotice/list`;
+        const url = baseUrl + `/ums/sNotice/list`;
         const data = await this.$get(url, param);
         return data;
     }
@@ -22,7 +24,7 @@ export default class sNotice extends BaseApi {
      * @returns 
      */
     static async add(param) {
-        const url = `/ums/sNotice/add`;
+        const url = baseUrl + `/ums/sNotice/add`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -33,7 +35,7 @@ export default class sNotice extends BaseApi {
      * @returns 
      */
     static async delete(id) {
-        const url = `/ums/sNotice/delete/${id}`;
+        const url = baseUrl + `/ums/sNotice/delete/${id}`;
         const data = await this.$post(url);
         return data;
     }
@@ -44,7 +46,7 @@ export default class sNotice extends BaseApi {
      * @returns 
      */
     static async update(param) {
-        const url = `/ums/sNotice/add`;
+        const url = baseUrl + `/ums/sNotice/add`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -55,7 +57,7 @@ export default class sNotice extends BaseApi {
      * @returns 
      */
     static async deleteBatch(ids) {
-        const url = `/ums/sNotice/deleteBatch`;
+        const url = baseUrl + `/ums/sNotice/deleteBatch`;
         const data = await this.$post(url, ids);
         return data;
     }
@@ -65,7 +67,7 @@ export default class sNotice extends BaseApi {
      * @returns 
      */
     static async loginPage() {
-        const url = `/ums/sNotice/loginPage`;
+        const url = baseUrl + `/ums/sNotice/loginPage`;
         const data = await this.$get(url);
         return data;
     }

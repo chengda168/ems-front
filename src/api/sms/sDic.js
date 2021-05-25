@@ -1,5 +1,6 @@
 import BaseApi from '@/api/request/baseApi.js'
-
+import GLOBAL from '@/constant/global-variable'
+let baseUrl = GLOBAL.baseUrl.smsURL;
 
 /**
  * 数据字典api接口
@@ -11,7 +12,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async list(param){
-        const url = `/ums/sDic/list`;
+        const url = baseUrl + `/ums/sDic/list`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -22,7 +23,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async add(param){
-        const url = `/ums/sDic/add`;
+        const url = baseUrl + `/ums/sDic/add`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -33,7 +34,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async delete(id){
-        const url = `/ums/sDic/delete/${id}`;
+        const url = baseUrl + `/ums/sDic/delete/${id}`;
         const data = await this.$post(url);
         return data;
     }
@@ -44,7 +45,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async update(param){
-        const url = `/ums/sDic/add`;
+        const url = baseUrl + `/ums/sDic/add`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -55,7 +56,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async deleteBatch(ids){
-        const url = `/ums/sDic/deleteBatch`;
+        const url = baseUrl + `/ums/sDic/deleteBatch`;
         const data = await this.$post(url,ids);
         return data;
     } 
@@ -65,7 +66,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
      static async getPCA(){
-        const url = `/ums/sDic/getPCA`;
+        const url = baseUrl + `/ums/sDic/getPCA`;
         const data = await this.$get(url);
         return data;
     }

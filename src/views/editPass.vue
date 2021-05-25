@@ -289,7 +289,7 @@ export default {
   }
   .backHome{
     font-size: 14px;
-    color: #4461F2;
+    color: #4d9fff;
     text-decoration: underline;
   }
   .siemensForgetCopyRight{
@@ -409,7 +409,7 @@ export default {
   }
   .backHome{
     font-size: 12px;
-    color: #4461F2;
+    color: #4d9fff;
     text-decoration: underline;
   }
   .siemensForgetCopyRight{

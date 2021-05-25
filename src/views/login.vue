@@ -71,7 +71,7 @@
 <script>
 import JsEncrypt from "jsencrypt";
 import Login from "@/api/ums/login.js";
-import SAdertising from "@/api/ums/sAdvertising.js";
+import SAdertising from "@/api/sms/sAdvertising.js";
 
 export default {
   data() {
