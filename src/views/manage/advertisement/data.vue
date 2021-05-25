@@ -5,10 +5,9 @@
                 <div class="swiperBoxContain">
                     <ul class="swiperWrapper" ref="swiperBox" :style="styleObj">
                         <li class="swiperSlide" :class="{'swiperSlideActive' : activeIndex == index}" 
-                        v-for="(item,index) in list" :key="index" @click="onChange(index)">
-                        
-                            <el-tooltip effect="dark" :content="item" placement="top" :disabled="item.length<=6">
-                                <div>{{item}}</div>
+                        v-for="(item,index) in dicTypeList" :key="item.dicType" @click="onChange(item.dicType)">
+                            <el-tooltip effect="dark" :content="item.dicTypeName" placement="top" :disabled="item.length<=6">
+                                <div>{{item.dicTypeName}}</div>
                             </el-tooltip>
                         </li>
                     </ul>
@@ -90,7 +89,7 @@
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
-
+import SDic from "@/api/ums/sDic";
 
   export default {
     computed:{
@@ -120,7 +119,7 @@ import Tips from "@/components/ftd-tips/tips";
             translateX:0,
             isShowArrow:false,
             activeIndex:0,
-            list:['设备层级','设备类型','设备型号','设备使用场景','额定电压','开关柜柜型','测试测试1','测试测试测试测试'],
+            dicTypeList:{},
             dic_type_name:'',
             currentPage:1,
             editIndex:null,
@@ -314,6 +313,10 @@ import Tips from "@/components/ftd-tips/tips";
                 this.isShowArrow = false;
             }
         },
+        async api_GetTypes() {
+            let res = await SDic.getTypes();
+            this.dicTypeList = res.data;
+        },
     },
     watch:{
         collapse(newVal){
@@ -343,7 +346,7 @@ import Tips from "@/components/ftd-tips/tips";
             self.resizeFn();
         });   
         this.getTableData()
-
+        this.api_GetTypes()
        
     }
 }
