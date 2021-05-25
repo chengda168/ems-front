@@ -70,4 +70,14 @@ export default class sDic extends BaseApi {
         const data = await this.$get(url);
         return data;
     }
+
+    /**
+     * 获取字典大分类
+     * @returns 
+     */
+         static async getTypes(){
+            const url = `/ums/sDic/types`;
+            const data = await this.$get(url);
+            return data;
+        }
 }
