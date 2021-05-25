@@ -116,10 +116,10 @@ li,ol{
     color: #009999;
 }
 .blueColor1{
-    color: #4461F2;
+    color: #4d9fff;
 }
 .linkText{
-    color: #4461F2;
+    color: #4d9fff;
     text-decoration: underline;
 }
 /*控制整个滚动条*/
@@ -200,17 +200,18 @@ el-input__inner::placeholder{
 }
 .el-button--primary,
 .el-button--primary:focus, 
-.el-button--primary:hover{
+.el-button--primary:hover,
+.el-button--primary.is-active, 
+.el-button--primary:active{
     background-color: #009999;
     border: 0;
 }
-.el-button--primary.is-disabled,
-.el-button--primary.is-disabled:active, 
-.el-button--primary.is-disabled:focus, 
-.el-button--primary.is-disabled:hover{
+.el-button.is-disabled,
+.el-button.is-disabled:active, 
+.el-button.is-disabled:focus, 
+.el-button.is-disabled:hover{
     background-color: #879BAA;
 }
-
 
 .el-menu--vertical{
     display: none;
@@ -1219,7 +1220,7 @@ el-input__inner::placeholder{
     }
     .dateBox /deep/  .el-range-separator{
         width: 6%;
-        line-break: 18px;
+        line-height: 18px;
     }
     .dateBox /deep/ .el-input__prefix,
     .dateBox /deep/ .el-range__icon{
