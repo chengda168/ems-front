@@ -89,7 +89,7 @@
 import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
-import SDic from "@/api/ums/sDic";
+import SDic from "@/api/sms/sDic";
 
   export default {
     computed:{
