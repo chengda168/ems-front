@@ -12,7 +12,7 @@ export default class sUser extends BaseApi {
      * @returns 
      */
     static async list(param) {
-        const url = baseUrl + `/ums/users/page`;
+        const url = baseUrl + `/users/page`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -23,7 +23,7 @@ export default class sUser extends BaseApi {
      * @returns 
      */
      static async add(param){
-        const url = baseUrl + `/ums/users/add`;
+        const url = baseUrl + `/users/add`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -34,7 +34,7 @@ export default class sUser extends BaseApi {
      * @returns 
      */
      static async update(param){
-        const url = baseUrl + `/ums/users/update`;
+        const url = baseUrl + `/users/update`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -45,7 +45,7 @@ export default class sUser extends BaseApi {
      * @returns 
      */
          static async deleteBatch(ids){
-            const url = baseUrl + `/ums/users/deleteBatch`;
+            const url = baseUrl + `/users/deleteBatch`;
             const data = await this.$post(url,ids);
             return data;
         }
@@ -56,7 +56,7 @@ export default class sUser extends BaseApi {
      * @returns 
      */
     static async suspendBatch(ids){
-        const url = baseUrl + `/ums/users/suspendBatch`;
+        const url = baseUrl + `/users/suspendBatch`;
         const data = await this.$post(url,ids);
         return data;
     }
@@ -67,7 +67,7 @@ export default class sUser extends BaseApi {
      * @returns 
      */
        static async recoverBatch(ids){
-        const url = baseUrl + `/ums/users/recoverBatch`;
+        const url = baseUrl + `/users/recoverBatch`;
         const data = await this.$post(url,ids);
         return data;
     }
@@ -77,7 +77,7 @@ export default class sUser extends BaseApi {
      * @returns 获取全部菜单
      */
     static async menuList(){
-        const url = baseUrl + `/ums/sMenu/list`;
+        const url = baseUrl + `/sMenu/list`;
         const data = await this.$get(url);
         return data;
     }
@@ -86,7 +86,7 @@ export default class sUser extends BaseApi {
      * 获取用户权限
      */
      static async getUserMenu(userId){
-        const url = baseUrl + `/ums/sMenu/getUserMenu/${userId}`;
+        const url = baseUrl + `/sMenu/getUserMenu/${userId}`;
         const data = await this.$get(url);
         return data;
     }

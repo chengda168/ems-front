@@ -9,7 +9,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async getPublicKey(account){
-        const url = baseUrl + `/ums/login/getPublicKey`;
+        const url = baseUrl + `/login/getPublicKey`;
         let param = {
             "account" : account
         }
@@ -22,7 +22,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async doLogin(userJson){
-        const url = baseUrl + `/ums/login/doLogin`;
+        const url = baseUrl + `/login/doLogin`;
         // let param = {
         //     "userJson" : userJson
         // }
@@ -36,7 +36,7 @@ export default class login extends BaseApi {
      */
     static async verifyCode(){
         // console.log(uuid)
-        const url = baseUrl + `/ums/verifyCode/generate`;
+        const url = baseUrl + `/verifyCode/generate`;
         // let param = {
         //     "uuid" : uuid
         // }
@@ -51,7 +51,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async sendVerificationCode(number){
-        const url = baseUrl + `/ums/users/sendVerificationCode`;
+        const url = baseUrl + `/users/sendVerificationCode`;
         let param = {
             "number" : number
         }
@@ -67,7 +67,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async verificationCode(account,code){
-        const url = baseUrl + `/ums/users/verificationCode`;
+        const url = baseUrl + `/users/verificationCode`;
         let param = {
             "number" : account,
             "vCode":code
@@ -83,7 +83,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async updateNewPwd(account,encrypted){
-        const url = baseUrl + `/ums/users/updateNewPwd`;
+        const url = baseUrl + `/users/updateNewPwd`;
         let param = {
             "number" : account,
             "newPwd":encrypted
@@ -98,7 +98,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async updatePwd(account,encryptedold,encryptednew){
-        const url = baseUrl + `/ums/users/updatePwd`;
+        const url = baseUrl + `/users/updatePwd`;
         let param = {
             "oldPwd" : encryptedold,
             "newPwd":encryptednew,
@@ -115,7 +115,7 @@ export default class login extends BaseApi {
      * @returns 
      */
      static async resetPwd(account,encryptedNewPwd,type){
-        const url = baseUrl + `/ums/login/resetPwd`;
+        const url = baseUrl + `/login/resetPwd`;
         let param = {
             "account" : account,
             "newPwd" : encryptedNewPwd,
@@ -131,7 +131,7 @@ export default class login extends BaseApi {
      * @returns 
      */
     static async logout(){
-        const url = baseUrl + `/ums/login/logout`;
+        const url = baseUrl + `/login/logout`;
         const data = await this.$get(url);
         return data;
     }

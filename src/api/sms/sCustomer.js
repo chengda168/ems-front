@@ -11,7 +11,7 @@ export default class sCustomer extends BaseApi {
      * @returns 
      */
     static async list(param) {
-        const url = baseUrl + `/ums/sCustomer/list`;
+        const url = baseUrl + `/sCustomer/list`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -22,7 +22,7 @@ export default class sCustomer extends BaseApi {
      * @returns 
      */
     static async add(param) {
-        const url = baseUrl + `/ums/sCustomer/add`;
+        const url = baseUrl + `/sCustomer/add`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -33,7 +33,7 @@ export default class sCustomer extends BaseApi {
      * @returns 
      */
     static async delete(id) {
-        const url = baseUrl + `/ums/sCustomer/delete/${id}`;
+        const url = baseUrl + `/sCustomer/delete/${id}`;
         const data = await this.$post(url);
         return data;
     }
@@ -44,7 +44,7 @@ export default class sCustomer extends BaseApi {
      * @returns 
      */
     static async update(param) {
-        const url = baseUrl + `/ums/sCustomer/update`;
+        const url = baseUrl + `/sCustomer/update`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -55,7 +55,7 @@ export default class sCustomer extends BaseApi {
      * @returns 
      */
     static async deleteBatch(ids) {
-        const url = baseUrl + `/ums/sCustomer/deleteBatch`;
+        const url = baseUrl + `/sCustomer/deleteBatch`;
         const data = await this.$post(url, ids);
         return data;
     }
@@ -65,7 +65,7 @@ export default class sCustomer extends BaseApi {
      * @returns 
      */
     static async allByLoginUser() {
-        const url = baseUrl + `/ums/sCustomer/allByLoginUser`;
+        const url = baseUrl + `/sCustomer/allByLoginUser`;
         const data = await this.$get(url);
         return data;
     }
@@ -75,7 +75,7 @@ export default class sCustomer extends BaseApi {
      * @returns 获取上级单位
      */
     static async getAllCustomer(){
-        const url = baseUrl + `/ums/sCustomer/getAllCustomer`;
+        const url = baseUrl + `/sCustomer/getAllCustomer`;
         const data = await this.$get(url);
         return data;
     }
@@ -85,7 +85,7 @@ export default class sCustomer extends BaseApi {
      * @returns 
      */
     static async getOperationUnit(){
-        const url = baseUrl + `/ums/sOperationUnit/list`;
+        const url = baseUrl + `/sOperationUnit/list`;
         const data = await this.$get(url);
         return data;
     }

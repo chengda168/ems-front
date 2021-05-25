@@ -12,7 +12,7 @@ export default class sOperationUnit extends BaseApi {
      * @returns 
      */
     static async page(param){
-        const url = baseUrl + `/ums/sOperationUnit/page`;
+        const url = baseUrl + `/sOperationUnit/page`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -23,7 +23,7 @@ export default class sOperationUnit extends BaseApi {
      * @returns 
      */
     static async add(param){
-        const url = baseUrl + `/ums/sOperationUnit/add`;
+        const url = baseUrl + `/sOperationUnit/add`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -34,7 +34,7 @@ export default class sOperationUnit extends BaseApi {
      * @returns 
      */
     static async delete(id){
-        const url = baseUrl + `/ums/sOperationUnit/delete/${id}`;
+        const url = baseUrl + `/sOperationUnit/delete/${id}`;
         const data = await this.$post(url);
         return data;
     }
@@ -45,7 +45,7 @@ export default class sOperationUnit extends BaseApi {
      * @returns 
      */
     static async update(param){
-        const url = baseUrl + `/ums/sOperationUnit/update`;
+        const url = baseUrl + `/sOperationUnit/update`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -56,7 +56,7 @@ export default class sOperationUnit extends BaseApi {
      * @returns 
      */
     static async deleteBatch(ids){
-        const url = baseUrl + `/ums/sOperationUnit/deleteBatch`;
+        const url = baseUrl + `/sOperationUnit/deleteBatch`;
         const data = await this.$post(url,ids);
         return data;
     } 
@@ -66,7 +66,7 @@ export default class sOperationUnit extends BaseApi {
      * @returns 
      */
      static async list(){
-        const url = baseUrl + `/ums/sOperationUnit/list`;
+        const url = baseUrl + `/sOperationUnit/list`;
         const data = await this.$get(url);
         return data;
     }

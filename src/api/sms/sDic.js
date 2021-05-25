@@ -12,7 +12,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async list(param){
-        const url = baseUrl + `/ums/sDic/list`;
+        const url = baseUrl + `/sDic/list`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -23,7 +23,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async add(param){
-        const url = baseUrl + `/ums/sDic/add`;
+        const url = baseUrl + `/sDic/add`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -34,7 +34,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async delete(id){
-        const url = baseUrl + `/ums/sDic/delete/${id}`;
+        const url = baseUrl + `/sDic/delete/${id}`;
         const data = await this.$post(url);
         return data;
     }
@@ -45,7 +45,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async update(param){
-        const url = baseUrl + `/ums/sDic/add`;
+        const url = baseUrl + `/sDic/add`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -56,7 +56,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async deleteBatch(ids){
-        const url = baseUrl + `/ums/sDic/deleteBatch`;
+        const url = baseUrl + `/sDic/deleteBatch`;
         const data = await this.$post(url,ids);
         return data;
     } 
@@ -66,7 +66,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
      static async getPCA(){
-        const url = baseUrl + `/ums/sDic/getPCA`;
+        const url = baseUrl + `/sDic/getPCA`;
         const data = await this.$get(url);
         return data;
     }
@@ -76,7 +76,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
          static async getTypes(){
-            const url = `/ums/sDic/types`;
+            const url = `/sDic/types`;
             const data = await this.$get(url);
             return data;
         }

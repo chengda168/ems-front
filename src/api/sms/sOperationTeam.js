@@ -12,7 +12,7 @@ export default class sOperationTeam extends BaseApi {
      * @returns 
      */
     static async page(param){
-        const url = baseUrl + `/ums/sOperationTeam/page`;
+        const url = baseUrl + `/sOperationTeam/page`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -23,7 +23,7 @@ export default class sOperationTeam extends BaseApi {
      * @returns 
      */
     static async add(param){
-        const url = baseUrl + `/ums/sOperationTeam/add`;
+        const url = baseUrl + `/sOperationTeam/add`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -34,7 +34,7 @@ export default class sOperationTeam extends BaseApi {
      * @returns 
      */
     static async delete(id){
-        const url = baseUrl + `/ums/sOperationTeam/delete/${id}`;
+        const url = baseUrl + `/sOperationTeam/delete/${id}`;
         const data = await this.$post(url);
         return data;
     }
@@ -45,7 +45,7 @@ export default class sOperationTeam extends BaseApi {
      * @returns 
      */
     static async update(param){
-        const url = baseUrl + `/ums/sOperationTeam/update`;
+        const url = baseUrl + `/sOperationTeam/update`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -56,7 +56,7 @@ export default class sOperationTeam extends BaseApi {
      * @returns 
      */
     static async deleteBatch(ids){
-        const url = baseUrl + `/ums/sOperationTeam/deleteBatch`;
+        const url = baseUrl + `/sOperationTeam/deleteBatch`;
         const data = await this.$post(url,ids);
         return data;
     }
@@ -67,7 +67,7 @@ export default class sOperationTeam extends BaseApi {
      * @returns 
      */
     static async suspendBatch(ids){
-        const url = baseUrl + `/ums/sOperationTeam/suspendBatch`;
+        const url = baseUrl + `/sOperationTeam/suspendBatch`;
         const data = await this.$post(url,ids);
         return data;
     }
@@ -78,7 +78,7 @@ export default class sOperationTeam extends BaseApi {
      * @returns 
      */
     static async recoverBatch(ids){
-        const url = baseUrl + `/ums/sOperationTeam/recoverBatch`;
+        const url = baseUrl + `/sOperationTeam/recoverBatch`;
         const data = await this.$post(url,ids);
         return data;
     }

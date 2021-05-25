@@ -12,7 +12,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
     static async page(param) {
-        const url = baseUrl + `/ums/sAdvertising/page`;
+        const url = baseUrl + `/sAdvertising/page`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -23,7 +23,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
     static async add(param) {
-        const url = baseUrl + `/ums/sAdvertising/add`;
+        const url = baseUrl + `/sAdvertising/add`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -34,7 +34,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
     static async delete(id) {
-        const url = baseUrl + `/ums/sAdvertising/delete/${id}`;
+        const url = baseUrl + `/sAdvertising/delete/${id}`;
         const data = await this.$post(url);
         return data;
     }
@@ -45,7 +45,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
     static async update(param) {
-        const url = baseUrl + `/ums/sAdvertising/update`;
+        const url = baseUrl + `/sAdvertising/update`;
         const data = await this.$post(url, param);
         return data;
     }
@@ -56,7 +56,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
     static async deleteBatch(ids) {
-        const url = baseUrl + `/ums/sAdvertising/deleteBatch`;
+        const url = baseUrl + `/sAdvertising/deleteBatch`;
         const data = await this.$post(url, ids);
         return data;
     }
@@ -66,7 +66,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
     static async detail(id) {
-        const url = baseUrl + `/ums/sAdvertising/detail/` + id;
+        const url = baseUrl + `/sAdvertising/detail/` + id;
         const data = await this.$get(url);
         return data;
     }
@@ -76,7 +76,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
      static async updateShowTime(time) {
-        const url = baseUrl + `/ums/sAdvertising/updateShowTime/` + time;
+        const url = baseUrl + `/sAdvertising/updateShowTime/` + time;
         const data = await this.$get(url);
         return data;
     }
@@ -86,7 +86,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
     static async getShowAdv(){
-        const url = baseUrl + `/ums/sAdvertising/getShowAdv`;
+        const url = baseUrl + `/sAdvertising/getShowAdv`;
         const data = await this.$get(url);
         return data;
     }
@@ -96,7 +96,7 @@ export default class sAdvertising extends BaseApi {
      * @returns 
      */
      static async getMaxShowTime(){
-        const url = baseUrl + `/ums/sAdvertising/getMaxShowTime`;
+        const url = baseUrl + `/sAdvertising/getMaxShowTime`;
         const data = await this.$get(url);
         return data;
     }
