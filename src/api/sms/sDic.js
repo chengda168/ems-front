@@ -45,7 +45,7 @@ export default class sDic extends BaseApi {
      * @returns 
      */
     static async update(param){
-        const url = baseUrl + `/sDic/add`;
+        const url = baseUrl + `/sDic/update`;
         const data = await this.$post(url,param);
         return data;
     }
@@ -75,9 +75,30 @@ export default class sDic extends BaseApi {
      * 获取字典大分类
      * @returns 
      */
-         static async getTypes(){
-            const url = `/sDic/types`;
-            const data = await this.$get(url);
-            return data;
-        }
+    static async getTypes(){
+        const url = baseUrl + `/sDic/types`;
+        const data = await this.$get(url);
+        return data;
+    }
+
+    /**
+     * 查询所有
+     * @param {查询参数} param 
+     * @returns 
+     */
+     static async page(param){
+        const url = baseUrl + `/sDic/page`;
+        const data = await this.$post(url,param);
+        return data;
+    }
+
+    /**
+     * 查询详情
+     * @returns 
+     */
+    static async detail(id) {
+        const url = baseUrl + `/sDic/detail/` + id;
+        const data = await this.$get(url);
+        return data;
+    }
 }
