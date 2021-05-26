@@ -79,7 +79,7 @@
           </el-form-item>
           <el-form-item label="版本:" prop="versionCode">
             <el-select v-model="ruleForm.versionCode" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in versionSelect" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
+              <el-option v-for="item in versionSelectData" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
               </el-option>
             </el-select>
           </el-form-item>
@@ -124,7 +124,7 @@ export default {
       roleList: [],
       isEdit: false,
       ruleForm: {
-        id : null,
+        id: null,
         versionCode: null,
         operatorOrgName: "",
         operatorOrgCode: null,
@@ -165,9 +165,10 @@ export default {
       pageSize: 15,
       width: 50,
       tableData: [],
-      tableSeelctVal: [],
-      // 版本下拉框
-      versionSelect: []
+      tableSelectVal: [],
+      /* 下拉框数据 */
+      // 1、版本下拉框
+      versionSelectData: [],
     };
   },
   watch: {
@@ -221,15 +222,17 @@ export default {
           message: res.msg,
           type: res.code == 200 ? "success" : "error",
         });
-
-        this.dialogVisible = false;
-        this.getTableData();
+        if (res.code != 200) {
+        } else {
+          this.dialogVisible = false;
+          this.getTableData();
+        }
       } else {
         return false;
       }
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map((item) => item.id) || [];
+      let ids = this.tableSelectVal.map((item) => item.id) || [];
       if (ids.length == 0) {
         return false;
       }
@@ -243,7 +246,7 @@ export default {
       this.isDialog = false;
     },
     handleSelectionChange(val) {
-      this.tableSeelctVal = val;
+      this.tableSelectVal = val;
     },
     resizeFn() {
       if (!this.collapse) {
@@ -272,10 +275,10 @@ export default {
       this.totalElements = res.data.totalElements;
     },
     // 查询版本下拉框数据
-    async getVersionSelect() {
+    async getVersionSelectData() {
       let res = await SDic.list({ dicType: "version" });
-      this.versionSelect = res.data;
-    }
+      this.versionSelectData = res.data;
+    },
   },
   mounted() {
     let self = this;
@@ -284,7 +287,7 @@ export default {
       self.resizeFn();
     });
     this.getTableData();
-    this.getVersionSelect();
+    this.getVersionSelectData();
   },
 };
 </script>

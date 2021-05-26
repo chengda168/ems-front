@@ -47,15 +47,26 @@ let FormValidate = function () {
             },
 
             // 密码的验证
-            validatePsdReg(rule, value, callback) {
+            validatePsd(rule, value, callback) {
                 if (!value) {
-                    return callback(new Error('请输入密码'))
-                }
-                if (!passwordReg.test(value)) {
-                    callback(new Error('请输入6-20位英文字母、数字或者符号（除空格），且字母、数字和标点符号至少包含两种'))
+                    return callback(new Error('请输入密码'));
+                }else if (!passwordReg.test(value)) {
+                    return callback(new Error('请输入6-20位英文字母、数字或者符号（除空格），且字母、数字和标点符号至少包含两种'));
                 } else {
-                    callback()
+                    return callback();
                 }
+            },
+
+            // 确认密码的校验
+            validateAgainPsd(rule,value,callback,password) {
+                if (!value) {
+                    return callback(new Error('请再次输入密码'));
+                }else if(value != password) {
+                    return callback(new Error('新密码不一致，请重新输入!'));
+                } else {
+                    return callback();
+                }
+    
             },
 
             // 邮箱的验证规则
@@ -92,7 +103,10 @@ let FormValidate = function () {
                 } else {
                     callback()
                 }
-            }
+            },
+
+
+
         }
     }
 

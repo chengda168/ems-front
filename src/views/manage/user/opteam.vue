@@ -103,7 +103,8 @@
           </el-form-item>
           <el-form-item label="园区名称:" prop="operatorCustomerId">
             <el-select v-model="ruleForm.operatorCustomerId" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in sOperatorCustomerSelectData" :key="item.id" :label="item.customerName" :value="item.id">
+              <el-option v-for="item in sOperatorCustomerSelectData" :key="item.id" :label="item.customerName"
+                :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -164,25 +165,6 @@ export default {
     Tips,
   },
   data() {
-    var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.ruleForm1.password1 !== "") {
-          this.$refs.ruleForm1.validateField("password1");
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm1.password) {
-        callback(new Error("新密码不一致，请重新输入!"));
-      } else {
-        callback();
-      }
-    };
     return {
       dialogPassword: false,
       isDialog: false,
@@ -256,10 +238,20 @@ export default {
       },
       rules1: {
         password: [
-          { required: true, validator: validatePass, trigger: "blur" },
+          { required: true, validator: Rules.FormValidate.Form().validatePsd, trigger: "blur" },
         ],
         password1: [
-          { required: true, validator: validatePass2, trigger: "blur" },
+          {
+            required: true,
+            validator: (rule, value, callback) =>
+              Rules.FormValidate.Form().validateAgainPsd(
+                rule,
+                value,
+                callback,
+                this.ruleForm1.password
+              ),
+            trigger: "blur",
+          },
         ],
       },
       params: {
