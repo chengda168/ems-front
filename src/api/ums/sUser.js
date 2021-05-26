@@ -11,7 +11,7 @@ export default class sUser extends BaseApi {
      * @param {查询参数} param 
      * @returns 
      */
-    static async list(param) {
+    static async page(param) {
         const url = baseUrl + `/users/page`;
         const data = await this.$post(url, param);
         return data;

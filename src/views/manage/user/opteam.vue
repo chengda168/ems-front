@@ -6,7 +6,7 @@
           <el-input v-model="params.userName" placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="单位：" class="treeFormItem">
-          <el-input v-model="params.unitName" placeholder="请输入单位"></el-input>
+          <el-input v-model="params.operatorOrgName" placeholder="请输入单位"></el-input>
         </el-form-item>
         <el-form-item label="手机号码：" class="treeFormItem">
           <el-input v-model="params.mobile" placeholder="请输入手机号码"></el-input>
@@ -14,9 +14,6 @@
         <el-form-item label="电子邮箱：" class="treeFormItem">
           <el-input v-model="params.email" placeholder="请输入电子邮箱"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="运维客户：" class="treeFormItem">
-          <el-input v-model="params.customerName" placeholder="请输入运维客户"></el-input>
-        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" class="fullBtn" @click="getTableData"><i class="iconfont icon-sousuo"></i>查询
           </el-button>
@@ -47,13 +44,13 @@
           </el-table-column>
           <el-table-column align="center" prop="mobile" label="手机号码">
           </el-table-column>
-          <el-table-column align="center" prop="job" label="职务/角色">
+          <el-table-column align="center" prop="userRoleName" label="职务/角色">
           </el-table-column>
           <el-table-column align="center" prop="email" label="电子邮箱">
           </el-table-column>
-          <el-table-column align="center" prop="unitName" label="单 位">
+          <el-table-column align="center" prop="operatorOrgName" label="单 位">
           </el-table-column>
-          <el-table-column align="center" prop="customerName" label="运维客户">
+          <el-table-column align="center" prop="operatorCustomerName" label="运维客户">
           </el-table-column>
           <el-table-column align="center" prop="status" :formatter="$typeFormatter" label="状 态">
           </el-table-column>
@@ -88,21 +85,25 @@
           <el-form-item label="手机号码:" prop="mobile">
             <el-input v-model="ruleForm.mobile"></el-input>
           </el-form-item>
-          <el-form-item label="职务/角色:" prop="job">
-            <el-input v-model="ruleForm.job"></el-input>
+          <el-form-item label="职务/角色:" prop="userRoleId">
+            <el-select v-model="ruleForm.userRoleId" placeholder="" popper-class="dialogSelect">
+              <el-option v-for="item in sRoleSelectData" :key="item.id" :label="item.roleName" :value="item.id">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="电子邮箱:" prop="email">
             <el-input type="text" v-model="ruleForm.email"></el-input>
           </el-form-item>
-          <el-form-item label="运维单位:" prop="unitId">
-            <el-select v-model="ruleForm.unitId" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in sOpUnitSelect" :key="item.id" :label="item.unitName" :value="item.id">
+          <el-form-item label="运维单位:" prop="operatorOrgId">
+            <el-select v-model="ruleForm.operatorOrgId" placeholder="" popper-class="dialogSelect">
+              <el-option v-for="item in sOperatorOrgSelectData" :key="item.id" :label="item.operatorOrgName"
+                :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="园区名称:" prop="customerId">
-            <el-select v-model="ruleForm.customerId" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in sCustomerSelect" :key="item.id" :label="item.customerName" :value="item.id">
+          <el-form-item label="园区名称:" prop="operatorCustomerId">
+            <el-select v-model="ruleForm.operatorCustomerId" placeholder="" popper-class="dialogSelect">
+              <el-option v-for="item in sOperatorCustomerSelectData" :key="item.id" :label="item.customerName" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -145,12 +146,13 @@
 import { mapGetters } from "vuex";
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
-import SOperationTeam from "@/api/sms/sOperationTeam";
 import SOperationUnit from "@/api/sms/sOperationUnit";
 import SCustomer from "@/api/sms/sCustomer";
 import Login from "@/api/ums/login.js";
 import JsEncrypt from "jsencrypt";
 import Rules from "@/utils/rule.js";
+import SUser from "@/api/ums/sUser";
+import SRole from "@/api/ums/sRole";
 export default {
   computed: {
     ...mapGetters({
@@ -191,17 +193,62 @@ export default {
       labelWidth1: "96px",
       isEdit: false,
       editIndex: null,
-      sOpUnitSelect: [],
-      sCustomerSelect: [],
+      /* 下拉框数据 */
+      // 1、单位下拉框
+      sOperatorOrgSelectData: [],
+      // 2、客户下拉框
+      sOperatorCustomerSelectData: [],
+      // 3、角色下拉框
+      sRoleSelectData: [],
+      /* 下拉框参数 */
+      // 1、角色下拉框参数
+      roleParam: {
+        roleType: 2,
+      },
+      /* dialog表格（新增、修改） */
+      // 1、表格数据
       ruleForm: {
-        id: "",
+        id: null,
+        userType: "2", // 2：运维团队用户
         userName: "",
+        userRoleId: "",
         mobile: "",
-        job: "",
         email: "",
-        unitId: "",
-        customerId: "",
+        operatorOrgId: "",
+        operatorOrgName: "",
+        operatorCustomerId: "",
+        operatorCustomerName: "",
         status: "1",
+      },
+      // 2、表格校验
+      rules: {
+        userName: [
+          { required: true, message: "请输入用户姓名", trigger: "blur" },
+        ],
+        mobile: [
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validatePhone,
+            trigger: "blur",
+          },
+        ],
+        userRoleId: [
+          { required: true, message: "请选择职务/角色", trigger: "blur" },
+        ],
+        email: [
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validateEmail,
+            trigger: "blur",
+          },
+        ],
+        operatorOrgId: [
+          { required: true, message: "请选择运维单位", trigger: "change" },
+        ],
+        operatorCustomerId: [
+          { required: true, message: "请选择园区名称", trigger: "change" },
+        ],
+        status: [{ required: true, message: "请选择状态", trigger: "blur" }],
       },
       ruleForm1: {
         password: "",
@@ -215,39 +262,12 @@ export default {
           { required: true, validator: validatePass2, trigger: "blur" },
         ],
       },
-      rules: {
-        userName: [
-          { required: true, message: "请输入用户姓名", trigger: "blur" },
-        ],
-        mobile: [
-          {
-            required: true,
-            validator: Rules.FormValidate.Form().validatePhone,
-            trigger: "blur",
-          },
-        ],
-        job: [{ required: true, message: "请输入职务/角色", trigger: "blur" }],
-        email: [
-          {
-            required: true,
-            validator: Rules.FormValidate.Form().validateEmail,
-            trigger: "blur",
-          },
-        ],
-        unitId: [
-          { required: true, message: "请选择运维单位", trigger: "change" },
-        ],
-        customerId: [
-          { required: true, message: "请选择园区名称", trigger: "change" },
-        ],
-        status: [{ required: true, message: "请选择状态", trigger: "blur" }],
-      },
       params: {
+        userType: "2", // 2：运维团队用户
         userName: "",
-        unitName: "",
+        operatorOrgName: "",
         mobile: "",
         email: "",
-        customerName: "",
       },
       currentPage: 1,
       totalElements: 0,
@@ -271,6 +291,26 @@ export default {
         } else {
           this.width = 40;
         }
+      }
+    },
+    "ruleForm.operatorOrgId": function (newVal) {
+      if (newVal == "") {
+        this.ruleForm.operatorOrgName = "";
+      } else {
+        let item = this.sOperatorOrgSelectData.find(
+          (item) => item.id == newVal
+        );
+        this.ruleForm.operatorOrgName = item.operatorOrgName;
+      }
+    },
+    "ruleForm.operatorCustomerId": function (newVal) {
+      if (newVal == "") {
+        this.ruleForm.operatorCustomerName = "";
+      } else {
+        let item = this.sOperatorCustomerSelectData.find(
+          (item) => item.id == newVal
+        );
+        this.ruleForm.operatorCustomerName = item.customerName;
       }
     },
   },
@@ -302,9 +342,9 @@ export default {
       let res = null;
       if (valid) {
         if (this.isEdit) {
-          res = await SOperationTeam.update(this.ruleForm);
+          res = await SUser.update(this.ruleForm);
         } else {
-          res = await SOperationTeam.add(this.ruleForm);
+          res = await SUser.add(this.ruleForm);
         }
         this.$message({
           message: res.msg,
@@ -343,7 +383,7 @@ export default {
       if (ids.length == 0) {
         return false;
       }
-      let res = await SOperationTeam.deleteBatch(ids);
+      let res = await SUser.deleteBatch(ids);
       this.$message({
         message: res.msg,
         type: res.code == 200 ? "success" : "error",
@@ -379,26 +419,18 @@ export default {
         this.labelWidth = "68px";
       }
     },
-    async getOpunitSelectData() {
-      let res = await SOperationUnit.list();
-      this.sOpUnitSelect = res.data;
-    },
-    async getCustomerSelectData() {
-      let res = await SCustomer.getAllCustomer();
-      this.sCustomerSelect = res.data;
-    },
     async getTableData() {
       let params = this.$deepCopy(this.params);
       params["pageIndex"] = this.currentPage;
       params["length"] = this.pageSize;
-      let res = await SOperationTeam.page(params);
+      let res = await SUser.page(params);
       this.tableData = res.data.content || [];
       this.totalElements = res.data.totalElements;
     },
     async suspendBatch() {
       let ids = this.tableSeelctVal.map((item) => item.id);
       if (ids.length > 0) {
-        let res = await SOperationTeam.suspendBatch(ids);
+        let res = await SUser.suspendBatch(ids);
         this.$message({
           message: res.msg,
           type: res.code == 200 ? "success" : "error",
@@ -409,13 +441,27 @@ export default {
     async recoverBatch() {
       let ids = this.tableSeelctVal.map((item) => item.id);
       if (ids.length > 0) {
-        let res = await SOperationTeam.recoverBatch(ids);
+        let res = await SUser.recoverBatch(ids);
         this.$message({
           message: res.msg,
           type: res.code == 200 ? "success" : "error",
         });
         this.getTableData();
       }
+    },
+    /* 下拉框 */
+    //
+    async getOperatorOrgSelectData() {
+      let res = await SOperationUnit.list();
+      this.sOperatorOrgSelectData = res.data;
+    },
+    async getCustomerSelectData() {
+      let res = await SCustomer.getAllCustomer();
+      this.sOperatorCustomerSelectData = res.data;
+    },
+    async getRoleSelectData() {
+      let res = await SRole.list(this.roleParam);
+      this.sRoleSelectData = res.data;
     },
   },
   mounted() {
@@ -425,9 +471,11 @@ export default {
       self.resizeFn();
     });
     // 获取运维单位下拉框数据
-    this.getOpunitSelectData();
+    this.getOperatorOrgSelectData();
     // 获取园区下拉框数据
     this.getCustomerSelectData();
+    // 获取角色下拉框数据
+    this.getRoleSelectData();
     // 获取表格数据
     this.getTableData();
   },

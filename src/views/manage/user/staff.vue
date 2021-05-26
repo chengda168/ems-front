@@ -451,7 +451,7 @@ export default {
       let params = this.$deepCopy(this.params);
       params["pageIndex"] = this.currentPage;
       params["length"] = this.pageSize;
-      let res = await SUser.list(params);
+      let res = await SUser.page(params);
       this.tableData = res.data.content || [];
       this.totalElements = res.data.totalElements;
     },
