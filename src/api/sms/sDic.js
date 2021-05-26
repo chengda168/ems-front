@@ -11,9 +11,9 @@ export default class sDic extends BaseApi {
      * @param {查询参数} param 
      * @returns 
      */
-    static async list(param){
+    static async list(param) {
         const url = baseUrl + `/sDic/list`;
-        const data = await this.$post(url,param);
+        const data = await this.$post(url, param);
         return data;
     }
 
@@ -22,9 +22,9 @@ export default class sDic extends BaseApi {
      * @param {新增实体参数} param 
      * @returns 
      */
-    static async add(param){
+    static async add(param) {
         const url = baseUrl + `/sDic/add`;
-        const data = await this.$post(url,param);
+        const data = await this.$post(url, param);
         return data;
     }
 
@@ -33,7 +33,7 @@ export default class sDic extends BaseApi {
      * @param {实体id} id 
      * @returns 
      */
-    static async delete(id){
+    static async delete(id) {
         const url = baseUrl + `/sDic/delete/${id}`;
         const data = await this.$post(url);
         return data;
@@ -44,9 +44,9 @@ export default class sDic extends BaseApi {
      * @param {更新实体参数} param 
      * @returns 
      */
-    static async update(param){
+    static async update(param) {
         const url = baseUrl + `/sDic/update`;
-        const data = await this.$post(url,param);
+        const data = await this.$post(url, param);
         return data;
     }
 
@@ -55,17 +55,17 @@ export default class sDic extends BaseApi {
      * @param {批量删除实体ids-数组}} ids 
      * @returns 
      */
-    static async deleteBatch(ids){
+    static async deleteBatch(ids) {
         const url = baseUrl + `/sDic/deleteBatch`;
-        const data = await this.$post(url,ids);
+        const data = await this.$post(url, ids);
         return data;
-    } 
+    }
 
     /**
      * 获取省市区
      * @returns 
      */
-     static async getPCA(){
+    static async getPCA() {
         const url = baseUrl + `/sDic/getPCA`;
         const data = await this.$get(url);
         return data;
@@ -75,7 +75,7 @@ export default class sDic extends BaseApi {
      * 获取字典大分类
      * @returns 
      */
-    static async getTypes(){
+    static async getTypes() {
         const url = baseUrl + `/sDic/types`;
         const data = await this.$get(url);
         return data;
@@ -86,9 +86,9 @@ export default class sDic extends BaseApi {
      * @param {查询参数} param 
      * @returns 
      */
-     static async page(param){
+    static async page(param) {
         const url = baseUrl + `/sDic/page`;
-        const data = await this.$post(url,param);
+        const data = await this.$post(url, param);
         return data;
     }
 

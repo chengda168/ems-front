@@ -6,39 +6,20 @@
         <div class="flexCenter">
           <div class="adverDiv">
             <div class="adver">秒</div>
-            <el-input
-              v-model="inputShowTime"
-              class="adverInput"
-              @blur="updateShowTime($event)"
-            ></el-input>
+            <el-input v-model="inputShowTime" class="adverInput" @blur="updateShowTime($event)"></el-input>
             <div class="adver">轮播时间</div>
           </div>
-          <el-button type="primary" class="fullBtn" @click="onAdd"
-            ><i class="iconfont icon-xinjian"></i>新建</el-button
-          >
-          <el-button type="primary" class="fullBtn" @click="isDialog = true"
-            ><i class="iconfont icon-shanchu"></i>删除
+          <el-button type="primary" class="fullBtn" @click="onAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
+          <el-button type="primary" class="fullBtn" @click="isDialog = true"><i class="iconfont icon-shanchu"></i>删除
           </el-button>
         </div>
       </div>
       <div class="siemensLayoutResultCon">
-        <el-table
-          border
-          stripe
-          :key="index"
-          :data="tableData"
-          height="100%"
-          style="width: 100%"
-          @selection-change="handleSelectionChange"
-        >
+        <el-table border stripe :key="index" :data="tableData" height="100%" style="width: 100%"
+          @selection-change="handleSelectionChange">
           <el-table-column align="center" type="selection" :width="width">
           </el-table-column>
-          <el-table-column
-            label="序号"
-            align="center"
-            type="index"
-            :width="width"
-          >
+          <el-table-column label="序号" align="center" type="index" :width="width">
           </el-table-column>
           <el-table-column align="center" prop="pictureUrl" label="广告图片">
             <template slot-scope="scope">
@@ -49,67 +30,29 @@
           </el-table-column>
           <el-table-column align="center" prop="limitTime" label="广告展示时限">
           </el-table-column>
-          <el-table-column
-            align="center"
-            prop="describe"
-            label="广告描述"
-            :width="width1"
-          >
+          <el-table-column align="center" prop="describe" label="广告描述" :width="width1">
           </el-table-column>
           <el-table-column align="center" label="操 作">
             <template slot-scope="scope">
               <div class="tableOper">
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  content="编辑"
-                  placement="top"
-                >
-                  <i
-                    class="iconfont icon-bianji"
-                    @click="onEdit(scope.row, scope.$index)"
-                  ></i>
+                <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                  <i class="iconfont icon-bianji" @click="onEdit(scope.row, scope.$index)"></i>
                 </el-tooltip>
               </div>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <Page
-        :total="totalElements"
-        :pageSize="15"
-        :currentPage="currentPage"
-        @onPageChange="onPageChange"
-      ></Page>
+      <Page :total="totalElements" :pageSize="15" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
     </div>
-    <el-dialog
-      top="0"
-      :title="title"
-      :show-close="false"
-      :visible.sync="dialogVisible"
-      :before-close="beforeClose"
-    >
+    <el-dialog top="0" :title="title" :show-close="false" :visible.sync="dialogVisible" :before-close="beforeClose">
       <div class="close iconfont icon-guanbi" @click="beforeClose()"></div>
       <div class="dialogdiv">
-        <el-form
-          :model="ruleForm"
-          label-position="left"
-          :rules="rules"
-          ref="ruleForm"
-          class="registerForm"
-          :label-width="labelWidth"
-        >
+        <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
+          :label-width="labelWidth">
           <el-form-item label="广告图片:" prop="pictureUrl">
-            <el-upload
-              :with-credentials="true"
-              class="upload-demo"
-              :action="uploadPicUrl"
-              :limit="1"
-              :file-list="ruleForm.pictureUrl"
-              list-type="picture"
-              :on-remove="onRemove"
-              :on-success="onSuccess"
-            >
+            <el-upload :with-credentials="true" class="upload-demo" :action="uploadPicUrl" :limit="1"
+              :file-list="ruleForm.pictureUrl" list-type="picture" :on-remove="onRemove" :on-success="onSuccess">
               <div>
                 <el-button class="updataImg">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip updataImgTip">
@@ -122,36 +65,18 @@
             <el-input type="text" v-model="ruleForm.position"></el-input>
           </el-form-item>
           <el-form-item label="广告展示时间:" prop="data">
-            <el-date-picker
-              :clearable="false"
-              v-model="ruleForm.startDate"
-              :prefix-icon="'iconfont icon-rili'"
-              type="date"
-              class="dateBox dataCon"
-              :picker-options="pickerOptionsStart"
-              placeholder="开始日期"
-              @change="startTime()"
-            >
+            <el-date-picker :clearable="false" v-model="ruleForm.startDate" :prefix-icon="'iconfont icon-rili'"
+              type="date" class="dateBox dataCon" :picker-options="pickerOptionsStart" placeholder="开始日期"
+              @change="startTime()">
             </el-date-picker>
             <span class="separatorText">至</span>
-            <el-date-picker
-              :clearable="false"
-              v-model="ruleForm.endDate"
-              :prefix-icon="'iconfont icon-rili'"
-              type="date"
-              class="dateBox dataCon"
-              :picker-options="pickerOptionsEnd"
-              placeholder="结束日期"
-              @change="endTime()"
-            >
+            <el-date-picker :clearable="false" v-model="ruleForm.endDate" :prefix-icon="'iconfont icon-rili'"
+              type="date" class="dateBox dataCon" :picker-options="pickerOptionsEnd" placeholder="结束日期"
+              @change="endTime()">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="　广告描述:" prop="describe">
-            <el-input
-              v-model="ruleForm.describe"
-              type="textarea"
-              :autosize="{ minRows: 4, maxRows: 6 }"
-            ></el-input>
+            <el-input v-model="ruleForm.describe" type="textarea" :autosize="{ minRows: 4, maxRows: 6 }"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -162,11 +87,7 @@
         </div>
       </div>
     </el-dialog>
-    <Tips
-      :isDialog="isDialog"
-      @onClose="isDialog = false"
-      @onConfirm="onConfirm"
-    ></Tips>
+    <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
   </div>
 </template>
 <script>

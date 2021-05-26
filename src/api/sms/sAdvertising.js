@@ -75,7 +75,7 @@ export default class sAdvertising extends BaseApi {
      * 更新展示时间
      * @returns 
      */
-     static async updateShowTime(time) {
+    static async updateShowTime(time) {
         const url = baseUrl + `/sAdvertising/updateShowTime/` + time;
         const data = await this.$get(url);
         return data;
@@ -85,7 +85,7 @@ export default class sAdvertising extends BaseApi {
      * 查询展示广告详情
      * @returns 
      */
-    static async getShowAdv(){
+    static async getShowAdv() {
         const url = baseUrl + `/sAdvertising/getShowAdv`;
         const data = await this.$get(url);
         return data;
@@ -95,7 +95,7 @@ export default class sAdvertising extends BaseApi {
      * 查询轮播时间最大值
      * @returns 
      */
-     static async getMaxShowTime(){
+    static async getMaxShowTime() {
         const url = baseUrl + `/sAdvertising/getMaxShowTime`;
         const data = await this.$get(url);
         return data;
