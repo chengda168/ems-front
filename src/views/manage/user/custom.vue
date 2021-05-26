@@ -1,26 +1,15 @@
 <template>
   <div class="siemensLayoutCon">
     <div class="siemensLayoutSearchBox" :class="{ collspaseForm: collapse }">
-      <el-form
-        :inline="true"
-        :model="params"
-        class="siemensLayoutSearchBoxForm flexBetween"
-      >
+      <el-form :inline="true" :model="params" class="siemensLayoutSearchBoxForm flexBetween">
         <el-form-item label="客户名称：" class="treeFormItem">
-          <el-input
-            v-model="params.customerName"
-            placeholder="请输入客户名称"
-          ></el-input>
+          <el-input v-model="params.customerName" placeholder="请输入客户名称"></el-input>
         </el-form-item>
         <el-form-item label="联系人：" class="treeFormItem">
-          <el-input
-            v-model="params.contactUserName"
-            placeholder="请输入联系人"
-          ></el-input>
+          <el-input v-model="params.contactUserName" placeholder="请输入联系人"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="fullBtn" @click="getTableData"
-            ><i class="iconfont icon-sousuo"></i>查询
+          <el-button type="primary" class="fullBtn" @click="getTableData"><i class="iconfont icon-sousuo"></i>查询
           </el-button>
         </el-form-item>
       </el-form>
@@ -29,32 +18,17 @@
       <div class="siemensLayoutResultTitle flexBetween">
         <span>查询结果</span>
         <div class="flexCenter">
-          <el-button type="primary" class="fullBtn" @click="onAdd"
-            ><i class="iconfont icon-xinjian"></i>新建</el-button
-          >
-          <el-button type="primary" class="fullBtn" @click="isDialog = true"
-            ><i class="iconfont icon-shanchu"></i>删除
+          <el-button type="primary" class="fullBtn" @click="onAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
+          <el-button type="primary" class="fullBtn" @click="isDialog = true"><i class="iconfont icon-shanchu"></i>删除
           </el-button>
         </div>
       </div>
       <div class="siemensLayoutResultCon">
-        <el-table
-          border
-          stripe
-          :key="index"
-          :data="tableData"
-          height="100%"
-          style="width: 100%"
-          @selection-change="handleSelectionChange"
-        >
+        <el-table border stripe :key="index" :data="tableData" height="100%" style="width: 100%"
+          @selection-change="handleSelectionChange">
           <el-table-column align="center" type="selection" :width="width">
           </el-table-column>
-          <el-table-column
-            label="序号"
-            align="center"
-            type="index"
-            :width="width"
-          >
+          <el-table-column label="序号" align="center" type="index" :width="width">
           </el-table-column>
           <el-table-column align="center" prop="parentName" label="上级单位">
           </el-table-column>
@@ -64,23 +38,11 @@
           </el-table-column>
           <el-table-column align="center" prop="contactUserName" label="联系人">
           </el-table-column>
-          <el-table-column
-            align="center"
-            prop="contactUserMobile"
-            label="手机号码"
-          >
+          <el-table-column align="center" prop="contactUserMobile" label="手机号码">
           </el-table-column>
-          <el-table-column
-            align="center"
-            prop="contactUserEmail"
-            label="电子邮箱"
-          >
+          <el-table-column align="center" prop="contactUserEmail" label="电子邮箱">
           </el-table-column>
-          <el-table-column
-            align="center"
-            prop="operationsName"
-            label="所属运维单位"
-          >
+          <el-table-column align="center" prop="operationsName" label="所属运维单位">
           </el-table-column>
           <el-table-column align="center" prop="h" label="所属地址">
             <template slot-scope="scope">
@@ -91,62 +53,25 @@
           <el-table-column align="center" label="操 作">
             <template slot-scope="scope">
               <div class="tableOper">
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  content="编辑"
-                  placement="top"
-                >
-                  <i
-                    class="iconfont icon-bianji"
-                    @click="onEdit(scope.row, scope.$index)"
-                  ></i>
+                <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                  <i class="iconfont icon-bianji" @click="onEdit(scope.row, scope.$index)"></i>
                 </el-tooltip>
               </div>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <Page
-        :total="totalElements"
-        :pageSize="pageSize"
-        :currentPage="currentPage"
-        @onPageChange="onPageChange"
-      ></Page>
+      <Page :total="totalElements" :pageSize="pageSize" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
     </div>
-    <el-dialog
-      :title="title"
-      :show-close="false"
-      top="0"
-      :visible.sync="dialogVisible"
-      @close="$resetForm('ruleForm')"
-    >
-      <div
-        class="close iconfont icon-guanbi"
-        @click="dialogVisible = false"
-      ></div>
+    <el-dialog :title="title" :show-close="false" top="0" :visible.sync="dialogVisible" @close="$resetForm('ruleForm')">
+      <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
       <div class="dialogdiv">
-        <el-form
-          :model="ruleForm"
-          label-position="left"
-          :rules="rules"
-          ref="ruleForm"
-          class="registerForm"
-          :label-width="labelWidth"
-        >
+        <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
+          :label-width="labelWidth">
           <el-form-item label="上级单位:" prop="id">
-            <el-select
-              v-model="ruleForm.parentId"
-              placeholder=""
-              popper-class="dialogSelect"
-            >
+            <el-select v-model="ruleForm.parentId" placeholder="" popper-class="dialogSelect">
               <el-option :value="null" label="无上级单位"></el-option>
-              <el-option
-                v-for="item in customList"
-                :key="item.id"
-                :label="item.customerName"
-                :value="item.id"
-              >
+              <el-option v-for="item in customList" :key="item.id" :label="item.customerName" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -155,6 +80,9 @@
           </el-form-item>
           <el-form-item label="园区编号:" prop="customerCode">
             <el-input v-model="ruleForm.customerCode"></el-input>
+          </el-form-item>
+          <el-form-item label="园区描述:" prop="customerDesc">
+            <el-input type="text" v-model="ruleForm.customerDesc"></el-input>
           </el-form-item>
           <el-form-item label="联系   人:" prop="contactUserName">
             <el-input v-model="ruleForm.contactUserName"></el-input>
@@ -165,68 +93,47 @@
           <el-form-item label="电子邮箱:" prop="contactUserEmail">
             <el-input v-model="ruleForm.contactUserEmail"></el-input>
           </el-form-item>
-          <el-form-item label="运维单位:" prop="operationsId">
-            <el-select
-              v-model="ruleForm.operationsId"
-              placeholder=""
-              popper-class="dialogSelect"
-            >
-              <el-option
-                v-for="item in operationList"
-                :key="item.id"
-                :label="item.unitName"
-                :value="item.id"
-              >
+          <el-form-item label="运维单位:" prop="operatorOrgId">
+            <el-select v-model="ruleForm.operatorOrgId" placeholder="" popper-class="dialogSelect">
+              <el-option v-for="item in operationList" :key="item.id" :label="item.operatorOrgName" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="园区地址:" prop="demo">
             <div class="SelectYihang1">
-              <el-select
-                v-model="ruleForm.provinceCode"
-                placeholder=""
-                popper-class="dialogSelect"
-                class="SelectYihang"
-              >
-                <el-option
-                  v-for="item in provinceList"
-                  :key="item.id"
-                  :label="item.dicInfo"
-                  :value="item.dicCode"
-                >
+              <el-select v-model="ruleForm.provinceCode" placeholder="" popper-class="dialogSelect"
+                class="SelectYihang">
+                <el-option v-for="item in provinceList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
                 </el-option>
               </el-select>
-              <el-select
-                v-model="ruleForm.cityCode"
-                placeholder=""
-                popper-class="dialogSelect "
-                class="SelectYihang"
-              >
-                <el-option
-                  v-for="item in cityList"
-                  :key="item.id"
-                  :label="item.dicInfo"
-                  :value="item.dicCode"
-                >
+              <el-select v-model="ruleForm.cityCode" placeholder="" popper-class="dialogSelect " class="SelectYihang">
+                <el-option v-for="item in cityList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
                 </el-option>
               </el-select>
-              <el-select
-                v-model="ruleForm.areaCode"
-                placeholder=""
-                popper-class="dialogSelect "
-                class="SelectYihang"
-              >
-                <el-option
-                  v-for="item in areaList"
-                  :key="item.id"
-                  :label="item.dicInfo"
-                  :value="item.dicCode"
-                >
+              <el-select v-model="ruleForm.areaCode" placeholder="" popper-class="dialogSelect " class="SelectYihang">
+                <el-option v-for="item in areaList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
                 </el-option>
               </el-select>
             </div>
 
             <el-input v-model="ruleForm.address"></el-input>
+          </el-form-item>
+          <el-form-item label="版本:" prop="versionCode">
+            <el-select v-model="ruleForm.versionCode" placeholder="" popper-class="dialogSelect">
+              <el-option v-for="item in versionSelectData" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="客户图片:" prop="pictureUrl">
+            <el-upload :with-credentials="true" class="upload-demo" :action="uploadPicUrl" :limit="1"
+              :file-list="ruleForm.pictureUrl" list-type="picture" :on-remove="onRemove" :on-success="onSuccess">
+              <div>
+                <el-button class="updataImg">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip updataImgTip">
+                  图片尺寸789dpi*348dpi
+                </div>
+              </div>
+            </el-upload>
           </el-form-item>
         </el-form>
       </div>
@@ -237,11 +144,7 @@
         </div>
       </div>
     </el-dialog>
-    <Tips
-      :isDialog="isDialog"
-      @onClose="isDialog = false"
-      @onConfirm="onConfirm"
-    ></Tips>
+    <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
   </div>
 </template>
 <script>
@@ -263,6 +166,7 @@ export default {
   },
   data() {
     return {
+      uploadPicUrl: this.GLOBAL.uploadPicUrl,
       isDialog: false,
       index: 0,
       title: "新建客户信息",
@@ -272,10 +176,11 @@ export default {
         parentId: null,
         customerName: "",
         customerCode: "",
+        customerDesc: "",
         contactUserName: "",
         contactUserMobile: "",
         contactUserEmail: "",
-        operationsId: "",
+        operatorOrgId: null,
         provinceCode: null,
         cityCode: null,
         areaCode: null,
@@ -283,6 +188,8 @@ export default {
         provinceName: "",
         cityName: "",
         areaName: "",
+        versionCode: null,
+        pictureUrl: [],
       },
       rules: {
         customerName: [
@@ -329,6 +236,9 @@ export default {
       provinceList: [],
       cityList: [],
       areaList: [],
+      /* 下拉框数据 */
+      // 1、版本下拉框
+      versionSelectData: [],
     };
   },
   watch: {
@@ -410,6 +320,15 @@ export default {
       this.$copyBean(row, this.ruleForm);
       this.dialogVisible = true;
     },
+    onSuccess(response, file, fileList) {
+      this.ruleForm.pictureUrl = fileList;
+      this.ruleForm.pictureId = fileList[0].response.data[0].id;
+      this.$refs.ruleForm.validateField("pictureUrl");
+    },
+    onRemove(file, fileList) {
+      this.ruleForm.pictureUrl = fileList;
+      this.$refs.ruleForm.validateField("pictureUrl");
+    },
     async submitForm(formName) {
       let valid = await this.$refs[formName].validate();
       let res = null;
@@ -423,9 +342,10 @@ export default {
           message: res.msg,
           type: res.code == 200 ? "success" : "error",
         });
-
-        this.dialogVisible = false;
-        this.getTableData();
+        if (res.code == 200) {
+          this.dialogVisible = false;
+          this.getTableData();
+        }
       } else {
         return false;
       }
@@ -485,6 +405,11 @@ export default {
         this.labelWidth = "68px";
       }
     },
+    // 查询版本下拉框数据
+    async getVersionSelectData() {
+      let res = await SDic.list({ dicType: "version" });
+      this.versionSelectData = res.data;
+    },
   },
   mounted() {
     let self = this;
@@ -496,6 +421,7 @@ export default {
     this.getAllCustomer();
     this.getPCA();
     this.getOperationUnit();
+    this.getVersionSelectData();
   },
 };
 </script>

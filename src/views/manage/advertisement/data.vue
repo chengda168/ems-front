@@ -4,136 +4,65 @@
       <div class="swiperBox">
         <div class="swiperBoxContain">
           <ul class="swiperWrapper" ref="swiperBox" :style="styleObj">
-            <li
-              class="swiperSlide"
-              :class="{ swiperSlideActive: dicType == item.dicType }"
-              v-for="item in dicTypeList"
-              :key="item.dicType"
-              @click="onChange(item.dicType)"
-            >
-              <el-tooltip
-                effect="dark"
-                :content="item.dicInfo"
-                placement="top"
-                :disabled="item.length <= 6"
-              >
+            <li class="swiperSlide" :class="{ swiperSlideActive: dicType == item.dicType }" v-for="item in dicTypeList"
+              :key="item.dicType" @click="onChange(item.dicType)">
+              <el-tooltip effect="dark" :content="item.dicInfo" placement="top" :disabled="item.length <= 6">
                 <div>{{ item.dicInfo }}</div>
               </el-tooltip>
             </li>
           </ul>
         </div>
         <template v-if="isShowArrow">
-          <el-button
-            type="primary"
-            class="swiperBtn swiperPrevBtn flexCenter"
-            :disabled="btnPrevDisabled"
-            @click="onPrev"
-            ><i class="iconfont icon-youjiantou"></i
-          ></el-button>
-          <el-button
-            type="primary"
-            class="swiperBtn swiperNextBtn flexCenter"
-            :disabled="btnNextDisabled"
-            @click="onNext"
-            ><i class="iconfont icon-youjiantou"></i
-          ></el-button>
+          <el-button type="primary" class="swiperBtn swiperPrevBtn flexCenter" :disabled="btnPrevDisabled"
+            @click="onPrev"><i class="iconfont icon-youjiantou"></i></el-button>
+          <el-button type="primary" class="swiperBtn swiperNextBtn flexCenter" :disabled="btnNextDisabled"
+            @click="onNext"><i class="iconfont icon-youjiantou"></i></el-button>
         </template>
       </div>
       <div class="dataConBox">
         <div class="siemensLayoutSearchBox flexStartBetween">
-          <el-form
-            :inline="true"
-            class="siemensLayoutSearchBoxForm flexBetween"
-          >
+          <el-form :inline="true" class="siemensLayoutSearchBoxForm flexBetween">
             <el-form-item label="字段名称：">
-              <el-input
-                v-model="dicInfo"
-                placeholder="请输入字段名称"
-              ></el-input>
+              <el-input v-model="dicInfo" placeholder="请输入字段名称"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSearch"
-                ><i class="iconfont icon-sousuo"></i>查询</el-button
-              >
+              <el-button type="primary" @click="onSearch"><i class="iconfont icon-sousuo"></i>查询</el-button>
             </el-form-item>
           </el-form>
           <div class="flexCenter">
-            <el-button type="primary" @click="onAdd"
-              ><i class="iconfont icon-xinjian"></i>新建</el-button
-            >
-            <el-button type="primary" @click="isDialog = true"
-              ><i class="iconfont icon-shanchu"></i>删除</el-button
-            >
+            <el-button type="primary" @click="onAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
+            <el-button type="primary" @click="isDialog = true"><i class="iconfont icon-shanchu"></i>删除</el-button>
           </div>
         </div>
         <div class="siemensLayoutResultCon">
-          <el-table
-            border
-            stripe
-            :key="index"
-            :data="tableData"
-            height="100%"
-            style="width: 100%"
-            @selection-change="handleSelectionChange"
-          >
+          <el-table border stripe :key="index" :data="tableData" height="100%" style="width: 100%"
+            @selection-change="handleSelectionChange">
             <el-table-column align="center" type="selection" :width="width">
             </el-table-column>
-            <el-table-column
-              label="序号"
-              align="center"
-              type="index"
-              :width="width"
-            >
+            <el-table-column label="序号" align="center" type="index" :width="width">
             </el-table-column>
             <el-table-column align="center" prop="dicInfo" label="字段名称">
             </el-table-column>
             <el-table-column align="center" :width="operWidth" label="操 作">
               <template slot-scope="scope">
                 <div class="tableOper">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    content="编辑"
-                    placement="top"
-                  >
-                    <i
-                      class="iconfont icon-bianji"
-                      @click="onEdit(scope.row)"
-                    ></i>
+                  <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                    <i class="iconfont icon-bianji" @click="onEdit(scope.row)"></i>
                   </el-tooltip>
                 </div>
               </template>
             </el-table-column>
           </el-table>
         </div>
-        <Page
-          :total="totalElements"
-          :pageSize="pageSize"
-          :currentPage="currentPage"
-          @onPageChange="onPageChange"
-        ></Page>
+        <Page :total="totalElements" :pageSize="pageSize" :currentPage="currentPage" @onPageChange="onPageChange">
+        </Page>
       </div>
     </div>
-    <el-dialog
-      top="0"
-      class="dialogWrap"
-      :title="title"
-      :show-close="false"
-      @close="$resetForm('ruleForm')"
-      :visible.sync="dialogVisible"
-    >
-      <div
-        class="close iconfont icon-guanbi"
-        @click="dialogVisible = false"
-      ></div>
+    <el-dialog top="0" class="dialogWrap" :title="title" :show-close="false" @close="$resetForm('ruleForm')"
+      :visible.sync="dialogVisible">
+      <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
       <div class="dialogdiv">
-        <el-form
-          :model="ruleForm"
-          label-position="left"
-          :rules="rules"
-          ref="ruleForm"
-          :label-width="labelWidth"
-        >
+        <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" :label-width="labelWidth">
           <el-form-item label="字段名称:" prop="dicInfo">
             <el-input type="text" v-model="ruleForm.dicInfo"></el-input>
           </el-form-item>
@@ -146,11 +75,7 @@
         </div>
       </div>
     </el-dialog>
-    <Tips
-      :isDialog="isDialog"
-      @onClose="isDialog = false"
-      @onConfirm="onConfirm"
-    ></Tips>
+    <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
   </div>
 </template>
 
