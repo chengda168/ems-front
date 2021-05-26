@@ -6,8 +6,8 @@
                     <ul class="swiperWrapper" ref="swiperBox" :style="styleObj">
                         <li class="swiperSlide" :class="{'swiperSlideActive' : dicType == item.dicType}" 
                         v-for="(item) in dicTypeList" :key="item.dicType" @click="onChange(item.dicType)">
-                            <el-tooltip effect="dark" :content="item.dicInfo" placement="top" :disabled="item.length<=6">
-                                <div>{{item.dicInfo}}</div>
+                            <el-tooltip effect="dark" :content="item.dicTypeName" placement="top" :disabled="item.length<=6">
+                                <div>{{item.dicTypeName}}</div>
                             </el-tooltip>
                         </li>
                     </ul>
@@ -144,7 +144,7 @@ let self;
             content:[
             ],
             tableData: [],
-            tableSeelctVal:[],
+            tableSelectVal:[],
             params: {}
         }
     },
@@ -184,8 +184,8 @@ let self;
             this.getTableData();
         },
         onPageChange(val){
-            console.log(val)
             this.currentPage = val;
+            this.getTableData();
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
@@ -195,7 +195,7 @@ let self;
                 this.api_Update()
                }else{
                 // 新建
-                    this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
+                this.api_Add()
                }
                this.getTableData()
               this.dialogVisible = false
@@ -208,7 +208,6 @@ let self;
         onAdd(){
             this.isEdit = false;
             this.title = '新建字段'
-            this.ruleForm.id=this.tableData.length;
             this.dialogVisible = true;
         },
         onEdit(row){
@@ -216,19 +215,19 @@ let self;
             this.isEdit = true;
             this.title = '编辑字段'
             this.dialogVisible = true
-            console.log(this.ruleForm)
         },
         handleSelectionChange(val){
-            this.tableSeelctVal = val;
+            this.tableSelectVal = val;
         },
         onConfirm(){
-            this.tableSeelctVal.map((item) => {
-                this.tableData.map((child, index) => {
-                if (item.id == child.id) {
-                    this.tableData.splice(index, 1);
-                }
-                });
+            this.tableSelectIds = [];
+            this.tableSelectVal.map((item) => {
+                this.tableSelectIds.push(item.id)
             });
+            if(this.tableSelectIds.length == 0) {
+                return false;
+            }
+            this.api_DeleteBatch();
             this.isDialog = false;
             this.getTableData()
         },
@@ -263,6 +262,7 @@ let self;
             let res = await SDic.getTypes();
             this.dicTypeList = res.data;
             this.dicType = res.data[0].dicType;
+            this.dicTypeName = res.data[0].dicTypeName;
             this.getTableData()
         },
         async api_Detail(id) {
@@ -278,9 +278,23 @@ let self;
             this.entity.dicType = this.dicType;
             this.entity.dicInfo = this.ruleForm.dicInfo;
             SDic.update(this.entity).then(res => {
-                self.api_Page()
+                self.getTableData()
             });
         },
+        api_Add() {
+            this.entity = {};
+            this.entity.dicType = this.dicType;
+            this.entity.dicTypeName = this.dicTypeName;
+            this.entity.dicInfo = this.ruleForm.dicInfo;
+            SDic.add(this.entity).then(res => {
+                self.getTableData()
+            });
+        },
+        api_DeleteBatch() {
+            SDic.deleteBatch(this.tableSelectIds).then(res => {
+            self.getTableData()
+      });
+    },
     },
     watch:{
         collapse(newVal){
@@ -304,7 +318,7 @@ let self;
         }
     },
     mounted(){
-        let self = this;
+        self = this;
         this.resizeFn();
         window.addEventListener("resize", function () {
             self.resizeFn();
