@@ -69,8 +69,8 @@
   </div>
 </template>
 <script>
-import JsEncrypt from "jsencrypt";
 import Login from "@/api/ums/login.js";
+import EncryptUtil from "@/utils/encryptUtil";
 import SAdertising from "@/api/sms/sAdvertising.js";
 
 export default {
@@ -156,13 +156,11 @@ export default {
       this.errordis = 0;
       let valid = await this.$refs[params].validate();
       if (valid) {
-        let res = await Login.getPublicKey(this.params.name);
-        let publicKey = res.data;
-        let jse = new JsEncrypt();
-        jse.setPublicKey(
-          `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
+        let encrypted = await EncryptUtil.encrypt(
+          this.params.name,
+          this.params.password
         );
-        let encrypted = jse.encrypt(this.params.password);
+
         let loginRes = await Login.doLogin({
           account: this.params.name,
           password: encrypted,

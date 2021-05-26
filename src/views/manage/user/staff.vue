@@ -160,7 +160,7 @@ import Tips from "@/components/ftd-tips/tips";
 import SUser from "@/api/ums/sUser";
 import SCustomer from "@/api/sms/sCustomer.js";
 import Login from "@/api/ums/login.js";
-import JsEncrypt from "jsencrypt";
+import EncryptUtil from "@/utils/encryptUtil";
 import SDic from "@/api/sms/sDic.js";
 import Rules from "@/utils/rule.js";
 export default {
@@ -309,14 +309,11 @@ export default {
     async submitForm1(formName) {
       let valid = await this.$refs[formName].validate();
       if (valid) {
-        let pk = await Login.getPublicKey(this.ruleForm1.mobile);
-        let publicKey = pk.data;
-        let jse = new JsEncrypt();
-        jse.setPublicKey(
-          `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
+        let encrypted = await EncryptUtil.encrypt(
+          this.ruleForm1.mobile,
+          this.ruleForm1.password
         );
-        let encrypted = jse.encrypt(this.ruleForm1.password);
-        let res = await Login.resetPwd(this.ruleForm1.mobile, encrypted, 1);
+        let res = await Login.resetPwd(this.ruleForm1.mobile, encrypted);
         this.$message({
           message: res.msg,
           type: res.code == 200 ? "success" : "error",

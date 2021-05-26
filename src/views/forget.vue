@@ -64,7 +64,7 @@
 </template>
 <script>
 import Login from "@/api/ums/login.js";
-import JsEncrypt from "jsencrypt";
+import EncryptUtil from "@/utils/encryptUtil";
 
 export default {
   computed: {
@@ -210,13 +210,10 @@ export default {
       });
     },
     async commit() {
-      let pu = await Login.getPublicKey(this.ruleForm.account);
-      let publicKey = pu.data;
-      let jse = new JsEncrypt();
-      jse.setPublicKey(
-        `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
+      let encrypted = await EncryptUtil.encrypt(
+        this.ruleForm.account,
+        this.ruleForm.passwordTwo
       );
-      let encrypted = jse.encrypt(this.ruleForm.passwordTwo);
       let pwdRes = await Login.updateNewPwd(this.ruleForm.account, encrypted);
       if (pwdRes.code == 200) {
         this.activeIndex++;

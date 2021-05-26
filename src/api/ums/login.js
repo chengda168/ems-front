@@ -8,12 +8,12 @@ export default class login extends BaseApi {
      * @param {*} account （邮箱，手机号）
      * @returns 
      */
-    static async getPublicKey(account){
+    static async getPublicKey(account) {
         const url = baseUrl + `/login/getPublicKey`;
         let param = {
-            "account" : account
+            "account": account
         }
-        const data = await this.$get(url,param);
+        const data = await this.$get(url, param);
         return data;
     }
     /**
@@ -21,12 +21,12 @@ export default class login extends BaseApi {
      * @param {*} userJson （{account,password}）
      * @returns 
      */
-    static async doLogin(userJson){
+    static async doLogin(userJson) {
         const url = baseUrl + `/login/doLogin`;
         // let param = {
         //     "userJson" : userJson
         // }
-        const data = await this.$post(url,userJson);
+        const data = await this.$post(url, userJson);
         return data;
     }
 
@@ -34,7 +34,7 @@ export default class login extends BaseApi {
      * 获取验证码
      * @returns 
      */
-    static async verifyCode(){
+    static async verifyCode() {
         const url = baseUrl + `/verifyCode/generate`;
         const data = await this.$get(url);
         return data;
@@ -46,12 +46,12 @@ export default class login extends BaseApi {
      * @param {*} number 
      * @returns 
      */
-    static async sendVerificationCode(number){
+    static async sendVerificationCode(number) {
         const url = baseUrl + `/users/sendVerificationCode`;
         let param = {
-            "number" : number
+            "number": number
         }
-        const data = await this.$get(url,param);
+        const data = await this.$get(url, param);
         return data;
 
     }
@@ -62,13 +62,13 @@ export default class login extends BaseApi {
      * @param {*验证码} vcode 
      * @returns 
      */
-    static async verificationCode(account,code){
+    static async verificationCode(account, code) {
         const url = baseUrl + `/users/verificationCode`;
         let param = {
-            "number" : account,
-            "vCode":code
+            "number": account,
+            "vCode": code
         }
-        const data = await this.$get(url,param);
+        const data = await this.$get(url, param);
         return data;
     }
 
@@ -78,13 +78,13 @@ export default class login extends BaseApi {
      * @param {*} passwordTwo 
      * @returns 
      */
-    static async updateNewPwd(account,encrypted){
+    static async updateNewPwd(account, encrypted) {
         const url = baseUrl + `/users/updateNewPwd`;
         let param = {
-            "number" : account,
-            "newPwd":encrypted
+            "number": account,
+            "newPwd": encrypted
         }
-        const data = await this.$post(url,param);
+        const data = await this.$post(url, param);
         return data;
     }
     /**
@@ -93,14 +93,14 @@ export default class login extends BaseApi {
      * @param {*} passwordTwo 
      * @returns 
      */
-    static async updatePwd(account,encryptedold,encryptednew){
+    static async updatePwd(account, encryptedold, encryptednew) {
         const url = baseUrl + `/users/updatePwd`;
         let param = {
-            "oldPwd" : encryptedold,
-            "newPwd":encryptednew,
-            "account":account
+            "oldPwd": encryptedold,
+            "newPwd": encryptednew,
+            "account": account
         }
-        const data = await this.$post(url,param);
+        const data = await this.$post(url, param);
         return data;
     }
 
@@ -110,15 +110,13 @@ export default class login extends BaseApi {
      * @param {*} passwordTwo 
      * @returns 
      */
-     static async resetPwd(account,encryptedNewPwd,type){
+    static async resetPwd(account, encryptedNewPwd) {
         const url = baseUrl + `/login/resetPwd`;
         let param = {
-            "account" : account,
-            "newPwd" : encryptedNewPwd,
-            "type":type
+            "account": account,
+            "newPwd": encryptedNewPwd
         }
-        console.log(param)
-        const data = await this.$post(url,param);
+        const data = await this.$post(url, param);
         return data;
     }
 
@@ -126,11 +124,11 @@ export default class login extends BaseApi {
      * 登出
      * @returns 
      */
-    static async logout(){
+    static async logout() {
         const url = baseUrl + `/login/logout`;
         const data = await this.$get(url);
         return data;
     }
 
- 
+
 }
