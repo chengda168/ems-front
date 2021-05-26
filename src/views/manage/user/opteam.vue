@@ -406,13 +406,10 @@ export default {
       }
       if (document.body.clientWidth > 1664) {
         this.labelWidth = "88px";
+        this.labelWidth1 = "96px";
       } else {
         this.labelWidth = "68px";
-      }
-      if (document.body.clientWidth > 1664) {
-        this.labelWidth = "96px";
-      } else {
-        this.labelWidth = "68px";
+        this.labelWidth1 = "68px";
       }
     },
     async getTableData() {

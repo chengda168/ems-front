@@ -374,7 +374,7 @@ export default {
   }
   .siemensForgetCon {
     width: 100%;
-    height: 534px;
+    height: 500px;
     padding: 0 20px;
     text-align: center;
     background-color: #ffffff;
