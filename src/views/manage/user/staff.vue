@@ -1,6 +1,6 @@
 <template>
   <div class="siemensLayoutCon">
-    <div class="siemensLayoutSearchBox" :class="{'collspaseForm' : collapse}">
+    <div class="siemensLayoutSearchBox" :class="{ collspaseForm: collapse }">
       <el-form :inline="true" :model="params" class="siemensLayoutSearchBoxForm flexBetween">
         <el-form-item label="用户名：" class="treeFormItem">
           <el-input v-model="params.userName" placeholder="请输入用户名"></el-input>
@@ -21,8 +21,8 @@
       <div class="siemensLayoutResultTitle flexBetween">
         <span>查询结果</span>
         <div class="flexCenter">
-          <el-button type="primary" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
-          <el-button type="primary" @click="isDialog=true"><i class="iconfont icon-shanchu"></i>删除</el-button>
+          <el-button type="primary" @click="onAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
+          <el-button type="primary" @click="isDialog = true"><i class="iconfont icon-shanchu"></i>删除</el-button>
           <el-button type="primary" @click="suspendBatch"><i class="iconfont icon-zanting"></i>暂停</el-button>
           <el-button type="primary" @click="recoverBatch"><i class="iconfont icon-runtongyiyaoyihuifu_biyan"></i>恢复
           </el-button>
@@ -53,17 +53,14 @@
             <template slot-scope="scope">
               <div class="tableOper">
                 <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                  <i class="iconfont icon-bianji" @click="onEdit(scope.row,scope.$index)"></i>
+                  <i class="iconfont icon-bianji" @click="onEdit(scope.row, scope.$index)"></i>
                 </el-tooltip>
 
                 <el-tooltip class="item" effect="dark" content="重置密码" placement="top">
                   <i class="iconfont icon-ic_keyboard" @click="onPassword(scope.row.mobile)"></i>
                 </el-tooltip>
-
               </div>
-
             </template>
-
           </el-table-column>
         </el-table>
       </div>
@@ -72,7 +69,6 @@
     <el-dialog top="0" :title="title" :show-close="false" :visible.sync="dialogVisible" @close="$resetForm('ruleForm')">
       <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
       <div class="dialogdiv">
-
         <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
           :label-width="labelWidth">
           <el-form-item label="用户编码:" prop="userCode">
@@ -95,7 +91,6 @@
             </el-select>
           </el-form-item>
           <el-form-item label="所属角色:" prop="userRole">
-
             <el-select v-model="ruleForm.userRole" placeholder="" popper-class="dialogSelect">
               <el-option v-for="item in roleList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
               </el-option>
@@ -116,10 +111,10 @@
               <el-tree :key="index" :data="data" node-key="id" default-expand-all>
                 <span class="customTreeNode" slot-scope="{ node, data }">
                   <span>{{ data.name }}</span>
-                  <span v-if="data.children.length == 0" style="display: flex;">
-                    <el-checkbox v-model="browsePerm[data.id]" @change="(val)=>handleWatchChange(val,data,node)">浏览
+                  <span v-if="data.children.length == 0" style="display: flex">
+                    <el-checkbox v-model="browsePerm[data.id]" @change="(val) => handleWatchChange(val, data, node)">浏览
                     </el-checkbox>
-                    <el-checkbox v-model="editPerm[data.id]" @change="(val)=>handleEditChange(val,data)">编辑
+                    <el-checkbox v-model="editPerm[data.id]" @change="(val) => handleEditChange(val, data)">编辑
                     </el-checkbox>
                   </span>
                 </span>
@@ -130,7 +125,9 @@
       </div>
       <div class="dialogbuttom">
         <div @click="dialogVisible = false">取 消</div>
-        <div class="dialogbuttomclose" @click="submitForm('ruleForm')">保 存</div>
+        <div class="dialogbuttomclose" @click="submitForm('ruleForm')">
+          保 存
+        </div>
       </div>
     </el-dialog>
     <el-dialog top="0" title="重置密码" :show-close="false" :visible.sync="dialogPassword">
@@ -138,7 +135,6 @@
       <div class="dialogdiv">
         <el-form :model="ruleForm1" label-position="left" :rules="rules1" ref="ruleForm1" class="registerForm"
           :label-width="labelWidth1">
-
           <el-form-item label="新密码:" prop="password">
             <el-input type="password" v-model="ruleForm1.password"></el-input>
           </el-form-item>
@@ -149,7 +145,9 @@
       </div>
       <div class="dialogbuttom">
         <div @click="resetForm1()">取 消</div>
-        <div class="dialogbuttomclose" @click="submitForm1('ruleForm1')">保 存</div>
+        <div class="dialogbuttomclose" @click="submitForm1('ruleForm1')">
+          保 存
+        </div>
       </div>
     </el-dialog>
     <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
@@ -243,9 +241,19 @@ export default {
           { required: true, message: "请输入用户姓名", trigger: "blur" },
         ],
         mobile: [
-          {  required: true, validator: Rules.FormValidate.Form().validatePhone, trigger: "blur" },
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validatePhone,
+            trigger: "blur",
+          },
         ],
-        email: [{ required: true, validator: Rules.FormValidate.Form().validateEmail, trigger: "blur" }],
+        email: [
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validateEmail,
+            trigger: "blur",
+          },
+        ],
         //   customerId: [
         //    { required: true, message: '请选择所属园区', trigger: 'change' },
         //   ],
@@ -260,7 +268,7 @@ export default {
       width: 50,
       data: [],
       tableData: [],
-      tableSeelctVal: [],
+      tableSelectVal: [],
       isSelectWatch: false,
       isSelectEdiot: false,
       browsePerm: {},
@@ -314,7 +322,10 @@ export default {
           type: res.code == 200 ? "success" : "error",
         });
 
-        this.dialogPassword = false;
+        if (res.code == 200) {
+          this.dialogVisible = false;
+          this.getTableData();
+        }
       } else {
         console.log("error submit!!");
         return false;
@@ -325,7 +336,7 @@ export default {
       this.customList = res.data;
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSelectVal.map((item) => item.id);
       let res = await SUser.deleteBatch(ids);
       this.$message({
         message: res.msg,
@@ -334,7 +345,7 @@ export default {
       this.getTableData();
       this.isDialog = false;
     },
-    OnAdd() {
+    onAdd() {
       this.permInit();
       this.isEdit = false;
       this.title = "新建人员信息";
@@ -414,7 +425,7 @@ export default {
     handleAllWatch(val) {
       for (let i = 0; i < this.allCheckBoxIds.length; i++) {
         this.$set(this.browsePerm, this.allCheckBoxIds[i], val);
-        if(!this.menuPerm[this.allCheckBoxIds[i]]) {
+        if (!this.menuPerm[this.allCheckBoxIds[i]]) {
           this.menuPerm[this.allCheckBoxIds[i]] = new Object();
         }
         this.menuPerm[this.allCheckBoxIds[i]]["browsePermissions"] = val;
@@ -423,9 +434,9 @@ export default {
     handleAllEdit(val) {
       for (let i = 0; i < this.allCheckBoxIds.length; i++) {
         this.$set(this.editPerm, this.allCheckBoxIds[i], val);
-        if(!this.menuPerm[this.allCheckBoxIds[i]]) {
+        if (!this.menuPerm[this.allCheckBoxIds[i]]) {
           this.menuPerm[this.allCheckBoxIds[i]] = new Object();
-        } 
+        }
         this.menuPerm[this.allCheckBoxIds[i]]["editPermissions"] = val;
       }
     },
@@ -445,7 +456,7 @@ export default {
     },
 
     handleSelectionChange(val) {
-      this.tableSeelctVal = val;
+      this.tableSelectVal = val;
     },
     async getTableData() {
       let params = this.$deepCopy(this.params);
@@ -490,7 +501,7 @@ export default {
       }
     },
     async suspendBatch() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSelectVal.map((item) => item.id);
       if (ids.length > 0) {
         let res = await SUser.suspendBatch(ids);
         this.$message({
@@ -507,7 +518,7 @@ export default {
       this.roleList = res.data;
     },
     async recoverBatch() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSelectVal.map((item) => item.id);
       if (ids.length > 0) {
         let res = await SUser.recoverBatch(ids);
         this.$message({

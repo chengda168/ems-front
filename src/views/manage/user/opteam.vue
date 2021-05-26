@@ -1,6 +1,6 @@
 <template>
   <div class="siemensLayoutCon">
-    <div class="siemensLayoutSearchBox" :class="{'collspaseForm' : collapse}">
+    <div class="siemensLayoutSearchBox" :class="{ collspaseForm: collapse }">
       <el-form :inline="true" :model="params" class="siemensLayoutSearchBoxForm flexBetween">
         <el-form-item label="姓名：" class="treeFormItem">
           <el-input v-model="params.userName" placeholder="请输入姓名"></el-input>
@@ -48,9 +48,9 @@
           </el-table-column>
           <el-table-column align="center" prop="email" label="电子邮箱">
           </el-table-column>
-          <el-table-column align="center" prop="operatorOrgName" label="单 位">
+          <el-table-column align="center" prop="operatorOrgName" label="运维单位">
           </el-table-column>
-          <el-table-column align="center" prop="operatorCustomerName" label="运维客户">
+          <el-table-column align="center" prop="operatorCustomerName" label="运维园区">
           </el-table-column>
           <el-table-column align="center" prop="status" :formatter="$typeFormatter" label="状 态">
           </el-table-column>
@@ -64,7 +64,6 @@
                 <el-tooltip class="item" effect="dark" content="重置密码" placement="top">
                   <i class="iconfont icon-ic_keyboard" @click="onPassword(scope.row.mobile)"></i>
                 </el-tooltip>
-
               </div>
             </template>
           </el-table-column>
@@ -75,10 +74,8 @@
     <el-dialog top="0" :title="title" :show-close="false" :visible.sync="dialogVisible" @close="$resetForm('ruleForm')">
       <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
       <div class="dialogdiv">
-
         <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
           :label-width="labelWidth">
-
           <el-form-item label="姓　　名:" prop="userName">
             <el-input type="text" v-model="ruleForm.userName"></el-input>
           </el-form-item>
@@ -103,7 +100,8 @@
           </el-form-item>
           <el-form-item label="园区名称:" prop="operatorCustomerId">
             <el-select v-model="ruleForm.operatorCustomerId" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in sOperatorCustomerSelectData" :key="item.id" :label="item.customerName" :value="item.id">
+              <el-option v-for="item in sOperatorCustomerSelectData" :key="item.id" :label="item.customerName"
+                :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -117,7 +115,9 @@
       </div>
       <div class="dialogbuttom">
         <div @click="dialogVisible = false">取 消</div>
-        <div class="dialogbuttomclose" @click="submitForm('ruleForm')">保 存</div>
+        <div class="dialogbuttomclose" @click="submitForm('ruleForm')">
+          保 存
+        </div>
       </div>
     </el-dialog>
     <el-dialog top="0" title="重置密码" :show-close="false" :visible.sync="dialogPassword" @close="$resetForm('ruleForm1')">
@@ -125,7 +125,6 @@
       <div class="dialogdiv">
         <el-form :model="ruleForm1" label-position="left" :rules="rules1" ref="ruleForm1" class="registerForm"
           :label-width="labelWidth1">
-
           <el-form-item label="新密码:" prop="password">
             <el-input type="password" v-model="ruleForm1.password"></el-input>
           </el-form-item>
@@ -136,7 +135,9 @@
       </div>
       <div class="dialogbuttom">
         <div @click="resetForm1()">取 消</div>
-        <div class="dialogbuttomclose" @click="submitForm1('ruleForm1')">保 存</div>
+        <div class="dialogbuttomclose" @click="submitForm1('ruleForm1')">
+          保 存
+        </div>
       </div>
     </el-dialog>
     <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
@@ -146,13 +147,16 @@
 import { mapGetters } from "vuex";
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
-import SOperationUnit from "@/api/sms/sOperationUnit";
-import SCustomer from "@/api/sms/sCustomer";
-import Login from "@/api/ums/login.js";
-import JsEncrypt from "jsencrypt";
+// util
 import Rules from "@/utils/rule.js";
+import EncryptUtil from "@/utils/encryptUtil";
+// api
 import SUser from "@/api/ums/sUser";
 import SRole from "@/api/ums/sRole";
+import Login from "@/api/ums/login.js";
+import SOperationUnit from "@/api/sms/sOperationUnit";
+import SCustomer from "@/api/sms/sCustomer";
+
 export default {
   computed: {
     ...mapGetters({
@@ -164,25 +168,6 @@ export default {
     Tips,
   },
   data() {
-    var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.ruleForm1.password1 !== "") {
-          this.$refs.ruleForm1.validateField("password1");
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm1.password) {
-        callback(new Error("新密码不一致，请重新输入!"));
-      } else {
-        callback();
-      }
-    };
     return {
       dialogPassword: false,
       isDialog: false,
@@ -192,7 +177,6 @@ export default {
       labelWidth: "88px",
       labelWidth1: "96px",
       isEdit: false,
-      editIndex: null,
       /* 下拉框数据 */
       // 1、单位下拉框
       sOperatorOrgSelectData: [],
@@ -203,13 +187,13 @@ export default {
       /* 下拉框参数 */
       // 1、角色下拉框参数
       roleParam: {
-        roleType: 2,
+        roleType: this.Constant.roleType.ROLE_TYPE_2,
       },
       /* dialog表格（新增、修改） */
       // 1、表格数据
       ruleForm: {
         id: null,
-        userType: "2", // 2：运维团队用户
+        userType: this.Constant.userType.USER_TYPE_2, // 2：运维团队用户
         userName: "",
         userRoleId: "",
         mobile: "",
@@ -218,7 +202,7 @@ export default {
         operatorOrgName: "",
         operatorCustomerId: "",
         operatorCustomerName: "",
-        status: "1",
+        status: this.Constant.status.STATUS_1,
       },
       // 2、表格校验
       rules: {
@@ -256,14 +240,28 @@ export default {
       },
       rules1: {
         password: [
-          { required: true, validator: validatePass, trigger: "blur" },
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validatePsd,
+            trigger: "blur",
+          },
         ],
         password1: [
-          { required: true, validator: validatePass2, trigger: "blur" },
+          {
+            required: true,
+            validator: (rule, value, callback) =>
+              Rules.FormValidate.Form().validateAgainPsd(
+                rule,
+                value,
+                callback,
+                this.ruleForm1.password
+              ),
+            trigger: "blur",
+          },
         ],
       },
       params: {
-        userType: "2", // 2：运维团队用户
+        userType: this.Constant.userType.USER_TYPE_2, // 2：运维团队用户
         userName: "",
         operatorOrgName: "",
         mobile: "",
@@ -274,7 +272,7 @@ export default {
       pageSize: 15,
       width: 50,
       tableData: [],
-      tableSeelctVal: [],
+      tableSelectVal: [],
     };
   },
   watch: {
@@ -350,9 +348,10 @@ export default {
           message: res.msg,
           type: res.code == 200 ? "success" : "error",
         });
-
-        this.dialogVisible = false;
-        this.getTableData();
+        if (res.code == 200) {
+          this.dialogVisible = false;
+          this.getTableData();
+        }
       } else {
         return false;
       }
@@ -360,26 +359,25 @@ export default {
     async submitForm1(formName) {
       let valid = await this.$refs[formName].validate();
       if (valid) {
-        let pk = await Login.getPublicKey(this.ruleForm1.mobile);
-        let publicKey = pk.data;
-        let jse = new JsEncrypt();
-        jse.setPublicKey(
-          `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
+        let encrypted = await EncryptUtil.encrypt(
+          this.ruleForm1.mobile,
+          this.ruleForm1.password
         );
-        let encrypted = jse.encrypt(this.ruleForm1.password);
         let res = await Login.resetPwd(this.ruleForm1.mobile, encrypted, 2);
         this.$message({
           message: res.msg,
           type: res.code == 200 ? "success" : "error",
         });
-
-        this.dialogPassword = false;
+        if (res.code == 200) {
+          this.dialogVisible = false;
+          this.getTableData();
+        }
       } else {
         return false;
       }
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map((item) => item.id) || [];
+      let ids = this.tableSelectVal.map((item) => item.id) || [];
       if (ids.length == 0) {
         return false;
       }
@@ -392,7 +390,7 @@ export default {
       this.isDialog = false;
     },
     handleSelectionChange(val) {
-      this.tableSeelctVal = val;
+      this.tableSelectVal = val;
     },
     resizeFn() {
       if (!this.collapse) {
@@ -410,13 +408,10 @@ export default {
       }
       if (document.body.clientWidth > 1664) {
         this.labelWidth = "88px";
+        this.labelWidth1 = "96px";
       } else {
         this.labelWidth = "68px";
-      }
-      if (document.body.clientWidth > 1664) {
-        this.labelWidth = "96px";
-      } else {
-        this.labelWidth = "68px";
+        this.labelWidth1 = "68px";
       }
     },
     async getTableData() {
@@ -428,7 +423,7 @@ export default {
       this.totalElements = res.data.totalElements;
     },
     async suspendBatch() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSelectVal.map((item) => item.id);
       if (ids.length > 0) {
         let res = await SUser.suspendBatch(ids);
         this.$message({
@@ -439,7 +434,7 @@ export default {
       }
     },
     async recoverBatch() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSelectVal.map((item) => item.id);
       if (ids.length > 0) {
         let res = await SUser.recoverBatch(ids);
         this.$message({

@@ -18,7 +18,7 @@
       <div class="siemensLayoutResultTitle flexBetween">
         <span>查询结果</span>
         <div class="flexCenter">
-          <el-button type="primary" class="fullBtn" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
+          <el-button type="primary" class="fullBtn" @click="onAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
           <el-button type="primary" class="fullBtn" @click="isDialog = true"><i class="iconfont icon-shanchu"></i>删除
           </el-button>
         </div>
@@ -81,6 +81,9 @@
           <el-form-item label="园区编号:" prop="customerCode">
             <el-input v-model="ruleForm.customerCode"></el-input>
           </el-form-item>
+          <el-form-item label="园区描述:" prop="customerDesc">
+            <el-input type="text" v-model="ruleForm.customerDesc"></el-input>
+          </el-form-item>
           <el-form-item label="联系   人:" prop="contactUserName">
             <el-input v-model="ruleForm.contactUserName"></el-input>
           </el-form-item>
@@ -90,9 +93,9 @@
           <el-form-item label="电子邮箱:" prop="contactUserEmail">
             <el-input v-model="ruleForm.contactUserEmail"></el-input>
           </el-form-item>
-          <el-form-item label="运维单位:" prop="operationsId">
-            <el-select v-model="ruleForm.operationsId" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in operationList" :key="item.id" :label="item.unitName" :value="item.id">
+          <el-form-item label="运维单位:" prop="operatorOrgId">
+            <el-select v-model="ruleForm.operatorOrgId" placeholder="" popper-class="dialogSelect">
+              <el-option v-for="item in operationList" :key="item.id" :label="item.operatorOrgName" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -114,6 +117,23 @@
             </div>
 
             <el-input v-model="ruleForm.address"></el-input>
+          </el-form-item>
+          <el-form-item label="版本:" prop="versionCode">
+            <el-select v-model="ruleForm.versionCode" placeholder="" popper-class="dialogSelect">
+              <el-option v-for="item in versionSelectData" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="客户图片:" prop="pictureUrl">
+            <el-upload :with-credentials="true" class="upload-demo" :action="uploadPicUrl" :limit="1"
+              :file-list="ruleForm.pictureUrl" list-type="picture" :on-remove="onRemove" :on-success="onSuccess">
+              <div>
+                <el-button class="updataImg">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip updataImgTip">
+                  图片尺寸789dpi*348dpi
+                </div>
+              </div>
+            </el-upload>
           </el-form-item>
         </el-form>
       </div>
@@ -146,6 +166,7 @@ export default {
   },
   data() {
     return {
+      uploadPicUrl: this.GLOBAL.uploadPicUrl,
       isDialog: false,
       index: 0,
       title: "新建客户信息",
@@ -155,10 +176,11 @@ export default {
         parentId: null,
         customerName: "",
         customerCode: "",
+        customerDesc: "",
         contactUserName: "",
         contactUserMobile: "",
         contactUserEmail: "",
-        operationsId: "",
+        operatorOrgId: null,
         provinceCode: null,
         cityCode: null,
         areaCode: null,
@@ -166,6 +188,8 @@ export default {
         provinceName: "",
         cityName: "",
         areaName: "",
+        versionCode: null,
+        pictureUrl: [],
       },
       rules: {
         customerName: [
@@ -205,13 +229,16 @@ export default {
       labelWidth: "84px",
       tableData: [],
       isEdit: false,
-      tableSeelctVal: [],
+      tableSelectVal: [],
       operationList: [],
       customList: [],
       roleList: [],
       provinceList: [],
       cityList: [],
       areaList: [],
+      /* 下拉框数据 */
+      // 1、版本下拉框
+      versionSelectData: [],
     };
   },
   watch: {
@@ -282,7 +309,7 @@ export default {
       this.currentPage = val;
       this.getTableData();
     },
-    async OnAdd() {
+    async onAdd() {
       this.isEdit = false;
       this.title = "新建客户信息";
       this.dialogVisible = true;
@@ -292,6 +319,15 @@ export default {
       this.title = "编辑客户信息";
       this.$copyBean(row, this.ruleForm);
       this.dialogVisible = true;
+    },
+    onSuccess(response, file, fileList) {
+      this.ruleForm.pictureUrl = fileList;
+      this.ruleForm.pictureId = fileList[0].response.data[0].id;
+      this.$refs.ruleForm.validateField("pictureUrl");
+    },
+    onRemove(file, fileList) {
+      this.ruleForm.pictureUrl = fileList;
+      this.$refs.ruleForm.validateField("pictureUrl");
     },
     async submitForm(formName) {
       let valid = await this.$refs[formName].validate();
@@ -306,15 +342,16 @@ export default {
           message: res.msg,
           type: res.code == 200 ? "success" : "error",
         });
-
-        this.dialogVisible = false;
-        this.getTableData();
+        if (res.code == 200) {
+          this.dialogVisible = false;
+          this.getTableData();
+        }
       } else {
         return false;
       }
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSelectVal.map((item) => item.id);
       if (ids.length > 0) {
         let res = await SCustomer.deleteBatch(ids);
         this.$message({
@@ -326,7 +363,7 @@ export default {
       }
     },
     handleSelectionChange(val) {
-      this.tableSeelctVal = val;
+      this.tableSelectVal = val;
     },
     async getTableData() {
       let params = this.$deepCopy(this.params);
@@ -368,6 +405,11 @@ export default {
         this.labelWidth = "68px";
       }
     },
+    // 查询版本下拉框数据
+    async getVersionSelectData() {
+      let res = await SDic.list({ dicType: "version" });
+      this.versionSelectData = res.data;
+    },
   },
   mounted() {
     let self = this;
@@ -379,6 +421,7 @@ export default {
     this.getAllCustomer();
     this.getPCA();
     this.getOperationUnit();
+    this.getVersionSelectData();
   },
 };
 </script>
