@@ -1,6 +1,6 @@
 <template>
   <div class="siemensLayoutCon">
-    <div class="siemensLayoutSearchBox" :class="{'collspaseForm' : collapse}">
+    <div class="siemensLayoutSearchBox" :class="{ collspaseForm: collapse }">
       <el-form :inline="true" :model="params" class="siemensLayoutSearchBoxForm flexBetween">
         <el-form-item label="姓名：" class="treeFormItem">
           <el-input v-model="params.userName" placeholder="请输入姓名"></el-input>
@@ -64,7 +64,6 @@
                 <el-tooltip class="item" effect="dark" content="重置密码" placement="top">
                   <i class="iconfont icon-ic_keyboard" @click="onPassword(scope.row.mobile)"></i>
                 </el-tooltip>
-
               </div>
             </template>
           </el-table-column>
@@ -75,10 +74,8 @@
     <el-dialog top="0" :title="title" :show-close="false" :visible.sync="dialogVisible" @close="$resetForm('ruleForm')">
       <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
       <div class="dialogdiv">
-
         <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
           :label-width="labelWidth">
-
           <el-form-item label="姓　　名:" prop="userName">
             <el-input type="text" v-model="ruleForm.userName"></el-input>
           </el-form-item>
@@ -118,7 +115,9 @@
       </div>
       <div class="dialogbuttom">
         <div @click="dialogVisible = false">取 消</div>
-        <div class="dialogbuttomclose" @click="submitForm('ruleForm')">保 存</div>
+        <div class="dialogbuttomclose" @click="submitForm('ruleForm')">
+          保 存
+        </div>
       </div>
     </el-dialog>
     <el-dialog top="0" title="重置密码" :show-close="false" :visible.sync="dialogPassword" @close="$resetForm('ruleForm1')">
@@ -126,7 +125,6 @@
       <div class="dialogdiv">
         <el-form :model="ruleForm1" label-position="left" :rules="rules1" ref="ruleForm1" class="registerForm"
           :label-width="labelWidth1">
-
           <el-form-item label="新密码:" prop="password">
             <el-input type="password" v-model="ruleForm1.password"></el-input>
           </el-form-item>
@@ -137,7 +135,9 @@
       </div>
       <div class="dialogbuttom">
         <div @click="resetForm1()">取 消</div>
-        <div class="dialogbuttomclose" @click="submitForm1('ruleForm1')">保 存</div>
+        <div class="dialogbuttomclose" @click="submitForm1('ruleForm1')">
+          保 存
+        </div>
       </div>
     </el-dialog>
     <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
@@ -238,7 +238,11 @@ export default {
       },
       rules1: {
         password: [
-          { required: true, validator: Rules.FormValidate.Form().validatePsd, trigger: "blur" },
+          {
+            required: true,
+            validator: Rules.FormValidate.Form().validatePsd,
+            trigger: "blur",
+          },
         ],
         password1: [
           {
@@ -266,7 +270,7 @@ export default {
       pageSize: 15,
       width: 50,
       tableData: [],
-      tableSeelctVal: [],
+      tableSelectVal: [],
     };
   },
   watch: {
@@ -371,7 +375,7 @@ export default {
       }
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map((item) => item.id) || [];
+      let ids = this.tableSelectVal.map((item) => item.id) || [];
       if (ids.length == 0) {
         return false;
       }
@@ -384,7 +388,7 @@ export default {
       this.isDialog = false;
     },
     handleSelectionChange(val) {
-      this.tableSeelctVal = val;
+      this.tableSelectVal = val;
     },
     resizeFn() {
       if (!this.collapse) {
@@ -420,7 +424,7 @@ export default {
       this.totalElements = res.data.totalElements;
     },
     async suspendBatch() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSelectVal.map((item) => item.id);
       if (ids.length > 0) {
         let res = await SUser.suspendBatch(ids);
         this.$message({
@@ -431,7 +435,7 @@ export default {
       }
     },
     async recoverBatch() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSelectVal.map((item) => item.id);
       if (ids.length > 0) {
         let res = await SUser.recoverBatch(ids);
         this.$message({

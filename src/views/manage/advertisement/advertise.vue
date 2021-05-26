@@ -6,56 +6,115 @@
         <div class="flexCenter">
           <div class="adverDiv">
             <div class="adver">秒</div>
-            <el-input v-model="inputShowTime" class="adverInput" @blur="updateShowTime($event)"></el-input>
+            <el-input
+              v-model="inputShowTime"
+              class="adverInput"
+              @blur="updateShowTime($event)"
+            ></el-input>
             <div class="adver">轮播时间</div>
           </div>
-          <el-button type="primary" class="fullBtn" @click="onAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
-          <el-button type="primary" class="fullBtn" @click="isDialog=true"><i class="iconfont icon-shanchu"></i>删除
+          <el-button type="primary" class="fullBtn" @click="onAdd"
+            ><i class="iconfont icon-xinjian"></i>新建</el-button
+          >
+          <el-button type="primary" class="fullBtn" @click="isDialog = true"
+            ><i class="iconfont icon-shanchu"></i>删除
           </el-button>
         </div>
       </div>
       <div class="siemensLayoutResultCon">
-        <el-table border stripe :key="index" :data="tableData" height="100%" style="width: 100%"
-          @selection-change="handleSelectionChange">
+        <el-table
+          border
+          stripe
+          :key="index"
+          :data="tableData"
+          height="100%"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+        >
           <el-table-column align="center" type="selection" :width="width">
           </el-table-column>
-          <el-table-column label="序号" align="center" type="index" :width="width">
+          <el-table-column
+            label="序号"
+            align="center"
+            type="index"
+            :width="width"
+          >
           </el-table-column>
           <el-table-column align="center" prop="pictureUrl" label="广告图片">
             <template slot-scope="scope">
-              <img class="davertiseimg" :src="scope.row.pictureUrl">
+              <img class="davertiseimg" :src="scope.row.pictureUrl" />
             </template>
           </el-table-column>
           <el-table-column align="center" prop="position" label="广告轮转位置">
           </el-table-column>
           <el-table-column align="center" prop="limitTime" label="广告展示时限">
           </el-table-column>
-          <el-table-column align="center" prop="describe" label="广告描述" :width="width1">
+          <el-table-column
+            align="center"
+            prop="describe"
+            label="广告描述"
+            :width="width1"
+          >
           </el-table-column>
           <el-table-column align="center" label="操 作">
             <template slot-scope="scope">
               <div class="tableOper">
-                <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                  <i class="iconfont icon-bianji" @click="onEdit(scope.row,scope.$index)"></i>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="编辑"
+                  placement="top"
+                >
+                  <i
+                    class="iconfont icon-bianji"
+                    @click="onEdit(scope.row, scope.$index)"
+                  ></i>
                 </el-tooltip>
               </div>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <Page :total="totalElements" :pageSize="15" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
+      <Page
+        :total="totalElements"
+        :pageSize="15"
+        :currentPage="currentPage"
+        @onPageChange="onPageChange"
+      ></Page>
     </div>
-    <el-dialog top="0" :title="title" :show-close="false" :visible.sync="dialogVisible" :before-close="beforeClose">
+    <el-dialog
+      top="0"
+      :title="title"
+      :show-close="false"
+      :visible.sync="dialogVisible"
+      :before-close="beforeClose"
+    >
       <div class="close iconfont icon-guanbi" @click="beforeClose()"></div>
       <div class="dialogdiv">
-        <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
-          :label-width="labelWidth">
+        <el-form
+          :model="ruleForm"
+          label-position="left"
+          :rules="rules"
+          ref="ruleForm"
+          class="registerForm"
+          :label-width="labelWidth"
+        >
           <el-form-item label="广告图片:" prop="pictureUrl">
-            <el-upload :with-credentials="true" class="upload-demo" :action="uploadPicUrl" :limit="1"
-              :file-list="ruleForm.pictureUrl" list-type="picture" :on-remove="onRemove" :on-success="onSuccess">
+            <el-upload
+              :with-credentials="true"
+              class="upload-demo"
+              :action="uploadPicUrl"
+              :limit="1"
+              :file-list="ruleForm.pictureUrl"
+              list-type="picture"
+              :on-remove="onRemove"
+              :on-success="onSuccess"
+            >
               <div>
                 <el-button class="updataImg">点击上传</el-button>
-                <div slot="tip" class="el-upload__tip updataImgTip">图片尺寸789dpi*348dpi</div>
+                <div slot="tip" class="el-upload__tip updataImgTip">
+                  图片尺寸789dpi*348dpi
+                </div>
               </div>
             </el-upload>
           </el-form-item>
@@ -63,27 +122,51 @@
             <el-input type="text" v-model="ruleForm.position"></el-input>
           </el-form-item>
           <el-form-item label="广告展示时间:" prop="data">
-            <el-date-picker :clearable="false" v-model="ruleForm.startDate" :prefix-icon="'iconfont icon-rili'"
-              type="date" class="dateBox dataCon" :picker-options="pickerOptionsStart" placeholder="开始日期"
-              @change="startTime()">
+            <el-date-picker
+              :clearable="false"
+              v-model="ruleForm.startDate"
+              :prefix-icon="'iconfont icon-rili'"
+              type="date"
+              class="dateBox dataCon"
+              :picker-options="pickerOptionsStart"
+              placeholder="开始日期"
+              @change="startTime()"
+            >
             </el-date-picker>
             <span class="separatorText">至</span>
-            <el-date-picker :clearable="false" v-model="ruleForm.endDate" :prefix-icon="'iconfont icon-rili'"
-              type="date" class="dateBox dataCon" :picker-options="pickerOptionsEnd" placeholder="结束日期"
-              @change="endTime()">
+            <el-date-picker
+              :clearable="false"
+              v-model="ruleForm.endDate"
+              :prefix-icon="'iconfont icon-rili'"
+              type="date"
+              class="dateBox dataCon"
+              :picker-options="pickerOptionsEnd"
+              placeholder="结束日期"
+              @change="endTime()"
+            >
             </el-date-picker>
           </el-form-item>
           <el-form-item label="　广告描述:" prop="describe">
-            <el-input v-model="ruleForm.describe" type="textarea" :autosize="{ minRows: 4, maxRows: 6}"></el-input>
+            <el-input
+              v-model="ruleForm.describe"
+              type="textarea"
+              :autosize="{ minRows: 4, maxRows: 6 }"
+            ></el-input>
           </el-form-item>
         </el-form>
       </div>
       <div class="dialogbuttom">
         <div @click="resetForm('ruleForm')">取 消</div>
-        <div class="dialogbuttomclose" @click="submitForm('ruleForm')">保 存</div>
+        <div class="dialogbuttomclose" @click="submitForm('ruleForm')">
+          保 存
+        </div>
       </div>
     </el-dialog>
-    <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
+    <Tips
+      :isDialog="isDialog"
+      @onClose="isDialog = false"
+      @onConfirm="onConfirm"
+    ></Tips>
   </div>
 </template>
 <script>
@@ -197,7 +280,7 @@ export default {
       width1: 540,
       tableData: [],
       tableSelectVal: [],
-      tableSelectIds: []
+      tableSelectIds: [],
     };
   },
   watch: {
@@ -265,10 +348,9 @@ export default {
     async submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-
           if (this.isEdit) {
             // 编辑
-            this.api_Update()
+            this.api_Update();
           } else {
             // 新建
             this.api_Add();
@@ -299,9 +381,9 @@ export default {
     onConfirm() {
       this.tableSelectIds = [];
       this.tableSelectVal.map((item) => {
-        this.tableSelectIds.push(item.id)
+        this.tableSelectIds.push(item.id);
       });
-      if(this.tableSelectIds.length == 0) {
+      if (this.tableSelectIds.length == 0) {
         return false;
       }
       this.api_DeleteBatch();
@@ -336,7 +418,7 @@ export default {
         this.labelWidth = "95px";
       }
     },
-    updateShowTime(event){
+    updateShowTime(event) {
       let updateTime = event.target.value;
       this.api_UpdateShowTime(updateTime);
     },
@@ -355,8 +437,8 @@ export default {
       this.entity.showTime = this.inputShowTime;
       this.entity.position = this.ruleForm.position;
       this.entity.describe = this.ruleForm.describe;
-      SAdvertising.add(this.entity).then(res => {
-        self.api_Page()
+      SAdvertising.add(this.entity).then((res) => {
+        self.api_Page();
       });
     },
     api_Update() {
@@ -364,30 +446,29 @@ export default {
       this.entity.id = this.ruleForm.id;
       this.entity.startDate = this.ruleForm.startDate;
       this.entity.endDate = this.ruleForm.endDate;
-      if (this.ruleForm.pictureId == null){
-        let url = this.ruleForm.pictureUrl[0].url
-        this.entity.pictureId = url.substring(url.lastIndexOf('/') + 1);
-      } else
-      {
-        this.entity.pictureId = this.ruleForm.pictureId 
+      if (this.ruleForm.pictureId == null) {
+        let url = this.ruleForm.pictureUrl[0].url;
+        this.entity.pictureId = url.substring(url.lastIndexOf("/") + 1);
+      } else {
+        this.entity.pictureId = this.ruleForm.pictureId;
       }
       this.entity.describe = this.ruleForm.describe;
       this.entity.position = this.ruleForm.position;
-      this.entity.showTime = this.inputShowTime
-      SAdvertising.update(this.entity).then(res => {
-        self.api_Page()
+      this.entity.showTime = this.inputShowTime;
+      SAdvertising.update(this.entity).then((res) => {
+        self.api_Page();
       });
     },
     api_DeleteBatch() {
-      SAdvertising.deleteBatch(this.tableSelectIds).then(res => {
-        self.api_Page()
+      SAdvertising.deleteBatch(this.tableSelectIds).then((res) => {
+        self.api_Page();
       });
     },
     async api_Detail(id) {
       let res = await SAdvertising.detail(id);
       this.ruleForm.data = [];
       this.ruleForm.data[0] = res.data.startDate;
-      this.ruleForm.data[1] =  res.data.endDate;
+      this.ruleForm.data[1] = res.data.endDate;
       this.ruleForm.startDate = res.data.startDate;
       this.ruleForm.endDate = res.data.endDate;
       this.ruleForm.id = res.data.id;
@@ -396,21 +477,21 @@ export default {
       this.ruleForm.position = res.data.position;
     },
     async api_UpdateShowTime(time) {
-      SAdvertising.updateShowTime(time).then(res => {
-        self.api_Page()
+      SAdvertising.updateShowTime(time).then((res) => {
+        self.api_Page();
       });
     },
     async api_GetMaxShowTime() {
       let res = await SAdvertising.getMaxShowTime();
       if (res.data == null) {
-        this.inputShowTime = 10
-      } else{
-        this.inputShowTime = res.data
+        this.inputShowTime = 10;
+      } else {
+        this.inputShowTime = res.data;
       }
     },
   },
   mounted() {
-    self = this
+    self = this;
     this.resizeFn();
     window.addEventListener("resize", function () {
       self.resizeFn();
