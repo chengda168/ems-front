@@ -1,15 +1,26 @@
 <template>
   <div class="siemensLayoutCon">
-    <div class="siemensLayoutSearchBox" :class="{'collspaseForm' : collapse}">
-      <el-form :inline="true" :model="params" class="siemensLayoutSearchBoxForm flexBetween">
+    <div class="siemensLayoutSearchBox" :class="{ collspaseForm: collapse }">
+      <el-form
+        :inline="true"
+        :model="params"
+        class="siemensLayoutSearchBoxForm flexBetween"
+      >
         <el-form-item label="运维单位名称：" class="treeFormItem">
-          <el-input v-model="params.operatorOrgName" placeholder="请输入客户名称"></el-input>
+          <el-input
+            v-model="params.operatorOrgName"
+            placeholder="请输入客户名称"
+          ></el-input>
         </el-form-item>
         <el-form-item label="联系人：" class="treeFormItem">
-          <el-input v-model="params.contactUserName" placeholder="请输入联系人"></el-input>
+          <el-input
+            v-model="params.contactUserName"
+            placeholder="请输入联系人"
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="fullBtn" @click="getTableData"><i class="iconfont icon-sousuo"></i>查询
+          <el-button type="primary" class="fullBtn" @click="getTableData"
+            ><i class="iconfont icon-sousuo"></i>查询
           </el-button>
         </el-form-item>
       </el-form>
@@ -18,50 +29,107 @@
       <div class="siemensLayoutResultTitle flexBetween">
         <span>查询结果</span>
         <div class="flexCenter">
-          <el-button type="primary" class="fullBtn" @click="onAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
-          <el-button type="primary" class="fullBtn" @click="isDialog = true"><i class="iconfont icon-shanchu"></i>删除
+          <el-button type="primary" class="fullBtn" @click="onAdd"
+            ><i class="iconfont icon-xinjian"></i>新建</el-button
+          >
+          <el-button type="primary" class="fullBtn" @click="isDialog = true"
+            ><i class="iconfont icon-shanchu"></i>删除
           </el-button>
         </div>
       </div>
       <div class="siemensLayoutResultCon">
-        <el-table border stripe :key="index" :data="tableData" height="100%" style="width: 100%"
-          @selection-change="handleSelectionChange">
+        <el-table
+          border
+          stripe
+          :key="index"
+          :data="tableData"
+          height="100%"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+        >
           <el-table-column align="center" type="selection" :width="width">
           </el-table-column>
-          <el-table-column label="序号" align="center" type="index" :width="width">
+          <el-table-column
+            label="序号"
+            align="center"
+            type="index"
+            :width="width"
+          >
           </el-table-column>
-          <el-table-column align="center" prop="operatorOrgName" label="运维单位名称">
+          <el-table-column
+            align="center"
+            prop="operatorOrgName"
+            label="运维单位名称"
+          >
           </el-table-column>
-          <el-table-column align="center" prop="operatorOrgCode" label="运维单位编号">
+          <el-table-column
+            align="center"
+            prop="operatorOrgCode"
+            label="运维单位编号"
+          >
           </el-table-column>
           <el-table-column align="center" prop="contactUserName" label="联系人">
           </el-table-column>
-          <el-table-column align="center" prop="contactUserMobile" label="手机号码">
+          <el-table-column
+            align="center"
+            prop="contactUserMobile"
+            label="手机号码"
+          >
           </el-table-column>
-          <el-table-column align="center" prop="contactUserEmail" label="电子邮箱">
+          <el-table-column
+            align="center"
+            prop="contactUserEmail"
+            label="电子邮箱"
+          >
           </el-table-column>
           <el-table-column align="center" prop="versionInfo" label="版本">
           </el-table-column>
           <el-table-column align="center" label="操 作">
             <template slot-scope="scope">
               <div class="tableOper">
-                <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                  <i class="iconfont icon-bianji" @click="onEdit(scope.row,scope.$index)"></i>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="编辑"
+                  placement="top"
+                >
+                  <i
+                    class="iconfont icon-bianji"
+                    @click="onEdit(scope.row, scope.$index)"
+                  ></i>
                 </el-tooltip>
-
               </div>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <Page :total="totalElements" :pageSize="pageSize" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
+      <Page
+        :total="totalElements"
+        :pageSize="pageSize"
+        :currentPage="currentPage"
+        @onPageChange="onPageChange"
+      ></Page>
     </div>
-    <el-dialog top="0" :title="title" :show-close="false" :visible.sync="dialogVisible" @close="$resetForm('ruleForm')">
-      <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
+    <el-dialog
+      top="0"
+      :title="title"
+      :show-close="false"
+      :visible.sync="dialogVisible"
+      @close="$resetForm('ruleForm')"
+    >
+      <div
+        class="close iconfont icon-guanbi"
+        @click="dialogVisible = false"
+      ></div>
       <div class="dialogdiv">
-
-        <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
-          :label-width="labelWidth">
+        <el-form
+          :model="ruleForm"
+          label-position="left"
+          :rules="rules"
+          ref="ruleForm"
+          class="registerForm"
+          :label-width="labelWidth"
+        >
           <el-form-item label="运维单位名称:" prop="operatorOrgName">
             <el-input type="text" v-model="ruleForm.operatorOrgName"></el-input>
           </el-form-item>
@@ -78,8 +146,17 @@
             <el-input v-model="ruleForm.contactUserEmail"></el-input>
           </el-form-item>
           <el-form-item label="版本:" prop="versionCode">
-            <el-select v-model="ruleForm.versionCode" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in versionSelect" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
+            <el-select
+              v-model="ruleForm.versionCode"
+              placeholder=""
+              popper-class="dialogSelect"
+            >
+              <el-option
+                v-for="item in versionSelect"
+                :key="item.id"
+                :label="item.dicInfo"
+                :value="item.dicCode"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -87,10 +164,16 @@
       </div>
       <div class="dialogbuttom">
         <div @click="dialogVisible = false">取 消</div>
-        <div class="dialogbuttomclose" @click="submitForm('ruleForm')">保 存</div>
+        <div class="dialogbuttomclose" @click="submitForm('ruleForm')">
+          保 存
+        </div>
       </div>
     </el-dialog>
-    <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
+    <Tips
+      :isDialog="isDialog"
+      @onClose="isDialog = false"
+      @onConfirm="onConfirm"
+    ></Tips>
   </div>
 </template>
 <script>
@@ -124,7 +207,7 @@ export default {
       roleList: [],
       isEdit: false,
       ruleForm: {
-        id : null,
+        id: null,
         versionCode: null,
         operatorOrgName: "",
         operatorOrgCode: null,
@@ -165,9 +248,9 @@ export default {
       pageSize: 15,
       width: 50,
       tableData: [],
-      tableSeelctVal: [],
+      tableSelectVal: [],
       // 版本下拉框
-      versionSelect: []
+      versionSelect: [],
     };
   },
   watch: {
@@ -229,7 +312,7 @@ export default {
       }
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map((item) => item.id) || [];
+      let ids = this.tableSelectVal.map((item) => item.id) || [];
       if (ids.length == 0) {
         return false;
       }
@@ -243,7 +326,7 @@ export default {
       this.isDialog = false;
     },
     handleSelectionChange(val) {
-      this.tableSeelctVal = val;
+      this.tableSelectVal = val;
     },
     resizeFn() {
       if (!this.collapse) {
@@ -275,7 +358,7 @@ export default {
     async getVersionSelect() {
       let res = await SDic.list({ dicType: "version" });
       this.versionSelect = res.data;
-    }
+    },
   },
   mounted() {
     let self = this;

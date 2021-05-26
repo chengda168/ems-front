@@ -1,15 +1,26 @@
 <template>
   <div class="siemensLayoutCon">
     <div class="siemensLayoutSearchBox" :class="{ collspaseForm: collapse }">
-      <el-form :inline="true" :model="params" class="siemensLayoutSearchBoxForm flexBetween">
+      <el-form
+        :inline="true"
+        :model="params"
+        class="siemensLayoutSearchBoxForm flexBetween"
+      >
         <el-form-item label="客户名称：" class="treeFormItem">
-          <el-input v-model="params.customerName" placeholder="请输入客户名称"></el-input>
+          <el-input
+            v-model="params.customerName"
+            placeholder="请输入客户名称"
+          ></el-input>
         </el-form-item>
         <el-form-item label="联系人：" class="treeFormItem">
-          <el-input v-model="params.contactUserName" placeholder="请输入联系人"></el-input>
+          <el-input
+            v-model="params.contactUserName"
+            placeholder="请输入联系人"
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="fullBtn" @click="getTableData"><i class="iconfont icon-sousuo"></i>查询
+          <el-button type="primary" class="fullBtn" @click="getTableData"
+            ><i class="iconfont icon-sousuo"></i>查询
           </el-button>
         </el-form-item>
       </el-form>
@@ -18,17 +29,32 @@
       <div class="siemensLayoutResultTitle flexBetween">
         <span>查询结果</span>
         <div class="flexCenter">
-          <el-button type="primary" class="fullBtn" @click="OnAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
-          <el-button type="primary" class="fullBtn" @click="isDialog = true"><i class="iconfont icon-shanchu"></i>删除
+          <el-button type="primary" class="fullBtn" @click="onAdd"
+            ><i class="iconfont icon-xinjian"></i>新建</el-button
+          >
+          <el-button type="primary" class="fullBtn" @click="isDialog = true"
+            ><i class="iconfont icon-shanchu"></i>删除
           </el-button>
         </div>
       </div>
       <div class="siemensLayoutResultCon">
-        <el-table border stripe :key="index" :data="tableData" height="100%" style="width: 100%"
-          @selection-change="handleSelectionChange">
+        <el-table
+          border
+          stripe
+          :key="index"
+          :data="tableData"
+          height="100%"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+        >
           <el-table-column align="center" type="selection" :width="width">
           </el-table-column>
-          <el-table-column label="序号" align="center" type="index" :width="width">
+          <el-table-column
+            label="序号"
+            align="center"
+            type="index"
+            :width="width"
+          >
           </el-table-column>
           <el-table-column align="center" prop="parentName" label="上级单位">
           </el-table-column>
@@ -38,11 +64,23 @@
           </el-table-column>
           <el-table-column align="center" prop="contactUserName" label="联系人">
           </el-table-column>
-          <el-table-column align="center" prop="contactUserMobile" label="手机号码">
+          <el-table-column
+            align="center"
+            prop="contactUserMobile"
+            label="手机号码"
+          >
           </el-table-column>
-          <el-table-column align="center" prop="contactUserEmail" label="电子邮箱">
+          <el-table-column
+            align="center"
+            prop="contactUserEmail"
+            label="电子邮箱"
+          >
           </el-table-column>
-          <el-table-column align="center" prop="operationsName" label="所属运维单位">
+          <el-table-column
+            align="center"
+            prop="operationsName"
+            label="所属运维单位"
+          >
           </el-table-column>
           <el-table-column align="center" prop="h" label="所属地址">
             <template slot-scope="scope">
@@ -53,25 +91,62 @@
           <el-table-column align="center" label="操 作">
             <template slot-scope="scope">
               <div class="tableOper">
-                <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                  <i class="iconfont icon-bianji" @click="onEdit(scope.row, scope.$index)"></i>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="编辑"
+                  placement="top"
+                >
+                  <i
+                    class="iconfont icon-bianji"
+                    @click="onEdit(scope.row, scope.$index)"
+                  ></i>
                 </el-tooltip>
               </div>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <Page :total="totalElements" :pageSize="pageSize" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
+      <Page
+        :total="totalElements"
+        :pageSize="pageSize"
+        :currentPage="currentPage"
+        @onPageChange="onPageChange"
+      ></Page>
     </div>
-    <el-dialog :title="title" :show-close="false" top="0" :visible.sync="dialogVisible" @close="$resetForm('ruleForm')">
-      <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
+    <el-dialog
+      :title="title"
+      :show-close="false"
+      top="0"
+      :visible.sync="dialogVisible"
+      @close="$resetForm('ruleForm')"
+    >
+      <div
+        class="close iconfont icon-guanbi"
+        @click="dialogVisible = false"
+      ></div>
       <div class="dialogdiv">
-        <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
-          :label-width="labelWidth">
+        <el-form
+          :model="ruleForm"
+          label-position="left"
+          :rules="rules"
+          ref="ruleForm"
+          class="registerForm"
+          :label-width="labelWidth"
+        >
           <el-form-item label="上级单位:" prop="id">
-            <el-select v-model="ruleForm.parentId" placeholder="" popper-class="dialogSelect">
+            <el-select
+              v-model="ruleForm.parentId"
+              placeholder=""
+              popper-class="dialogSelect"
+            >
               <el-option :value="null" label="无上级单位"></el-option>
-              <el-option v-for="item in customList" :key="item.id" :label="item.customerName" :value="item.id">
+              <el-option
+                v-for="item in customList"
+                :key="item.id"
+                :label="item.customerName"
+                :value="item.id"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -91,24 +166,62 @@
             <el-input v-model="ruleForm.contactUserEmail"></el-input>
           </el-form-item>
           <el-form-item label="运维单位:" prop="operationsId">
-            <el-select v-model="ruleForm.operationsId" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in operationList" :key="item.id" :label="item.unitName" :value="item.id">
+            <el-select
+              v-model="ruleForm.operationsId"
+              placeholder=""
+              popper-class="dialogSelect"
+            >
+              <el-option
+                v-for="item in operationList"
+                :key="item.id"
+                :label="item.unitName"
+                :value="item.id"
+              >
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="园区地址:" prop="demo">
             <div class="SelectYihang1">
-              <el-select v-model="ruleForm.provinceCode" placeholder="" popper-class="dialogSelect"
-                class="SelectYihang">
-                <el-option v-for="item in provinceList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
+              <el-select
+                v-model="ruleForm.provinceCode"
+                placeholder=""
+                popper-class="dialogSelect"
+                class="SelectYihang"
+              >
+                <el-option
+                  v-for="item in provinceList"
+                  :key="item.id"
+                  :label="item.dicInfo"
+                  :value="item.dicCode"
+                >
                 </el-option>
               </el-select>
-              <el-select v-model="ruleForm.cityCode" placeholder="" popper-class="dialogSelect " class="SelectYihang">
-                <el-option v-for="item in cityList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
+              <el-select
+                v-model="ruleForm.cityCode"
+                placeholder=""
+                popper-class="dialogSelect "
+                class="SelectYihang"
+              >
+                <el-option
+                  v-for="item in cityList"
+                  :key="item.id"
+                  :label="item.dicInfo"
+                  :value="item.dicCode"
+                >
                 </el-option>
               </el-select>
-              <el-select v-model="ruleForm.areaCode" placeholder="" popper-class="dialogSelect " class="SelectYihang">
-                <el-option v-for="item in areaList" :key="item.id" :label="item.dicInfo" :value="item.dicCode">
+              <el-select
+                v-model="ruleForm.areaCode"
+                placeholder=""
+                popper-class="dialogSelect "
+                class="SelectYihang"
+              >
+                <el-option
+                  v-for="item in areaList"
+                  :key="item.id"
+                  :label="item.dicInfo"
+                  :value="item.dicCode"
+                >
                 </el-option>
               </el-select>
             </div>
@@ -124,7 +237,11 @@
         </div>
       </div>
     </el-dialog>
-    <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
+    <Tips
+      :isDialog="isDialog"
+      @onClose="isDialog = false"
+      @onConfirm="onConfirm"
+    ></Tips>
   </div>
 </template>
 <script>
@@ -205,7 +322,7 @@ export default {
       labelWidth: "84px",
       tableData: [],
       isEdit: false,
-      tableSeelctVal: [],
+      tableSelectVal: [],
       operationList: [],
       customList: [],
       roleList: [],
@@ -282,7 +399,7 @@ export default {
       this.currentPage = val;
       this.getTableData();
     },
-    async OnAdd() {
+    async onAdd() {
       this.isEdit = false;
       this.title = "新建客户信息";
       this.dialogVisible = true;
@@ -314,7 +431,7 @@ export default {
       }
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSelectVal.map((item) => item.id);
       if (ids.length > 0) {
         let res = await SCustomer.deleteBatch(ids);
         this.$message({
@@ -326,7 +443,7 @@ export default {
       }
     },
     handleSelectionChange(val) {
-      this.tableSeelctVal = val;
+      this.tableSelectVal = val;
     },
     async getTableData() {
       let params = this.$deepCopy(this.params);

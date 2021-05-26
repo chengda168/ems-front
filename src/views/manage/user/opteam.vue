@@ -1,21 +1,38 @@
 <template>
   <div class="siemensLayoutCon">
-    <div class="siemensLayoutSearchBox" :class="{'collspaseForm' : collapse}">
-      <el-form :inline="true" :model="params" class="siemensLayoutSearchBoxForm flexBetween">
+    <div class="siemensLayoutSearchBox" :class="{ collspaseForm: collapse }">
+      <el-form
+        :inline="true"
+        :model="params"
+        class="siemensLayoutSearchBoxForm flexBetween"
+      >
         <el-form-item label="姓名：" class="treeFormItem">
-          <el-input v-model="params.userName" placeholder="请输入姓名"></el-input>
+          <el-input
+            v-model="params.userName"
+            placeholder="请输入姓名"
+          ></el-input>
         </el-form-item>
         <el-form-item label="单位：" class="treeFormItem">
-          <el-input v-model="params.operatorOrgName" placeholder="请输入单位"></el-input>
+          <el-input
+            v-model="params.operatorOrgName"
+            placeholder="请输入单位"
+          ></el-input>
         </el-form-item>
         <el-form-item label="手机号码：" class="treeFormItem">
-          <el-input v-model="params.mobile" placeholder="请输入手机号码"></el-input>
+          <el-input
+            v-model="params.mobile"
+            placeholder="请输入手机号码"
+          ></el-input>
         </el-form-item>
         <el-form-item label="电子邮箱：" class="treeFormItem">
-          <el-input v-model="params.email" placeholder="请输入电子邮箱"></el-input>
+          <el-input
+            v-model="params.email"
+            placeholder="请输入电子邮箱"
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="fullBtn" @click="getTableData"><i class="iconfont icon-sousuo"></i>查询
+          <el-button type="primary" class="fullBtn" @click="getTableData"
+            ><i class="iconfont icon-sousuo"></i>查询
           </el-button>
         </el-form-item>
       </el-form>
@@ -24,21 +41,39 @@
       <div class="siemensLayoutResultTitle flexBetween">
         <span>查询结果</span>
         <div class="flexCenter">
-          <el-button type="primary" class="fullBtn" @click="onAdd"><i class="iconfont icon-xinjian"></i>新建</el-button>
-          <el-button type="primary" class="fullBtn" @click="isDialog = true"><i class="iconfont icon-shanchu"></i>删除
+          <el-button type="primary" class="fullBtn" @click="onAdd"
+            ><i class="iconfont icon-xinjian"></i>新建</el-button
+          >
+          <el-button type="primary" class="fullBtn" @click="isDialog = true"
+            ><i class="iconfont icon-shanchu"></i>删除
           </el-button>
-          <el-button type="primary" class="fullBtn" @click="suspendBatch"><i class="iconfont icon-zanting"></i>暂停
+          <el-button type="primary" class="fullBtn" @click="suspendBatch"
+            ><i class="iconfont icon-zanting"></i>暂停
           </el-button>
-          <el-button type="primary" class="fullBtn" @click="recoverBatch"><i
-              class="iconfont icon-runtongyiyaoyihuifu_biyan"></i>恢复</el-button>
+          <el-button type="primary" class="fullBtn" @click="recoverBatch"
+            ><i class="iconfont icon-runtongyiyaoyihuifu_biyan"></i
+            >恢复</el-button
+          >
         </div>
       </div>
       <div class="siemensLayoutResultCon">
-        <el-table border stripe :key="index" :data="tableData" height="100%" style="width: 100%"
-          @selection-change="handleSelectionChange">
+        <el-table
+          border
+          stripe
+          :key="index"
+          :data="tableData"
+          height="100%"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+        >
           <el-table-column align="center" type="selection" :width="width">
           </el-table-column>
-          <el-table-column label="序号" align="center" type="index" :width="width">
+          <el-table-column
+            label="序号"
+            align="center"
+            type="index"
+            :width="width"
+          >
           </el-table-column>
           <el-table-column align="center" prop="userName" label="姓名">
           </el-table-column>
@@ -50,35 +85,77 @@
           </el-table-column>
           <el-table-column align="center" prop="operatorOrgName" label="单 位">
           </el-table-column>
-          <el-table-column align="center" prop="operatorCustomerName" label="运维客户">
+          <el-table-column
+            align="center"
+            prop="operatorCustomerName"
+            label="运维客户"
+          >
           </el-table-column>
-          <el-table-column align="center" prop="status" :formatter="$typeFormatter" label="状 态">
+          <el-table-column
+            align="center"
+            prop="status"
+            :formatter="$typeFormatter"
+            label="状 态"
+          >
           </el-table-column>
           <el-table-column align="center" label="操 作">
             <template slot-scope="scope">
               <div class="tableOper">
-                <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                  <i class="iconfont icon-bianji" @click="onEdit(scope.row)"></i>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="编辑"
+                  placement="top"
+                >
+                  <i
+                    class="iconfont icon-bianji"
+                    @click="onEdit(scope.row)"
+                  ></i>
                 </el-tooltip>
 
-                <el-tooltip class="item" effect="dark" content="重置密码" placement="top">
-                  <i class="iconfont icon-ic_keyboard" @click="onPassword(scope.row.mobile)"></i>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="重置密码"
+                  placement="top"
+                >
+                  <i
+                    class="iconfont icon-ic_keyboard"
+                    @click="onPassword(scope.row.mobile)"
+                  ></i>
                 </el-tooltip>
-
               </div>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <Page :total="totalElements" :pageSize="pageSize" :currentPage="currentPage" @onPageChange="onPageChange"></Page>
+      <Page
+        :total="totalElements"
+        :pageSize="pageSize"
+        :currentPage="currentPage"
+        @onPageChange="onPageChange"
+      ></Page>
     </div>
-    <el-dialog top="0" :title="title" :show-close="false" :visible.sync="dialogVisible" @close="$resetForm('ruleForm')">
-      <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
+    <el-dialog
+      top="0"
+      :title="title"
+      :show-close="false"
+      :visible.sync="dialogVisible"
+      @close="$resetForm('ruleForm')"
+    >
+      <div
+        class="close iconfont icon-guanbi"
+        @click="dialogVisible = false"
+      ></div>
       <div class="dialogdiv">
-
-        <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm" class="registerForm"
-          :label-width="labelWidth">
-
+        <el-form
+          :model="ruleForm"
+          label-position="left"
+          :rules="rules"
+          ref="ruleForm"
+          class="registerForm"
+          :label-width="labelWidth"
+        >
           <el-form-item label="姓　　名:" prop="userName">
             <el-input type="text" v-model="ruleForm.userName"></el-input>
           </el-form-item>
@@ -86,8 +163,17 @@
             <el-input v-model="ruleForm.mobile"></el-input>
           </el-form-item>
           <el-form-item label="职务/角色:" prop="userRoleId">
-            <el-select v-model="ruleForm.userRoleId" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in sRoleSelectData" :key="item.id" :label="item.roleName" :value="item.id">
+            <el-select
+              v-model="ruleForm.userRoleId"
+              placeholder=""
+              popper-class="dialogSelect"
+            >
+              <el-option
+                v-for="item in sRoleSelectData"
+                :key="item.id"
+                :label="item.roleName"
+                :value="item.id"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -95,15 +181,32 @@
             <el-input type="text" v-model="ruleForm.email"></el-input>
           </el-form-item>
           <el-form-item label="运维单位:" prop="operatorOrgId">
-            <el-select v-model="ruleForm.operatorOrgId" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in sOperatorOrgSelectData" :key="item.id" :label="item.operatorOrgName"
-                :value="item.id">
+            <el-select
+              v-model="ruleForm.operatorOrgId"
+              placeholder=""
+              popper-class="dialogSelect"
+            >
+              <el-option
+                v-for="item in sOperatorOrgSelectData"
+                :key="item.id"
+                :label="item.operatorOrgName"
+                :value="item.id"
+              >
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="园区名称:" prop="operatorCustomerId">
-            <el-select v-model="ruleForm.operatorCustomerId" placeholder="" popper-class="dialogSelect">
-              <el-option v-for="item in sOperatorCustomerSelectData" :key="item.id" :label="item.customerName" :value="item.id">
+            <el-select
+              v-model="ruleForm.operatorCustomerId"
+              placeholder=""
+              popper-class="dialogSelect"
+            >
+              <el-option
+                v-for="item in sOperatorCustomerSelectData"
+                :key="item.id"
+                :label="item.customerName"
+                :value="item.id"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -117,15 +220,31 @@
       </div>
       <div class="dialogbuttom">
         <div @click="dialogVisible = false">取 消</div>
-        <div class="dialogbuttomclose" @click="submitForm('ruleForm')">保 存</div>
+        <div class="dialogbuttomclose" @click="submitForm('ruleForm')">
+          保 存
+        </div>
       </div>
     </el-dialog>
-    <el-dialog top="0" title="重置密码" :show-close="false" :visible.sync="dialogPassword" @close="$resetForm('ruleForm1')">
-      <div class="close iconfont icon-guanbi" @click="dialogPassword = false"></div>
+    <el-dialog
+      top="0"
+      title="重置密码"
+      :show-close="false"
+      :visible.sync="dialogPassword"
+      @close="$resetForm('ruleForm1')"
+    >
+      <div
+        class="close iconfont icon-guanbi"
+        @click="dialogPassword = false"
+      ></div>
       <div class="dialogdiv">
-        <el-form :model="ruleForm1" label-position="left" :rules="rules1" ref="ruleForm1" class="registerForm"
-          :label-width="labelWidth1">
-
+        <el-form
+          :model="ruleForm1"
+          label-position="left"
+          :rules="rules1"
+          ref="ruleForm1"
+          class="registerForm"
+          :label-width="labelWidth1"
+        >
           <el-form-item label="新密码:" prop="password">
             <el-input type="password" v-model="ruleForm1.password"></el-input>
           </el-form-item>
@@ -136,10 +255,16 @@
       </div>
       <div class="dialogbuttom">
         <div @click="resetForm1()">取 消</div>
-        <div class="dialogbuttomclose" @click="submitForm1('ruleForm1')">保 存</div>
+        <div class="dialogbuttomclose" @click="submitForm1('ruleForm1')">
+          保 存
+        </div>
       </div>
     </el-dialog>
-    <Tips :isDialog="isDialog" @onClose="isDialog = false" @onConfirm="onConfirm"></Tips>
+    <Tips
+      :isDialog="isDialog"
+      @onClose="isDialog = false"
+      @onConfirm="onConfirm"
+    ></Tips>
   </div>
 </template>
 <script>
@@ -274,7 +399,7 @@ export default {
       pageSize: 15,
       width: 50,
       tableData: [],
-      tableSeelctVal: [],
+      tableSelectVal: [],
     };
   },
   watch: {
@@ -379,7 +504,7 @@ export default {
       }
     },
     async onConfirm() {
-      let ids = this.tableSeelctVal.map((item) => item.id) || [];
+      let ids = this.tableSelectVal.map((item) => item.id) || [];
       if (ids.length == 0) {
         return false;
       }
@@ -392,7 +517,7 @@ export default {
       this.isDialog = false;
     },
     handleSelectionChange(val) {
-      this.tableSeelctVal = val;
+      this.tableSelectVal = val;
     },
     resizeFn() {
       if (!this.collapse) {
@@ -428,7 +553,7 @@ export default {
       this.totalElements = res.data.totalElements;
     },
     async suspendBatch() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSelectVal.map((item) => item.id);
       if (ids.length > 0) {
         let res = await SUser.suspendBatch(ids);
         this.$message({
@@ -439,7 +564,7 @@ export default {
       }
     },
     async recoverBatch() {
-      let ids = this.tableSeelctVal.map((item) => item.id);
+      let ids = this.tableSelectVal.map((item) => item.id);
       if (ids.length > 0) {
         let res = await SUser.recoverBatch(ids);
         this.$message({
