@@ -48,9 +48,9 @@
           </el-table-column>
           <el-table-column align="center" prop="email" label="电子邮箱">
           </el-table-column>
-          <el-table-column align="center" prop="operatorOrgName" label="单 位">
+          <el-table-column align="center" prop="operatorOrgName" label="运维单位">
           </el-table-column>
-          <el-table-column align="center" prop="operatorCustomerName" label="运维客户">
+          <el-table-column align="center" prop="operatorCustomerName" label="运维园区">
           </el-table-column>
           <el-table-column align="center" prop="status" :formatter="$typeFormatter" label="状 态">
           </el-table-column>
@@ -174,7 +174,6 @@ export default {
       labelWidth: "88px",
       labelWidth1: "96px",
       isEdit: false,
-      editIndex: null,
       /* 下拉框数据 */
       // 1、单位下拉框
       sOperatorOrgSelectData: [],
@@ -185,13 +184,13 @@ export default {
       /* 下拉框参数 */
       // 1、角色下拉框参数
       roleParam: {
-        roleType: 2,
+        roleType: this.Constant.roleType.ROLE_TYPE_2,
       },
       /* dialog表格（新增、修改） */
       // 1、表格数据
       ruleForm: {
         id: null,
-        userType: "2", // 2：运维团队用户
+        userType: this.Constant.userType.USER_TYPE_2, // 2：运维团队用户
         userName: "",
         userRoleId: "",
         mobile: "",
@@ -200,7 +199,7 @@ export default {
         operatorOrgName: "",
         operatorCustomerId: "",
         operatorCustomerName: "",
-        status: "1",
+        status: this.Constant.status.STATUS_1,
       },
       // 2、表格校验
       rules: {
@@ -259,7 +258,7 @@ export default {
         ],
       },
       params: {
-        userType: "2", // 2：运维团队用户
+        userType: this.Constant.userType.USER_TYPE_2, // 2：运维团队用户
         userName: "",
         operatorOrgName: "",
         mobile: "",
