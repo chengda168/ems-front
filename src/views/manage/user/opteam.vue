@@ -147,13 +147,16 @@
 import { mapGetters } from "vuex";
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
-import SOperationUnit from "@/api/sms/sOperationUnit";
-import SCustomer from "@/api/sms/sCustomer";
-import Login from "@/api/ums/login.js";
-import JsEncrypt from "jsencrypt";
+// util
 import Rules from "@/utils/rule.js";
+import EncryptUtil from "@/utils/encryptUtil";
+// api
 import SUser from "@/api/ums/sUser";
 import SRole from "@/api/ums/sRole";
+import Login from "@/api/ums/login.js";
+import SOperationUnit from "@/api/sms/sOperationUnit";
+import SCustomer from "@/api/sms/sCustomer";
+
 export default {
   computed: {
     ...mapGetters({
@@ -345,9 +348,10 @@ export default {
           message: res.msg,
           type: res.code == 200 ? "success" : "error",
         });
-
-        this.dialogVisible = false;
-        this.getTableData();
+        if (res.code == 200) {
+          this.dialogVisible = false;
+          this.getTableData();
+        }
       } else {
         return false;
       }
@@ -355,20 +359,19 @@ export default {
     async submitForm1(formName) {
       let valid = await this.$refs[formName].validate();
       if (valid) {
-        let pk = await Login.getPublicKey(this.ruleForm1.mobile);
-        let publicKey = pk.data;
-        let jse = new JsEncrypt();
-        jse.setPublicKey(
-          `-----BEGIN PUBLIC KEY-----${publicKey}-----END PUBLIC KEY-----`
+        let encrypted = await EncryptUtil.encrypt(
+          this.ruleForm1.mobile,
+          this.ruleForm1.password
         );
-        let encrypted = jse.encrypt(this.ruleForm1.password);
         let res = await Login.resetPwd(this.ruleForm1.mobile, encrypted, 2);
         this.$message({
           message: res.msg,
           type: res.code == 200 ? "success" : "error",
         });
-
-        this.dialogPassword = false;
+        if (res.code == 200) {
+          this.dialogVisible = false;
+          this.getTableData();
+        }
       } else {
         return false;
       }
