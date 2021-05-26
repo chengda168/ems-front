@@ -258,7 +258,6 @@ export default {
     },
     onEdit(row, index) {
       this.api_Detail(row.id);
-      this.editIndex = index;
       this.isEdit = true;
       this.title = "编辑首页广告";
       this.dialogVisible = true;

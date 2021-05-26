@@ -4,10 +4,10 @@
             <div class="swiperBox">
                 <div class="swiperBoxContain">
                     <ul class="swiperWrapper" ref="swiperBox" :style="styleObj">
-                        <li class="swiperSlide" :class="{'swiperSlideActive' : activeIndex == index}" 
-                        v-for="(item,index) in dicTypeList" :key="item.dicType" @click="onChange(item.dicType)">
-                            <el-tooltip effect="dark" :content="item.dicTypeName" placement="top" :disabled="item.length<=6">
-                                <div>{{item.dicTypeName}}</div>
+                        <li class="swiperSlide" :class="{'swiperSlideActive' : dicType == item.dicType}" 
+                        v-for="(item) in dicTypeList" :key="item.dicType" @click="onChange(item.dicType)">
+                            <el-tooltip effect="dark" :content="item.dicInfo" placement="top" :disabled="item.length<=6">
+                                <div>{{item.dicInfo}}</div>
                             </el-tooltip>
                         </li>
                     </ul>
@@ -21,7 +21,7 @@
                 <div class="siemensLayoutSearchBox flexStartBetween">
                     <el-form :inline="true"  class="siemensLayoutSearchBoxForm flexBetween">
                         <el-form-item label="字段名称：">
-                            <el-input v-model="dic_type_name" placeholder="请输入字段名称"></el-input>
+                            <el-input v-model="dicInfo" placeholder="请输入字段名称"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="onSearch"><i class="iconfont icon-sousuo"></i>查询</el-button>
@@ -45,7 +45,7 @@
                             :width="width">
                         </el-table-column>
                         <el-table-column align="center"
-                            prop="dic_type_name" 
+                            prop="dicInfo" 
                             label="字段名称">
                         </el-table-column>
                         <el-table-column align="center" :width="operWidth"
@@ -53,7 +53,7 @@
                             <template slot-scope="scope">
                                 <div class="tableOper">
                                     <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                                        <i class="iconfont icon-bianji" @click="onEdit(scope.row,scope.$index)"></i>
+                                        <i class="iconfont icon-bianji" @click="onEdit(scope.row)"></i>
                                     </el-tooltip>
                                 </div>
                             </template>
@@ -70,8 +70,8 @@
             <div class="close iconfont icon-guanbi" @click="dialogVisible = false"></div>
             <div class="dialogdiv">
                 <el-form :model="ruleForm" label-position="left" :rules="rules" ref="ruleForm"  :label-width="labelWidth" >
-                    <el-form-item label="字段名称:" prop="dic_type_name">
-                        <el-input type="text" v-model="ruleForm.dic_type_name"></el-input>
+                    <el-form-item label="字段名称:" prop="dicInfo">
+                        <el-input type="text" v-model="ruleForm.dicInfo"></el-input>
                     </el-form-item>
                 </el-form>
             </div>
@@ -90,7 +90,7 @@ import { mapGetters } from 'vuex'
 import Page from "@/components/ftd-page/page";
 import Tips from "@/components/ftd-tips/tips";
 import SDic from "@/api/sms/sDic";
-
+let self;
   export default {
     computed:{
         ...mapGetters({
@@ -118,9 +118,9 @@ import SDic from "@/api/sms/sDic";
         return{
             translateX:0,
             isShowArrow:false,
-            activeIndex:0,
+            dicType:0,
             dicTypeList:{},
-            dic_type_name:'',
+            dicInfo:'',
             currentPage:1,
             editIndex:null,
             index:0,
@@ -132,88 +132,37 @@ import SDic from "@/api/sms/sDic";
             labelWidth:'84px',
             operWidth:200,
             ruleForm:{
-                dic_type_name:''
+                dicInfo:''
             },
             rules: {
-                dic_type_name: [
+                dicInfo: [
                     { required: true, message: '请输入字段名称', trigger: 'blur' },
                 ]
             },
             totalElements:0,
             pageSize:15,
             content:[
-                {
-                    id:0,
-                     dic_type_name: '配电室'
-                }, 
-                {
-                    id:1,
-                    dic_type_name: '配电室'
-                }, 
-                {
-                    id:2,
-                     dic_type_name: '配电室'
-                },
-                {
-                    id:3,
-                     dic_type_name: '配电室',
-                },
-                {
-                    id:4,
-                     dic_type_name: '配电室'
-                }, 
-                {
-                    id:5,
-                     dic_type_name: '配电室'
-                }, 
-                {
-                    id:6,
-                     dic_type_name: '配电室'
-                },
-                {
-                    id:7,
-                     dic_type_name: '配电室'
-                },
-                {
-                    id:8,
-                     dic_type_name: '配电室'
-                }, 
-                {
-                    id:9,
-                     dic_type_name: '配电室'
-                }, 
-                {
-                    id:10,
-                     dic_type_name: '配电室'
-                },
-                {
-                    id:11,
-                     dic_type_name: '配电室'
-                },
-                {
-                    id:12,
-                     dic_type_name: '配电室'
-                },
-                {
-                    id:13,
-                     dic_type_name: '配电室'
-                },
-                {
-                    id:14,
-                     dic_type_name: '配电室'
-                }
             ],
             tableData: [],
             tableSeelctVal:[],
+            params: {}
         }
     },
     methods:{
-        getTableData(){
-            this.tableData= this.content;
-            this.totalElements = this.content.length;
+        async getTableData(){
+            this.params.pageIndex = this.currentPage;
+            this.params.length = this.pageSize;
+            this.params.dicType = this.dicType;
+            this.params.dicInfo = this.dicInfo;
+            let res = await SDic.page(this.params);
+            this.totalElements = res.data.totalElements;
+            this.tableData = res.data.content;
         },
-        onChange(index){
-            this.activeIndex = index;
+        onChange(dicType){
+            //TAB切换，字典类型名置空
+            this.dicInfo = '';
+            this.dicType = dicType;
+            this.getTableData();
         },
         onPrev(){
             let outerWidth = $(".swiperSlideActive").outerWidth(true);
@@ -232,7 +181,7 @@ import SDic from "@/api/sms/sDic";
             }
         },
         onSearch(){
-            console.log("查询")
+            this.getTableData();
         },
         onPageChange(val){
             console.log(val)
@@ -243,10 +192,7 @@ import SDic from "@/api/sms/sDic";
             if (valid) {
                if(this.isEdit){
                 // 编辑
-                console.log(this.ruleForm)
-                this.tableData[this.editIndex]=JSON.parse(JSON.stringify(this.ruleForm));
-                this.index++;
-                console.log(this.tableData)
+                this.api_Update()
                }else{
                 // 新建
                     this.tableData.unshift(JSON.parse(JSON.stringify(this.ruleForm)))
@@ -265,12 +211,12 @@ import SDic from "@/api/sms/sDic";
             this.ruleForm.id=this.tableData.length;
             this.dialogVisible = true;
         },
-         onEdit(row,index){
+        onEdit(row){
+            this.api_Detail(row.id);
             this.isEdit = true;
             this.title = '编辑字段'
-            this.ruleForm =JSON.parse(JSON.stringify(row)) ;
-            this.editIndex = index;
             this.dialogVisible = true
+            console.log(this.ruleForm)
         },
         handleSelectionChange(val){
             this.tableSeelctVal = val;
@@ -316,6 +262,24 @@ import SDic from "@/api/sms/sDic";
         async api_GetTypes() {
             let res = await SDic.getTypes();
             this.dicTypeList = res.data;
+            this.dicType = res.data[0].dicType;
+            this.getTableData()
+        },
+        async api_Detail(id) {
+            let res = await SDic.detail(id);
+            this.ruleForm.data = [];
+            this.ruleForm.id = res.data.id;
+            this.ruleForm.dicType = res.data.dicType;
+            this.ruleForm.dicInfo = res.data.dicInfo;
+        },
+        api_Update() {
+            this.entity = {};
+            this.entity.id = this.ruleForm.id;
+            this.entity.dicType = this.dicType;
+            this.entity.dicInfo = this.ruleForm.dicInfo;
+            SDic.update(this.entity).then(res => {
+                self.api_Page()
+            });
         },
     },
     watch:{
@@ -345,9 +309,7 @@ import SDic from "@/api/sms/sDic";
         window.addEventListener("resize", function () {
             self.resizeFn();
         });   
-        this.getTableData()
         this.api_GetTypes()
-       
     }
 }
 </script>
